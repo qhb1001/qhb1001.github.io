@@ -132,18 +132,18 @@
 
 
 
-<meta name="description" content="使用Python实现的简单函数绘图语言的解释器。 支持的语句包含四类，分别是：  循环绘图语句 FOR-DRAW 语法：FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标,纵坐标); 语义：令T从起点到终点，每次改变一个步长，绘制出由(横坐标，纵坐标)所规定的点的轨迹。 举例：FOR T FROM 0 TO 2*PI STEP PI/50 DRAW(COS(T),SIN(T)">
+<meta name="description" content="使用Python实现的简单函数绘图语言的解释器。 本解释器分为词法分析、语法分析、语义分析三个部分。其中语法分析使用递归下降子程序的方法实现。 在各个步骤之间都有输出中间结果。">
 <meta name="keywords" content="Python,Interpreter">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A Simple Interpreter">
 <meta property="og:url" content="http://notes-hongbo.top/2018/12/08/A-Simple-Interpreter/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="使用Python实现的简单函数绘图语言的解释器。 支持的语句包含四类，分别是：  循环绘图语句 FOR-DRAW 语法：FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标,纵坐标); 语义：令T从起点到终点，每次改变一个步长，绘制出由(横坐标，纵坐标)所规定的点的轨迹。 举例：FOR T FROM 0 TO 2*PI STEP PI/50 DRAW(COS(T),SIN(T)">
+<meta property="og:description" content="使用Python实现的简单函数绘图语言的解释器。 本解释器分为词法分析、语法分析、语义分析三个部分。其中语法分析使用递归下降子程序的方法实现。 在各个步骤之间都有输出中间结果。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-08T14:36:34.545Z">
+<meta property="og:updated_time" content="2018-12-10T00:40:50.188Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Simple Interpreter">
-<meta name="twitter:description" content="使用Python实现的简单函数绘图语言的解释器。 支持的语句包含四类，分别是：  循环绘图语句 FOR-DRAW 语法：FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标,纵坐标); 语义：令T从起点到终点，每次改变一个步长，绘制出由(横坐标，纵坐标)所规定的点的轨迹。 举例：FOR T FROM 0 TO 2*PI STEP PI/50 DRAW(COS(T),SIN(T)">
+<meta name="twitter:description" content="使用Python实现的简单函数绘图语言的解释器。 本解释器分为词法分析、语法分析、语义分析三个部分。其中语法分析使用递归下降子程序的方法实现。 在各个步骤之间都有输出中间结果。">
 
 
 
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-08T22:36:34+08:00">
-                2018-12-08
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-10T08:40:50+08:00">
+                2018-12-10
               </time>
             
           </span>
@@ -409,7 +409,10 @@
 
       
         <p>使用Python实现的简单函数绘图语言的解释器。</p>
-<p>支持的语句包含四类，分别是：</p>
+<p>本解释器分为词法分析、语法分析、语义分析三个部分。其中语法分析使用递归下降子程序的方法实现。</p>
+<p>在各个步骤之间都有输出中间结果。</p>
+<a id="more"></a>
+<h1 id="语法类型"><a href="#语法类型" class="headerlink" title="语法类型"></a>语法类型</h1><p>支持的语句包含四类，分别是：</p>
 <ul>
 <li><p>循环绘图语句 FOR-DRAW</p>
 <p>语法：<code>FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标,纵坐标);</code></p>
@@ -715,7 +718,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#词法分析器"><span class="nav-number">1.</span> <span class="nav-text">词法分析器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#记号的语法和语义"><span class="nav-number">1.1.</span> <span class="nav-text">记号的语法和语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记号的设计"><span class="nav-number">1.2.</span> <span class="nav-text">记号的设计</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#语法类型"><span class="nav-number">1.</span> <span class="nav-text">语法类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#词法分析器"><span class="nav-number">2.</span> <span class="nav-text">词法分析器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#记号的语法和语义"><span class="nav-number">2.1.</span> <span class="nav-text">记号的语法和语义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#记号的设计"><span class="nav-number">2.2.</span> <span class="nav-text">记号的设计</span></a></li></ol></li></ol></div>
             
 
           </div>

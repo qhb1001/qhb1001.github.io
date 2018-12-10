@@ -356,8 +356,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-08T22:36:34+08:00">
-                2018-12-08
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-10T08:40:50+08:00">
+                2018-12-10
               </time>
             
           </span>
@@ -410,75 +410,16 @@
 
       
         
-          
-            <p>使用Python实现的简单函数绘图语言的解释器。</p>
-<p>支持的语句包含四类，分别是：</p>
-<ul>
-<li><p>循环绘图语句 FOR-DRAW</p>
-<p>语法：<code>FOR T FROM 起点 TO 终点 STEP 步长 DRAW(横坐标,纵坐标);</code></p>
-<p>语义：令T从起点到终点，每次改变一个步长，绘制出由(横坐标，纵坐标)所规定的点的轨迹。</p>
-<p>举例：<code>FOR T FROM 0 TO 2*PI STEP PI/50 DRAW(COS(T),SIN(T));</code></p>
-<p>说明：绘制一个原点在(0,0)的单位圆</p>
-</li>
-<li><p>比例设置语句 SCALE</p>
-<p>语法：<code>SCALE IS (横坐标比例因子,纵坐标比例因子);</code></p>
-<p>语义：设置横纵坐标的比例，并分别按照比例因子进行变化。</p>
-<p>举例：<code>SCALE IS (100,100);</code></p>
-<p>说明：将横纵坐标的比例设置为1:1，并且放大100倍。</p>
-</li>
-<li><p>坐标平移语句 ORIGIN</p>
-<p>语法：<code>ORIGIN IS (横坐标,纵坐标);</code></p>
-<p>语义：将坐标系的原点平移到横坐标和纵坐标规定的点处。</p>
-<p>举例：<code>ORIGIN IS (360,240);</code></p>
-<p>说明：将原点从(0,0)平移到(360,240)处。</p>
-</li>
-<li><p>角度旋转语句 ROT</p>
-<p>语法：<code>ROT IS 角度;</code></p>
-<p>语义：逆时针旋转角度所规定的弧度值。</p>
-<p>举例：<code>ROT IS PI/2;</code></p>
-<p>说明：逆时针旋转<code>PI/2</code>，即逆时针旋转90度。</p>
-</li>
-</ul>
+          <p>使用Python实现的简单函数绘图语言的解释器。</p>
 <p>本解释器分为词法分析、语法分析、语义分析三个部分。其中语法分析使用递归下降子程序的方法实现。</p>
-<h1 id="词法分析器"><a href="#词法分析器" class="headerlink" title="词法分析器"></a>词法分析器</h1><p>词法分析器的三个任务：</p>
-<ol>
-<li>滤掉源程序中的无用成分；</li>
-<li>输出记号供语法分析器使用；</li>
-<li>识别非法输入，并将其标记为“出错记号”。</li>
-</ol>
-<h2 id="记号的语法和语义"><a href="#记号的语法和语义" class="headerlink" title="记号的语法和语义"></a>记号的语法和语义</h2><ul>
-<li><p>常数</p>
-<p>常数字面量和标识符形式的长两名均称为常数。需要支持pi, E这样的常量。</p>
-</li>
-<li><p>参数</p>
-<p>本作图语言中唯一的、已经被定义好的变量名T被称为参数。本次实验不要求。</p>
-</li>
-<li><p>函数</p>
-<p>为简单起见，当前函数调用仅支持Sin, Cos, Tan, Sqer, Exp, Ln</p>
-<p>它们的接口一致，都是接收一个浮点类型参数，返回一个浮点类型参数。</p>
-</li>
-<li><p>保留字</p>
-<p>语句中具有固定含义的标识符，包括：</p>
-<p>ORIGIN, SCALE, ROT, IS, TO, STEP, DRAW, FOR, FROM</p>
-</li>
-<li><p>运算符</p>
-<ul>
-<li><ul>
-<li><ul>
-<li>/ **</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>分隔符</p>
-<p>; , ( )</p>
-</li>
-</ul>
-<h2 id="记号的设计"><a href="#记号的设计" class="headerlink" title="记号的设计"></a>记号的设计</h2><p>记号的组成：类别和属性。这里使用枚举类型来表示记号的类别。</p>
-
-          
+<p>在各个步骤之间都有输出中间结果。</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/12/08/A-Simple-Interpreter/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
