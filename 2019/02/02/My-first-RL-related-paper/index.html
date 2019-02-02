@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Reinforcement Learning,Paper,Software Defined Network,Omnet++,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="这是关于论文的笔记。 该论文设计了一个具有层次结构的SDN，以及一个基于RL的进化式路由算法QAR(Qos-aware Adaptive routing)。用到的东西不是很新奇，但是在当时也许相当于开创了一个领域。 QAR使用SARSA算法，使用Qos设计Reward函数。 为了进行仿真，复现论文中的结果，为此学习了Omnet++框架，并且自己手搓了SDN网络协议。">
+<meta name="keywords" content="Reinforcement Learning,Paper,Software Defined Network,Omnet++">
+<meta property="og:type" content="article">
+<meta property="og:title" content="My first RL-related paper">
+<meta property="og:url" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="这是关于论文的笔记。 该论文设计了一个具有层次结构的SDN，以及一个基于RL的进化式路由算法QAR(Qos-aware Adaptive routing)。用到的东西不是很新奇，但是在当时也许相当于开创了一个领域。 QAR使用SARSA算法，使用Qos设计Reward函数。 为了进行仿真，复现论文中的结果，为此学习了Omnet++框架，并且自己手搓了SDN网络协议。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/4.png">
+<meta property="og:updated_time" content="2019-02-02T13:51:43.054Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="My first RL-related paper">
+<meta name="twitter:description" content="这是关于论文的笔记。 该论文设计了一个具有层次结构的SDN，以及一个基于RL的进化式路由算法QAR(Qos-aware Adaptive routing)。用到的东西不是很新奇，但是在当时也许相当于开创了一个领域。 QAR使用SARSA算法，使用Qos设计Reward函数。 为了进行仿真，复现论文中的结果，为此学习了Omnet++框架，并且自己手搓了SDN网络协议。">
+<meta name="twitter:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/">
+
+
+
+
+
+  <title>My first RL-related paper | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">My first RL-related paper</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-02-02T21:38:45+08:00">
+                2019-02-02
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-02-02T21:51:43+08:00">
+                2019-02-02
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  3.7k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是关于<a href="https://ieeexplore.ieee.org/document/7557432" target="_blank" rel="noopener">论文</a>的笔记。</p>
+<p>该论文设计了一个具有层次结构的SDN，以及一个基于RL的进化式路由算法QAR(Qos-aware Adaptive routing)。用到的东西不是很新奇，但是在当时也许相当于开创了一个领域。</p>
+<p>QAR使用SARSA算法，使用Qos设计Reward函数。</p>
+<p>为了进行仿真，复现论文中的结果，为此学习了Omnet++框架，并且自己手搓了SDN网络协议。</p>
+<a id="more"></a>
+<h1 id="预备知识"><a href="#预备知识" class="headerlink" title="预备知识"></a>预备知识</h1><h2 id="Temporal-Difference-Learning"><a href="#Temporal-Difference-Learning" class="headerlink" title="Temporal-Difference Learning"></a>Temporal-Difference Learning</h2><p>TD learning是一种将MC和DP结合起来的方法。相对于MC方法，其特性是不必等待一次完整迭代结束之后才进行更新，而是没进行一次决策就根据下一步转移到的状态进行更新。</p>
+<p><img src="1.png" alt=""></p>
+<p>回顾first-visit MC方法，可以注意到只有在首先得到一组遍历过的状态行为集之后才可以进行更新；但是对于TD方法，每一次状态转移都会进行更新，显而易见的区别在于，一次迭代当中可能对同一状态有多次访问，因此有更好的实时响应。伪代码见下图：</p>
+<p><img src="2.png" alt=""></p>
+<p>由于TD方法是根据估计值对Q进行再估计，而不是使用观测值进行更新，因此称为bootstrapping的。</p>
+<h3 id="SARSA"><a href="#SARSA" class="headerlink" title="SARSA"></a>SARSA</h3><p>该算法实际上是$(S_t, A_t, R_{t+1}, S_{t+1}, A_{t+1})$的简称。只需要将TD(0)中的参数V替换为Q，即可得到SARSA的算法框架：</p>
+<p><img src="3.png" alt=""></p>
+<p>可以很明显地观察到，这是on-policy的算法，没有将行为策略与目标策略分离，exploration交给了$\epsilon-greedy$部分。</p>
+<h3 id="Q-learning"><a href="#Q-learning" class="headerlink" title="Q-learning"></a>Q-learning</h3><p>如果在更新的时候不使用$\epsilon-greedy$算法得到下一个行为直接进行更新，因为此时与策略无关，那么就可以得到一个off-policy的算法。算法框架：</p>
+<p><img src="4.png" alt=""></p>
+<h2 id="SDN-software-defined-networks"><a href="#SDN-software-defined-networks" class="headerlink" title="SDN: software defined networks"></a>SDN: software defined networks</h2><p>软件定义网络，这是一种网络管理技术，并且能够通过对网络进行编程以监管网络以提高其性能。SDN解决了传统网络的去中心化和复杂的问题。SDN通过将网络中的信息集中到一个组件中，分离数据包的转发(data plane)以及路由的决策(control plane)这两个问题。control plane中包含了一个或多个控制器，它们作为SDN网络的决策中心，共享信息。</p>
+<p>该论文中设计出的是当时已知的第一个进化式路由算法。</p>
+<h2 id="omnet"><a href="#omnet" class="headerlink" title="omnet++"></a>omnet++</h2><p>使用NED后缀的文件定义组件以及组件之间的连接</p>
+<p>使用cc后缀的文件进行网络的初始化，以及组件的行为</p>
+<p>使用ini后缀的文件表示希望仿真NED文件中的哪一个网络，因为其中可能包含有多个网络</p>
+<p>不知道环境变量哪里出现了问题，每次启动omnet之前，必须在<code>~/omnet5.4.1</code>这个文件夹中配置环境变量<code>. setenv</code>，之后才能够启动<code>omnet</code></p>
+<h3 id="Official-Guide"><a href="#Official-Guide" class="headerlink" title="Official Guide"></a>Official Guide</h3><p>下面是通过<a href="https://docs.omnetpp.org/tutorials/tictoc/" target="_blank" rel="noopener">官方文档</a>学习该框架的使用笔记</p>
+<ol>
+<li><p>在<code>.ini</code>文件中添加<code>record-eventlog = true</code>，可以在result目录下生成日志图文件，记录信息传递的形象化信息；注意，在下一次运行之后，将会对该文件进行覆盖。</p>
+</li>
+<li><p>类似c++中使用cout进行debug，这里可以使用EV来输出相关的信息</p>
+<p>可以使用<code>bubble(string);</code>方法在仿真图上面输出相关信息</p>
+</li>
+<li><p>下面展示一个定义class的模版</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * In this class we add a counter, and delete the message after ten exchanges.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Txc3</span> :</span> <span class="keyword">public</span> cSimpleModule</span><br><span class="line">&#123;</span><br><span class="line">  <span class="keyword">private</span>:</span><br><span class="line">    <span class="keyword">int</span> counter;  <span class="comment">// Note the counter here</span></span><br><span class="line"></span><br><span class="line">  <span class="keyword">protected</span>:</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">initialize</span><span class="params">()</span> override</span>;</span><br><span class="line">    <span class="function"><span class="keyword">virtual</span> <span class="keyword">void</span> <span class="title">handleMessage</span><span class="params">(cMessage *msg)</span> override</span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Define_Module(Txc3);</span><br></pre></td></tr></table></figure>
+<p>不知道为什么要定义为虚函数，以及重载类型；但是注意，下面的<code>Define_Module()</code>，这是一个宏，用于对类进行注册，以后在该平台上需要默认进行这一行为</p>
+<p>下面展示对其中方法的定义</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Txc3::initialize()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Initialize counter to ten. We'll decrement it every time and delete</span></span><br><span class="line">    <span class="comment">// the message when it reaches zero.</span></span><br><span class="line">    counter = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// The WATCH() statement below will let you examine the variable under</span></span><br><span class="line">    <span class="comment">// Tkenv. After doing a few steps in the simulation, double-click either</span></span><br><span class="line">    <span class="comment">// `tic' or `toc', select the Contents tab in the dialog that pops up,</span></span><br><span class="line">    <span class="comment">// and you'll find "counter" in the list.</span></span><br><span class="line">    WATCH(counter);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">"tic"</span>, getName()) == <span class="number">0</span>) &#123;</span><br><span class="line">        EV &lt;&lt; <span class="string">"Sending initial message\n"</span>;</span><br><span class="line">        cMessage *msg = <span class="keyword">new</span> cMessage(<span class="string">"tictocMsg"</span>);</span><br><span class="line">        send(msg, <span class="string">"out"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>WATCH</code>属于辅助功能，添加后可在列表中显示；注意继承了<code>cSimpleModule</code>的类，可以使用<code>getName()</code>方法得到组件对应的名称，该名称在声明的时候定义</p>
+</li>
+<li><p><code>.ini</code>文件中可以对网络中的参数进行设置，并且遵循正则表达式，将对于所有满足条件的变量设置</p>
+<p>使用时的格式大概为<code>网络名.组件名.参数名 = value</code></p>
+</li>
+<li><p>下面开始介绍如何处理结点内的延迟</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Txc6::initialize()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Create the event object we'll use for timing -- just any ordinary message.</span></span><br><span class="line">    event = <span class="keyword">new</span> cMessage(<span class="string">"event"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// No tictoc message yet.</span></span><br><span class="line">    tictocMsg = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">strcmp</span>(<span class="string">"tic"</span>, getName()) == <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="comment">// We don't start right away, but instead send an message to ourselves</span></span><br><span class="line">        <span class="comment">// (a "self-message") -- we'll do the first sending when it arrives</span></span><br><span class="line">        <span class="comment">// back to us, at t=5.0s simulated time.</span></span><br><span class="line">        EV &lt;&lt; <span class="string">"Scheduling first send to t=5.0s\n"</span>;</span><br><span class="line">        tictocMsg = <span class="keyword">new</span> cMessage(<span class="string">"tictocMsg"</span>);</span><br><span class="line">        scheduleAt(<span class="number">5.0</span>, event);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>初始化函数，当组件名称对应时，将设置仿真起始时间，并且调用<code>scheduleAt()</code>方法将<code>cMessage</code>对象发送给<code>handleMessage</code>函数，如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">void</span> Txc6::handleMessage(cMessage *msg)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// There are several ways of distinguishing messages, for example by message</span></span><br><span class="line">    <span class="comment">// kind (an int attribute of cMessage) or by class using dynamic_cast</span></span><br><span class="line">    <span class="comment">// (provided you subclass from cMessage). In this code we just check if we</span></span><br><span class="line">    <span class="comment">// recognize the pointer, which (if feasible) is the easiest and fastest</span></span><br><span class="line">    <span class="comment">// method.</span></span><br><span class="line">    <span class="keyword">if</span> (msg == event) &#123;</span><br><span class="line">        <span class="comment">// The self-message arrived, so we can send out tictocMsg and nullptr out</span></span><br><span class="line">        <span class="comment">// its pointer so that it doesn't confuse us later.</span></span><br><span class="line">        EV &lt;&lt; <span class="string">"Wait period is over, sending back message\n"</span>;</span><br><span class="line">        send(tictocMsg, <span class="string">"out"</span>);</span><br><span class="line">        tictocMsg = <span class="literal">nullptr</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// If the message we received is not our self-message, then it must</span></span><br><span class="line">        <span class="comment">// be the tic-toc message arriving from our partner. We remember its</span></span><br><span class="line">        <span class="comment">// pointer in the tictocMsg variable, then schedule our self-message</span></span><br><span class="line">        <span class="comment">// to come back to us in 1s simulated time.</span></span><br><span class="line">        EV &lt;&lt; <span class="string">"Message arrived, starting to wait 1 sec...\n"</span>;</span><br><span class="line">        tictocMsg = msg;</span><br><span class="line">        scheduleAt(simTime()+<span class="number">1.0</span>, event);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面开始分析其中的工作原理，能够与<code>handleMessage</code>函数进行交互的函数有<code>send</code>以及<code>scheduleAt</code>，其中前者用于发送数据，后者用于处理结点内的延迟时间。</p>
+</li>
+<li><p>将结点内的处理延迟随机化的程序，在simple中多设置一个等待时间，并且在<code>.ini</code>文件中对其设置即可，似乎<code>.ini</code>中的针对变量的初始化，在每次调用<code>par(valueName)</code>之后，都将会重新赋值</p>
+</li>
+<li><p>txc8中包含有停等协议的实现</p>
+</li>
+<li><p>在处理多结点网络，构建网络的拓扑结构时，需要将out、in这些变量进行++操作，考虑到背后的实现原理，这实际上是理所当然的，因为不可能只使用一个变量out来映射所有的信息发送口，大体框架如下：</p>
+</li>
+<li><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">network Tictoc10</span><br><span class="line">&#123;</span><br><span class="line">    submodules:</span><br><span class="line">        tic[<span class="number">6</span>]: Txc10;</span><br><span class="line">    connections:</span><br><span class="line">        tic[<span class="number">0</span>].out++ --&gt; &#123;  delay = <span class="number">100</span>ms; &#125; --&gt; tic[<span class="number">1</span>].in++;</span><br><span class="line">        tic[<span class="number">0</span>].in++ &lt;-- &#123;  delay = <span class="number">100</span>ms; &#125; &lt;-- tic[<span class="number">1</span>].out++;</span><br><span class="line"></span><br><span class="line">        tic[<span class="number">1</span>].out++ --&gt; &#123;  delay = <span class="number">100</span>ms; &#125; --&gt; tic[<span class="number">2</span>].in++;</span><br><span class="line">        tic[<span class="number">1</span>].in++ &lt;-- &#123;  delay = <span class="number">100</span>ms; &#125; &lt;-- tic[<span class="number">2</span>].out++;</span><br><span class="line"></span><br><span class="line">        tic[<span class="number">1</span>].out++ --&gt; &#123;  delay = <span class="number">100</span>ms; &#125; --&gt; tic[<span class="number">4</span>].in++;</span><br><span class="line">        tic[<span class="number">1</span>].in++ &lt;-- &#123;  delay = <span class="number">100</span>ms; &#125; &lt;-- tic[<span class="number">4</span>].out++;</span><br><span class="line"></span><br><span class="line">        tic[<span class="number">3</span>].out++ --&gt; &#123;  delay = <span class="number">100</span>ms; &#125; --&gt; tic[<span class="number">4</span>].in++;</span><br><span class="line">        tic[<span class="number">3</span>].in++ &lt;-- &#123;  delay = <span class="number">100</span>ms; &#125; &lt;-- tic[<span class="number">4</span>].out++;</span><br><span class="line"></span><br><span class="line">        tic[<span class="number">4</span>].out++ --&gt; &#123;  delay = <span class="number">100</span>ms; &#125; --&gt; tic[<span class="number">5</span>].in++;</span><br><span class="line">        tic[<span class="number">4</span>].in++ &lt;-- &#123;  delay = <span class="number">100</span>ms; &#125; &lt;-- tic[<span class="number">5</span>].out++;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在txc10中包含有处理多结点网络的方法</p>
+</li>
+<li><p>txc11使用channel特性，简化了上面的传输延迟的定义</p>
+</li>
+<li><p>txc12使用双向传送的方式，进一步简化网络的定义</p>
+</li>
+<li><p>txc13使用message特性，通过<code>.msg</code>文件定义了传输信息的类型，大体框架为</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">message TicTocMsg13</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">int</span> source;</span><br><span class="line">    <span class="keyword">int</span> destination;</span><br><span class="line">    <span class="keyword">int</span> hopCount = <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在build之后，将会自动生成对应的<code>.cc</code>, <code>.h</code>文件；并且将会自动为其中的每个变量生成对应的方法以进行修改，格式为<code>setHopCount(int);</code></p>
+<p>也就是说，这些变量都是属于message类的私有成员，只有通过这些方法才可以进行修改</p>
+</li>
+<li><p>txc14定义每个结点收发分组的数量，并且显示在仿真图上面</p>
+</li>
+<li><p>txc15给出了统计每个结点上面的统计信息，主要是hopCount的信息</p>
+<p>因为可以用柱状图的形式表示，因此很实用</p>
+</li>
+<li><p>txc16给出了另外一种统计结点上面信息的方式，搭配可视化数据这一章节，其实现的功能比txc15更强大</p>
+</li>
+</ol>
+<h3 id="omnet-问题总结"><a href="#omnet-问题总结" class="headerlink" title="omnet++ 问题总结"></a>omnet++ 问题总结</h3><ol>
+<li><p>将官方文档中的样例敲进去了，运行不起来，出现了error code:2 no such file or directory，可是实际上样例中的程序都可以运行</p>
+<p>我的解决方案：运行的时候不可以run as omnet++ simulation，而是应该run as local c/c++ application，这样就可以正常启动</p>
+</li>
+<li><p>无法进入debug mode，但是可以正常运行，通过输出中间结果，应该同样可以完成debug的目的</p>
+</li>
+</ol>
+<h1 id="paper-总结"><a href="#paper-总结" class="headerlink" title="paper 总结"></a>paper 总结</h1><h2 id="motivation"><a href="#motivation" class="headerlink" title="motivation"></a>motivation</h2><p>SDN已经被认可为下一代的网络协议，但是应对大规模网络，其性能并不是很好，仍然需要投入关于拓扑结构和算法的设计。该论文针对此问题，设计出了一个多控制器、Qos感知、含有进化式路由算法的SDN协议。</p>
+<p>单控制器组成的control plane：管理整个data plane，在对流量和网络状态的全局可见情况下作出决策；但是限制于单个结点的计算能力，因此不适用规模较大的网络</p>
+<p>多控制器的出现很自然，与分治的思想相同，将处理数据的问题交付给子节点进行，父节点进行信息的统合即可；同时还可以利用多核并行处理的提高计算速率。</p>
+<h2 id="idea"><a href="#idea" class="headerlink" title="idea"></a>idea</h2><h3 id="SDN网络"><a href="#SDN网络" class="headerlink" title="SDN网络"></a>SDN网络</h3><h4 id="拓扑结构"><a href="#拓扑结构" class="headerlink" title="拓扑结构"></a>拓扑结构</h4><p>控制器由三层构成</p>
+<ul>
+<li><p>slave controller对交换机的数据只读，接收它们的端口状态信息</p>
+<p>同时可以缓解I/O前端中过多的控制信息，提供简单的控制</p>
+</li>
+<li><p>domain controller对交换机具有全权的控制权限，能够通过发送控制信息以修改交换机的状态</p>
+</li>
+<li><p>super controller连接所有的domain controller，管理整个网络</p>
+</li>
+</ul>
+<p>设立domain controller以及super controller的目的是为了管理流量建立、响应控制行为；而slave controller的目的只是为了减少从不同应用接收控制信息的负担</p>
+<p>如果分组的传送在一个domain controller管理下就可以完成，那么不会向super controller传送；如果超过了这个范围，那么将会将分组继续向上传送。</p>
+<h4 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h4><ul>
+<li>交换机接收到信息流，如果转发表中包含有对应的目的地址，那么直接进行转发；否则将该流中的第一个分组信息发送给domain controller</li>
+<li>domain controller接收到分组信息之后，首先根据slave controller的信息对当前的网络状态进行更新；使用算法2中描述的流程进行路径规划，得到返回的路线之后将其中包含的交换机的转发表进行更新</li>
+<li>如果分组的目标地址不在domain controller控制的子网中，那么将分组转发给super controller，其按照算法2规定的流程进行路线规划，之后将需要的路由信息发送给对应的domain controller，更新对应的交换机的转发表</li>
+</ul>
+<h2 id="RL算法核心"><a href="#RL算法核心" class="headerlink" title="RL算法核心"></a>RL算法核心</h2><h3 id="action-selection-policy"><a href="#action-selection-policy" class="headerlink" title="action selection policy"></a>action selection policy</h3><p>使用softmax算法进行决策，使用的公式为<br>$$<br>\pi_t(s_t, a_t) = \frac{\exp{(Q_t(s_t, a_t)/\tau_n)}}{\sum_{b=1}^n \exp{(Q_t(s_t,b_t)/\tau_n)}}<br>$$<br>其中参数$\tau_n$是一个随时间变化的量，可以很明显地观察到，如果该值较大，那么每个决策的权重将会趋于一致，因此此时偏重exploration；如果该值较小，则会相对放大不同决策之间的差别，进而偏重exploitation。该论文中设计的算法，想要做到的是在开始阶段偏重exploration，而逐渐地偏向exploitation。假设学习在有限时间内线性收敛，于是设计出了以下更新参数$\tau_n$的式子<br>$$<br>\tau_n = -\frac{(\tau_0 - \tau_T)n}{T} + \tau_0, \ \ \ n\le T<br>$$<br>这个做法的默认前提是网络的情况没有发生改变，我认为这里也许可以进行改进：设置一个计数器，在到达某个阶段之后重新设置退火因子</p>
+<h3 id="state-action-function"><a href="#state-action-function" class="headerlink" title="state-action function"></a>state-action function</h3><p>使用SARSA算法，公式为<br>$$<br>Q_{t+1}(s_t, a_t):= Q_t(s_t,a_t) + \alpha [R_t + \gamma Q_t(s_{t+1}, a_{t+1}) - Q_t(s_t, a_t)]<br>$$</p>
+<h3 id="reward-function​"><a href="#reward-function​" class="headerlink" title="reward function​"></a>reward function​</h3><p>这个量综合考虑了传输延迟、排队延迟、丢包率、可用带宽、行为代价这五个因素，具体形式为：<br>$$<br>\begin{equation}<br>\begin{aligned}<br>R_t&amp;:=R(i\rightarrow j|_{s_t,a_t}) \<br>&amp;=-g(a_t) + \beta_1(\theta_1 delay_{ij} + \theta_2queue_j) + \beta_2loss_j + \beta_3(\phi_1B1_{ij} + \phi_2B2_{ij})<br>\end{aligned}<br>\end{equation}<br>$$</p>
+<ul>
+<li><p>$delay_{ij}$表示从结点i发送数据到结点j的传输延迟减去与相邻结点的平均传输延迟，是一个相对值。使用$d_{ij}^l$表示从结点i到结点j的传输延迟，取值范围是[0, 100]；$A(i)$表示结点i的相邻结点数量，那么可以将$delay_{ij}$表达如下：<br>$$<br>delay_{ij} = \frac{2}{\pi} \arctan(d_{ij}^l - \frac{\sum^{A(i)}<em>{k=1}d</em>{ik}^l}{A(i)})<br>$$</p>
+</li>
+<li><p>$queue_{ij}$表示从结点i发送数据到结点j的排队延迟减去与相邻结点的平均排队延迟，是一个相对值。使用$d_{ij}^q$表示从结点i=到结点j的传输延迟，$N$表示交换机所在子网中的交换机数量，那么可以将$queue_{ij}$表达如下：<br>$$<br>queue_{ij} = \frac{2}{\pi}\arctan(d_{ij}^q - \frac{\sum_{k=1}^N d_{ik}^q}{N})<br>$$</p>
+</li>
+<li><p>$loss_{ij}$表示从结点i发送数据到结点j的丢包率，将该值映射到了[-1,1]，是一个绝对值，与环境无关。可以表达为：<br>$$<br>loss_{ij} = 1 - 2 \%\text{loss}_{ij}<br>$$</p>
+</li>
+<li><p>$B1_{ij}$表示结点i到结点j这条通路中的剩余带宽比例。使用$BW_{ij}^T$表示通路中的总带宽，$BW_{ij}^A$表示通路中的剩余带宽，它们的取值范围是[0, 100]，则有：<br>$$<br>B1_{ij} = \frac{2BW_{ij}^A}{BW_{ij}^T} - 1<br>$$</p>
+</li>
+<li><p>$B2_{ij}$表示结点i到结点j这条通路中的剩余带宽减去该子网中结点的平均可用带宽，表示为：<br>$$<br>B2_{ij} = \frac{2}{\pi} \arctan(0.01(BW_{ij}^A - \frac{\sum_{k=1}^N BW_{ik}^A}{N}))<br>$$</p>
+</li>
+</ul>
+<h3 id="metrics"><a href="#metrics" class="headerlink" title="metrics"></a>metrics</h3><p>虽然在设计算法的时候使用了Qos指标，但是在对算法的性能进行评估的时候，使用了平均跳数(Number of hops)</p>
+<p>​                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/" title="My first RL-related paper">http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Reinforcement-Learning/" rel="tag"># Reinforcement Learning</a>
+          
+            <a href="/tags/Paper/" rel="tag"># Paper</a>
+          
+            <a href="/tags/Software-Defined-Network/" rel="tag"># Software Defined Network</a>
+          
+            <a href="/tags/Omnet/" rel="tag"># Omnet++</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/12/19/Reinforcement-Learning-Note-2/" rel="next" title="Reinforcement Learning Note (2)">
+                <i class="fa fa-chevron-left"></i> Reinforcement Learning Note (2)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">10</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">13</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预备知识"><span class="nav-number">1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">1.1.</span> <span class="nav-text">Temporal-Difference Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SARSA"><span class="nav-number">1.1.1.</span> <span class="nav-text">SARSA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning"><span class="nav-number">1.1.2.</span> <span class="nav-text">Q-learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDN-software-defined-networks"><span class="nav-number">1.2.</span> <span class="nav-text">SDN: software defined networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#omnet"><span class="nav-number">1.3.</span> <span class="nav-text">omnet++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Official-Guide"><span class="nav-number">1.3.1.</span> <span class="nav-text">Official Guide</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omnet-问题总结"><span class="nav-number">1.3.2.</span> <span class="nav-text">omnet++ 问题总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#paper-总结"><span class="nav-number">2.</span> <span class="nav-text">paper 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">2.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idea"><span class="nav-number">2.2.</span> <span class="nav-text">idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SDN网络"><span class="nav-number">2.2.1.</span> <span class="nav-text">SDN网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#拓扑结构"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">拓扑结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流程"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RL算法核心"><span class="nav-number">2.3.</span> <span class="nav-text">RL算法核心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#action-selection-policy"><span class="nav-number">2.3.1.</span> <span class="nav-text">action selection policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state-action-function"><span class="nav-number">2.3.2.</span> <span class="nav-text">state-action function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reward-function​"><span class="nav-number">2.3.3.</span> <span class="nav-text">reward function​</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metrics"><span class="nav-number">2.3.4.</span> <span class="nav-text">metrics</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">27.6k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
