@@ -144,7 +144,7 @@
 <meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/2.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/3.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/02/02/My-first-RL-related-paper/4.png">
-<meta property="og:updated_time" content="2019-02-02T13:51:43.054Z">
+<meta property="og:updated_time" content="2019-02-08T08:37:37.460Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="My first RL-related paper">
 <meta name="twitter:description" content="这是关于论文的笔记。 该论文设计了一个具有层次结构的SDN，以及一个基于RL的进化式路由算法QAR(Qos-aware Adaptive routing)。用到的东西不是很新奇，但是在当时也许相当于开创了一个领域。 QAR使用SARSA算法，使用Qos设计Reward函数。 为了进行仿真，复现论文中的结果，为此学习了Omnet++框架，并且自己手搓了SDN网络协议。">
@@ -360,8 +360,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-02-02T21:51:43+08:00">
-                2019-02-02
+              <time title="Post modified" itemprop="dateModified" datetime="2019-02-08T16:37:37+08:00">
+                2019-02-08
               </time>
             
           </span>
@@ -388,7 +388,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  3.7k
+                  3.9k
                 </span>
               
 
@@ -510,23 +510,36 @@
 <li>domain controller接收到分组信息之后，首先根据slave controller的信息对当前的网络状态进行更新；使用算法2中描述的流程进行路径规划，得到返回的路线之后将其中包含的交换机的转发表进行更新</li>
 <li>如果分组的目标地址不在domain controller控制的子网中，那么将分组转发给super controller，其按照算法2规定的流程进行路线规划，之后将需要的路由信息发送给对应的domain controller，更新对应的交换机的转发表</li>
 </ul>
-<h2 id="RL算法核心"><a href="#RL算法核心" class="headerlink" title="RL算法核心"></a>RL算法核心</h2><h3 id="action-selection-policy"><a href="#action-selection-policy" class="headerlink" title="action selection policy"></a>action selection policy</h3><p>使用softmax算法进行决策，使用的公式为<br>$$<br>\pi_t(s_t, a_t) = \frac{\exp{(Q_t(s_t, a_t)/\tau_n)}}{\sum_{b=1}^n \exp{(Q_t(s_t,b_t)/\tau_n)}}<br>$$<br>其中参数$\tau_n$是一个随时间变化的量，可以很明显地观察到，如果该值较大，那么每个决策的权重将会趋于一致，因此此时偏重exploration；如果该值较小，则会相对放大不同决策之间的差别，进而偏重exploitation。该论文中设计的算法，想要做到的是在开始阶段偏重exploration，而逐渐地偏向exploitation。假设学习在有限时间内线性收敛，于是设计出了以下更新参数$\tau_n$的式子<br>$$<br>\tau_n = -\frac{(\tau_0 - \tau_T)n}{T} + \tau_0, \ \ \ n\le T<br>$$<br>这个做法的默认前提是网络的情况没有发生改变，我认为这里也许可以进行改进：设置一个计数器，在到达某个阶段之后重新设置退火因子</p>
+<h2 id="RL算法核心"><a href="#RL算法核心" class="headerlink" title="RL算法核心"></a>RL算法核心</h2><h3 id="action-selection-policy"><a href="#action-selection-policy" class="headerlink" title="action selection policy"></a>action selection policy</h3><p>使用softmax算法进行决策，使用的公式为<br>$$<br>\pi_t(s_t, a_t) = \frac{\exp{(Q_t(s_t, a_t)/\tau_n)}}{\sum_{b=1}^n \exp{(Q_t(s_t,b_t)/\tau_n)}}<br>$$<br>其中参数$\tau_n​$是一个随时间变化的量，可以很明显地观察到，如果该值较大，那么每个决策的权重将会趋于一致，因此此时偏重exploration；如果该值较小，则会相对放大不同决策之间的差别，进而偏重exploitation。该论文中设计的算法，想要做到的是在开始阶段偏重exploration，而逐渐地偏向exploitation。假设学习在有限时间内线性收敛，于是设计出了以下更新参数$\tau_n​$的式子<br>$$<br>\tau_n = -\frac{(\tau_0 - \tau_T)n}{T} + \tau_0, \ \ \ n\le T<br>$$<br>这个做法的默认前提是网络的情况没有发生改变，我认为这里也许可以进行改进：设置一个计数器，在到达某个阶段之后重新设置退火因子</p>
 <h3 id="state-action-function"><a href="#state-action-function" class="headerlink" title="state-action function"></a>state-action function</h3><p>使用SARSA算法，公式为<br>$$<br>Q_{t+1}(s_t, a_t):= Q_t(s_t,a_t) + \alpha [R_t + \gamma Q_t(s_{t+1}, a_{t+1}) - Q_t(s_t, a_t)]<br>$$</p>
 <h3 id="reward-function​"><a href="#reward-function​" class="headerlink" title="reward function​"></a>reward function​</h3><p>这个量综合考虑了传输延迟、排队延迟、丢包率、可用带宽、行为代价这五个因素，具体形式为：<br>$$<br>\begin{equation}<br>\begin{aligned}<br>R_t&amp;:=R(i\rightarrow j|_{s_t,a_t}) \<br>&amp;=-g(a_t) + \beta_1(\theta_1 delay_{ij} + \theta_2queue_j) + \beta_2loss_j + \beta_3(\phi_1B1_{ij} + \phi_2B2_{ij})<br>\end{aligned}<br>\end{equation}<br>$$</p>
 <ul>
-<li><p>$delay_{ij}$表示从结点i发送数据到结点j的传输延迟减去与相邻结点的平均传输延迟，是一个相对值。使用$d_{ij}^l$表示从结点i到结点j的传输延迟，取值范围是[0, 100]；$A(i)$表示结点i的相邻结点数量，那么可以将$delay_{ij}$表达如下：<br>$$<br>delay_{ij} = \frac{2}{\pi} \arctan(d_{ij}^l - \frac{\sum^{A(i)}<em>{k=1}d</em>{ik}^l}{A(i)})<br>$$</p>
+<li><p>$delay_{ij}​$表示从结点i发送数据到结点j的传输延迟减去与相邻结点的平均传输延迟，是一个相对值。使用$d_{ij}^l​$表示从结点i到结点j的传输延迟，取值范围是[0, 100]；$A(i)​$表示结点i的相邻结点数量，那么可以将$delay_{ij}​$表达如下：<br>$$<br>delay_{ij} = \frac{2}{\pi} \arctan(d_{ij}^l - \frac{\sum^{A(i)}<em>{k=1}d</em>{ik}^l}{A(i)})<br>$$</p>
 </li>
-<li><p>$queue_{ij}$表示从结点i发送数据到结点j的排队延迟减去与相邻结点的平均排队延迟，是一个相对值。使用$d_{ij}^q$表示从结点i=到结点j的传输延迟，$N$表示交换机所在子网中的交换机数量，那么可以将$queue_{ij}$表达如下：<br>$$<br>queue_{ij} = \frac{2}{\pi}\arctan(d_{ij}^q - \frac{\sum_{k=1}^N d_{ik}^q}{N})<br>$$</p>
+<li><p>$queue_{ij}$表示从结点i发送数据到结点j的排队延迟减去与相邻结点的平均排队延迟，是一个相对值。使用$d_{ij}^q$表示从结点i到结点j的传输延迟，$N$表示交换机所在子网中的交换机数量，那么可以将$queue_{ij}$表达如下：<br>$$<br>queue_{ij} = \frac{2}{\pi}\arctan(d_{ij}^q - \frac{\sum_{k=1}^N d_{ik}^q}{N})<br>$$</p>
 </li>
-<li><p>$loss_{ij}$表示从结点i发送数据到结点j的丢包率，将该值映射到了[-1,1]，是一个绝对值，与环境无关。可以表达为：<br>$$<br>loss_{ij} = 1 - 2 \%\text{loss}_{ij}<br>$$</p>
+<li><p>$loss_{ij}​$表示从结点i发送数据到结点j的丢包率，将该值映射到了[-1,1]，是一个绝对值，与环境无关。可以表达为：<br>$$<br>loss_{ij} = 1 - 2 \%\text{loss}_{ij}<br>$$</p>
 </li>
 <li><p>$B1_{ij}$表示结点i到结点j这条通路中的剩余带宽比例。使用$BW_{ij}^T$表示通路中的总带宽，$BW_{ij}^A$表示通路中的剩余带宽，它们的取值范围是[0, 100]，则有：<br>$$<br>B1_{ij} = \frac{2BW_{ij}^A}{BW_{ij}^T} - 1<br>$$</p>
 </li>
-<li><p>$B2_{ij}$表示结点i到结点j这条通路中的剩余带宽减去该子网中结点的平均可用带宽，表示为：<br>$$<br>B2_{ij} = \frac{2}{\pi} \arctan(0.01(BW_{ij}^A - \frac{\sum_{k=1}^N BW_{ik}^A}{N}))<br>$$</p>
+<li><p>$B2_{ij}​$表示结点i到结点j这条通路中的剩余带宽减去该子网中结点的平均可用带宽，表示为：<br>$$<br>B2_{ij} = \frac{2}{\pi} \arctan(0.01(BW_{ij}^A - \frac{\sum_{k=1}^N BW_{ik}^A}{N}))<br>$$</p>
 </li>
 </ul>
 <h3 id="metrics"><a href="#metrics" class="headerlink" title="metrics"></a>metrics</h3><p>虽然在设计算法的时候使用了Qos指标，但是在对算法的性能进行评估的时候，使用了平均跳数(Number of hops)</p>
-<p>​                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           </p>
+<h2 id="设计细节"><a href="#设计细节" class="headerlink" title="设计细节"></a>设计细节</h2><ol>
+<li><p>由于有丢包率的存在，所以必须设置ACK应答，超时重传机制</p>
+</li>
+<li><p>如何处理剩余带宽和总带宽的问题？</p>
+<p>由于只要存在有剩余带宽，那么就可以进行数据传输，于是只需要初始化的时候将目前整个网络的剩余带宽与总带宽随机一下即可，表示当前仿真环境的搭建</p>
+</li>
+<li><p>关于排队延迟，我决定同样处理为随机数值，但是是在读取数据的时候进行随机取数</p>
+<p>丢包率只需要出示设置即可，由于线路一般比较靠谱，所以在[0, 0.2]之间随机取值即可</p>
+<p>在接受到信息之后，如何向信息发送方发送ack信号？</p>
+<ul>
+<li>首先需要设置两个信息，一个用于暂存当前以发送的信息<code>msg_</code>，当发生超时的时候重传；另外一个是当前接收到的信息<code>msg</code>。</li>
+</ul>
+</li>
+</ol>
 
       
     </div>
@@ -753,6 +766,10 @@
                     <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
                   </li>
                 
+                  <li class="links-of-blogroll-item">
+                    <a href="blog.three7.cc" title="37as" target="_blank">37as</a>
+                  </li>
+                
               </ul>
             </div>
           
@@ -772,7 +789,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预备知识"><span class="nav-number">1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">1.1.</span> <span class="nav-text">Temporal-Difference Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SARSA"><span class="nav-number">1.1.1.</span> <span class="nav-text">SARSA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning"><span class="nav-number">1.1.2.</span> <span class="nav-text">Q-learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDN-software-defined-networks"><span class="nav-number">1.2.</span> <span class="nav-text">SDN: software defined networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#omnet"><span class="nav-number">1.3.</span> <span class="nav-text">omnet++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Official-Guide"><span class="nav-number">1.3.1.</span> <span class="nav-text">Official Guide</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omnet-问题总结"><span class="nav-number">1.3.2.</span> <span class="nav-text">omnet++ 问题总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#paper-总结"><span class="nav-number">2.</span> <span class="nav-text">paper 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">2.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idea"><span class="nav-number">2.2.</span> <span class="nav-text">idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SDN网络"><span class="nav-number">2.2.1.</span> <span class="nav-text">SDN网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#拓扑结构"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">拓扑结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流程"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RL算法核心"><span class="nav-number">2.3.</span> <span class="nav-text">RL算法核心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#action-selection-policy"><span class="nav-number">2.3.1.</span> <span class="nav-text">action selection policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state-action-function"><span class="nav-number">2.3.2.</span> <span class="nav-text">state-action function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reward-function​"><span class="nav-number">2.3.3.</span> <span class="nav-text">reward function​</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metrics"><span class="nav-number">2.3.4.</span> <span class="nav-text">metrics</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#预备知识"><span class="nav-number">1.</span> <span class="nav-text">预备知识</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Temporal-Difference-Learning"><span class="nav-number">1.1.</span> <span class="nav-text">Temporal-Difference Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SARSA"><span class="nav-number">1.1.1.</span> <span class="nav-text">SARSA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Q-learning"><span class="nav-number">1.1.2.</span> <span class="nav-text">Q-learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SDN-software-defined-networks"><span class="nav-number">1.2.</span> <span class="nav-text">SDN: software defined networks</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#omnet"><span class="nav-number">1.3.</span> <span class="nav-text">omnet++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Official-Guide"><span class="nav-number">1.3.1.</span> <span class="nav-text">Official Guide</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#omnet-问题总结"><span class="nav-number">1.3.2.</span> <span class="nav-text">omnet++ 问题总结</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#paper-总结"><span class="nav-number">2.</span> <span class="nav-text">paper 总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#motivation"><span class="nav-number">2.1.</span> <span class="nav-text">motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#idea"><span class="nav-number">2.2.</span> <span class="nav-text">idea</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SDN网络"><span class="nav-number">2.2.1.</span> <span class="nav-text">SDN网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#拓扑结构"><span class="nav-number">2.2.1.1.</span> <span class="nav-text">拓扑结构</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#工作流程"><span class="nav-number">2.2.1.2.</span> <span class="nav-text">工作流程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RL算法核心"><span class="nav-number">2.3.</span> <span class="nav-text">RL算法核心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#action-selection-policy"><span class="nav-number">2.3.1.</span> <span class="nav-text">action selection policy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#state-action-function"><span class="nav-number">2.3.2.</span> <span class="nav-text">state-action function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#reward-function​"><span class="nav-number">2.3.3.</span> <span class="nav-text">reward function​</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#metrics"><span class="nav-number">2.3.4.</span> <span class="nav-text">metrics</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设计细节"><span class="nav-number">2.4.</span> <span class="nav-text">设计细节</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -806,7 +823,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">27.6k</span>
+    <span title="Site words total count">27.8k</span>
   
 </div>
 
