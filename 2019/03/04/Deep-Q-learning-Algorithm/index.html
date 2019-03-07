@@ -141,7 +141,9 @@
 <meta property="og:description" content="这篇笔记用于记录自己对Deep Q-learning的理解、思考 主要参考了post from Intel">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/DQN.png">
-<meta property="og:updated_time" content="2019-03-05T13:50:16.334Z">
+<meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/3.png">
+<meta property="og:updated_time" content="2019-03-07T14:31:01.268Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Deep Q-learning Algorithm">
 <meta name="twitter:description" content="这篇笔记用于记录自己对Deep Q-learning的理解、思考 主要参考了post from Intel">
@@ -357,8 +359,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-05T21:50:16+08:00">
-                2019-03-05
+              <time title="Post modified" itemprop="dateModified" datetime="2019-03-07T22:31:01+08:00">
+                2019-03-07
               </time>
             
           </span>
@@ -407,7 +409,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1k
+                  2.5k
                 </span>
               
 
@@ -479,7 +481,57 @@
 </li>
 </ul>
 <p><img src="DQN.png" alt=""></p>
-<p>Deep Deterministic Policy Gradient </p>
+<h1 id="Deep-Deterministic-Policy-Gradient"><a href="#Deep-Deterministic-Policy-Gradient" class="headerlink" title="Deep Deterministic Policy Gradient"></a>Deep Deterministic Policy Gradient</h1><h2 id="1-Policy-Gradient"><a href="#1-Policy-Gradient" class="headerlink" title="1. Policy Gradient"></a>1. Policy Gradient</h2><p>所有包含有通过对策略$\pi$设定参数$\theta$，从experience中直接学习策略的方法，统称为策略梯度方法，因此该类方法可以说是基于策略的。而同时学习策略以及值函数的方法，称为actor-critic方法，其中action表示学到的策略，critic表示学到的值函数。</p>
+<p>PG相对基于值函数的优点是，该策略最终将会逼近一个确定策略，而不像$\epsilon-greedy$那样仍然会有$\epsilon$的可能随机选择。尽管后者可以通过在softmax中添加一个temperature，以保证随着时间的推进最终可以得到一个确定性策略，但是temperature衰减的过程很难把握，并且初值也很难选择。</p>
+<p>基于策略的方法的一个最显而易见的好处，就是可以在初始化阶段，在策略中加入自己的知识(偏好)，以得到一个很好的起始状态。</p>
+<p>关于PG的证明可以看<a href="https://medium.com/@jonathan_hui/rl-policy-gradients-explained-9b13b688b146" target="_blank" rel="noopener">这里</a>，其中的解释非常棒，并且给出了推导出来的式子的一个直观解释。</p>
+<p><img src="2.png" alt=""></p>
+<p>观察该式，可以发现下面划线的项其实是一个极大似然估计，表示在给定策略下得到这条状态转移路线的可能性，之后乘以了reward值，以对策略进行更新。直观来看，可以十分确定的是$\nabla_\theta J(\theta) \sim  \Epsilon (r(s, a))$，但是具体应该按照什么样的比例更新多少是未知的。而极大似然估计正是一个十分合适的比例。</p>
+<blockquote>
+<p>In Deep Learning, a long sequence of multiplication with factors that are strongly correlated can trigger vanishing or exploding gradient easily. However, the policy gradient only sums up the gradient which breaks the curse of multiplying a long sequence of numbers.</p>
+</blockquote>
+<p>高方差问题：对于某个问题，可能存在多个完美的policy，使得期望的奖励值达到最大。再加上这是非确定性策略问题，因此对于目前已学到的参数，可能它正在接近某个最优解，但是当探索出一条到达另外某个最优解的情况时，将会偏离当前的方向向另外一个最优解靠近，因此导致难以收敛，也就是高方差问题。</p>
+<p>通过两个trick来解决高方差问题</p>
+<ul>
+<li><p>Reward to go</p>
+<p>通过观察梯度更新的式子，可以发现t-1时刻的奖励竟然会与未来的t时刻的策略梯度相乘。这是不符合马克多夫性质的。因此可以将原式修改为<br>$$<br>\nabla_\theta J(\theta) =\cfrac{1}{N}\sum_{i=1}^N [ \sum_{t=1}^T [ \nabla_\theta\log  \pi_\theta(a_{i,t}|s_{i,t}) \sum_{t’=t}^T r(s_{i,t’}, a_{i,t’}) ]]<br>$$</p>
+</li>
+<li><p>Baseline</p>
+<p>对于后面的激励，可以使其减去一个常数，以达到减少方差并且不改变无偏性</p>
+<p>关于该常数的选取，在教材中有指明，可以是任意的函数、变量，只要不是a的函数即可。一般而言，对于MDP，baseline应该是关于状态的函数。下面这段话对baseline如何加快收敛的过程，作了一个直观的解释：</p>
+<blockquote>
+<p>In some states all actions have high values and we need a high baseline to diﬀerentiate the higher valued actions from the less highly valued ones; in other states all actions will have low values and a low baseline is appropriate.</p>
+</blockquote>
+<p>也正因如此，一般选择</p>
+<ul>
+<li><p>当前episode的平均reward</p>
+<p>$b = \frac{1}{N}\sum_{i=1}^N r(\tau)$</p>
+</li>
+<li><p>使用一个神经网络来拟合该值</p>
+<p>将原式中的轨迹上奖励总和替换为$A^{\pi}(s_t, a_t) = Q^{\pi}(s_t, a_t) - V^{\pi}(s_t)$</p>
+<p>这个变形感觉很费解，是否会影响无偏性呢？</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>上述描述的算法，称之为REINFORCE-with-baseline算法，对于policy以及state-value function分别使用一个神经网络进行学习。但是它仍然不属于actor-critic算法，因为其中的baseline并没有涉及利用之后的行为状态更新当前的参数，而仅仅是加快收敛速度的作用，所以这并不能称之为批评家。</p>
+<p>正如我们在TD方法中看到的，当批评家对参数进行单步更新的时候，这些偏差以及对状态的依赖都是有益的。</p>
+<h2 id="2-“CONTINUOUS-CONTROL-WITH-DEEP-REINFORCEMENT-LEARNING”"><a href="#2-“CONTINUOUS-CONTROL-WITH-DEEP-REINFORCEMENT-LEARNING”" class="headerlink" title="2. “CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING”"></a>2. “CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING”</h2><p>拜读DDPG论文</p>
+<p>其中给出的论文提出背景感觉非常实在有用，尤其是关于policy gradient算法发明出来的路线，1997-2011-2014，如今想来真是令人振奋。</p>
+<p>为了解决使用非线性评估器近似Q值不稳定的问题，这里使用了DQN中的两个trick</p>
+<ul>
+<li><p>replay buffer</p>
+</li>
+<li><p>soft update</p>
+<p>相对于DQN中在某个给定的步长范围之内更新，这里是类似于多臂赌博机中的soft update，也就是给出一个参数，只更新部分</p>
+</li>
+</ul>
+<p>为了提高模型的泛化能力，使得同一种网络架构能够处理多种不同的情景(不同的游戏可坑存在不同的状态，并且每个状态下的取值范围也可能有很大的波动性)，这里对数据进行了正则化。</p>
+<p>正如模型中的第二个单词deterministic的含义，DDPG学得的是确定性策略，也就是说给定网络中的参数以及当前的状态，可以唯一确定出下一个状态。因此必须同经典的RL算法一样，平衡exploring &amp; exploiting，论文中的做法是对确定性策略的输出加上一个噪声，以进行exploiting。</p>
+<p>下面对算法流程进行分析</p>
+<p><img src="3.png" alt=""></p>
+<p>大体上是一个actor-critic框架，每个角色都由两个神经网络构成，一个是evaluation网络，一个是target网络，用于减少关联性，加快收敛速度。</p>
+<p><strong>关于更新式的证明留待将来研究</strong></p>
 
       
     </div>
@@ -723,7 +775,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Q-Learning"><span class="nav-number">1.</span> <span class="nav-text">Deep Q-Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-我们为什么需要深度学习？"><span class="nav-number">1.1.</span> <span class="nav-text">1. 我们为什么需要深度学习？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CNN-by-Andrew-Ng"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CNN by Andrew Ng</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-Motivation"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1 Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-Calculation"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.1.2 Calculation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-如何改进强化学习算法？"><span class="nav-number">1.2.</span> <span class="nav-text">2. 如何改进强化学习算法？</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Q-Learning"><span class="nav-number">1.</span> <span class="nav-text">Deep Q-Learning</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-我们为什么需要深度学习？"><span class="nav-number">1.1.</span> <span class="nav-text">1. 我们为什么需要深度学习？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CNN-by-Andrew-Ng"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CNN by Andrew Ng</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-Motivation"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1 Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-Calculation"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.1.2 Calculation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-如何改进强化学习算法？"><span class="nav-number">1.2.</span> <span class="nav-text">2. 如何改进强化学习算法？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Deterministic-Policy-Gradient"><span class="nav-number">2.</span> <span class="nav-text">Deep Deterministic Policy Gradient</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Policy-Gradient"><span class="nav-number">2.1.</span> <span class="nav-text">1. Policy Gradient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-“CONTINUOUS-CONTROL-WITH-DEEP-REINFORCEMENT-LEARNING”"><span class="nav-number">2.2.</span> <span class="nav-text">2. “CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING”</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -757,7 +809,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">28.8k</span>
+    <span title="Site words total count">30.3k</span>
   
 </div>
 
