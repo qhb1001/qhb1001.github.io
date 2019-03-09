@@ -143,7 +143,7 @@
 <meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/DQN.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/2.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/03/04/Deep-Q-learning-Algorithm/3.png">
-<meta property="og:updated_time" content="2019-03-07T14:31:01.268Z">
+<meta property="og:updated_time" content="2019-03-09T00:58:11.550Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Deep Q-learning Algorithm">
 <meta name="twitter:description" content="这篇笔记用于记录自己对Deep Q-learning的理解、思考 主要参考了post from Intel">
@@ -359,8 +359,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-07T22:31:01+08:00">
-                2019-03-07
+              <time title="Post modified" itemprop="dateModified" datetime="2019-03-09T08:58:11+08:00">
+                2019-03-09
               </time>
             
           </span>
@@ -409,7 +409,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2.5k
+                  2.6k
                 </span>
               
 
@@ -531,6 +531,11 @@
 <p>下面对算法流程进行分析</p>
 <p><img src="3.png" alt=""></p>
 <p>大体上是一个actor-critic框架，每个角色都由两个神经网络构成，一个是evaluation网络，一个是target网络，用于减少关联性，加快收敛速度。</p>
+<p>对于更新式J，这里记录一下对其的理解</p>
+<ul>
+<li>首先看求和号后面的第二项，这是对策略求梯度，表示当前行为的变化，也就是actor这一步相对于上一步的梯度，actor只是作出这一步，而且不知道当前策略的变化将会带来的影响</li>
+<li>现在看求和号后面的第一项， 对当前的state-action function求梯度，以得知actor作出的改变究竟是好是坏</li>
+</ul>
 <p><strong>关于更新式的证明留待将来研究</strong></p>
 
       
@@ -589,6 +594,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/" rel="prev" title="Graph Neural Networks: A Review of Methods and Applications">
+                Graph Neural Networks: A Review of Methods and Applications <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -669,7 +678,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">11</span>
+                  <span class="site-state-item-count">12</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -809,7 +818,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">30.3k</span>
+    <span title="Site words total count">31.2k</span>
   
 </div>
 
