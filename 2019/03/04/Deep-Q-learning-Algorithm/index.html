@@ -157,7 +157,7 @@
     root: '/',
     scheme: 'Muse',
     version: '5.1.3',
-    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
     fancybox: true,
     tabs: true,
     motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
@@ -655,8 +655,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -769,6 +778,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Q-Learning-Network"><span class="nav-number">1.</span> <span class="nav-text">Deep Q-Learning Network</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-我们为什么需要深度学习？"><span class="nav-number">1.1.</span> <span class="nav-text">1. 我们为什么需要深度学习？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-CNN-by-Andrew-Ng"><span class="nav-number">1.1.1.</span> <span class="nav-text">1.1 CNN by Andrew Ng</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-1-Motivation"><span class="nav-number">1.1.1.1.</span> <span class="nav-text">1.1.1 Motivation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-2-Calculation"><span class="nav-number">1.1.1.2.</span> <span class="nav-text">1.1.2 Calculation</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-如何改进强化学习算法？"><span class="nav-number">1.2.</span> <span class="nav-text">2. 如何改进强化学习算法？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Deep-Deterministic-Policy-Gradient"><span class="nav-number">2.</span> <span class="nav-text">Deep Deterministic Policy Gradient</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Policy-Gradient"><span class="nav-number">2.1.</span> <span class="nav-text">1. Policy Gradient</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-“CONTINUOUS-CONTROL-WITH-DEEP-REINFORCEMENT-LEARNING”"><span class="nav-number">2.2.</span> <span class="nav-text">2. “CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING”</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
