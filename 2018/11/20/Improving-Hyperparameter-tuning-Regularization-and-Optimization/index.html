@@ -632,17 +632,8 @@
       
 
       
-        <ul class="sidebar-nav motion-element">
-          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
-            Table of Contents
-          </li>
-          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
-            Overview
-          </li>
-        </ul>
-      
 
-      <section class="site-overview-wrap sidebar-panel">
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -703,17 +694,20 @@
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
-                    GitHub</a>
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
                   <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
-                    E-Mail</a>
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
                 </span>
               
                 <span class="links-of-author-item">
                   <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
-                    Instagram</a>
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
                 </span>
               
             
@@ -752,22 +746,6 @@
         </div>
       </section>
 
-      
-      <!--noindex-->
-        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
-          <div class="post-toc">
-
-            
-              
-            
-
-            
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Week-1"><span class="nav-number">1.</span> <span class="nav-text">Week 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setting-up-ML-application"><span class="nav-number">1.1.</span> <span class="nav-text">Setting up ML application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-dev-test-sets"><span class="nav-number">1.1.1.</span> <span class="nav-text">Train/dev/test sets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bias-and-Variance"><span class="nav-number">1.1.2.</span> <span class="nav-text">Bias and Variance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-recipe-for-machine-learning"><span class="nav-number">1.1.3.</span> <span class="nav-text">Basic recipe for machine learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Regularization"><span class="nav-number">1.2.</span> <span class="nav-text">Regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Logistic-regression"><span class="nav-number">1.2.1.</span> <span class="nav-text">Logistic regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Neural-network"><span class="nav-number">1.2.2.</span> <span class="nav-text">Neural network</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-regularization-prevent-overfitting"><span class="nav-number">1.3.</span> <span class="nav-text">Why regularization prevent overfitting?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L2-Regularization"><span class="nav-number">1.3.1.</span> <span class="nav-text">L2 Regularization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dropout-regularization"><span class="nav-number">1.3.2.</span> <span class="nav-text">Dropout regularization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-augmentation"><span class="nav-number">1.3.3.</span> <span class="nav-text">Data augmentation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Early-stopping"><span class="nav-number">1.3.4.</span> <span class="nav-text">Early stopping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Setting-up-optimization-problem"><span class="nav-number">1.4.</span> <span class="nav-text">Setting up optimization problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Normalizing-training-sets"><span class="nav-number">1.4.1.</span> <span class="nav-text">Normalizing training sets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Weight-initialization-for-deep-networks"><span class="nav-number">1.4.2.</span> <span class="nav-text">Weight initialization for deep networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Check-derivative-computation"><span class="nav-number">1.4.3.</span> <span class="nav-text">Check derivative computation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Homework"><span class="nav-number">1.5.</span> <span class="nav-text">Homework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Week-2"><span class="nav-number">2.</span> <span class="nav-text">Week 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mini-batch-gradient-descent"><span class="nav-number">2.1.</span> <span class="nav-text">Mini-batch gradient descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-figure"><span class="nav-number">2.1.1.</span> <span class="nav-text">cost figure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#intuition"><span class="nav-number">2.1.2.</span> <span class="nav-text">intuition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-choose-mini-batch-size"><span class="nav-number">2.1.3.</span> <span class="nav-text">how to choose mini-batch size</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exponentially-weighted-averages"><span class="nav-number">2.2.</span> <span class="nav-text">Exponentially weighted averages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tutuition"><span class="nav-number">2.2.1.</span> <span class="nav-text">tutuition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bias-correction"><span class="nav-number">2.2.2.</span> <span class="nav-text">bias correction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-descent-with-momentum"><span class="nav-number">2.3.</span> <span class="nav-text">Gradient descent with momentum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSprop"><span class="nav-number">2.4.</span> <span class="nav-text">RMSprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">2.5.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-rate-decay"><span class="nav-number">2.6.</span> <span class="nav-text">Learning rate decay</span></a></li></ol></li></ol></div>
-            
-
-          </div>
-        </section>
-      <!--/noindex-->
       
 
       
