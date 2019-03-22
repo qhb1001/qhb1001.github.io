@@ -139,7 +139,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is intended to record some useful details in the course CS61A in UCB. Since this class is designed for newbie, I will go through it quickly and just write down some meaningful and interestin">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-21T12:54:15.201Z">
+<meta property="og:updated_time" content="2019-03-22T08:07:23.079Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS61A">
 <meta name="twitter:description" content="This note is intended to record some useful details in the course CS61A in UCB. Since this class is designed for newbie, I will go through it quickly and just write down some meaningful and interestin">
@@ -354,8 +354,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-21T20:54:15+08:00">
-                2019-03-21
+              <time title="Post modified" itemprop="dateModified" datetime="2019-03-22T16:07:23+08:00">
+                2019-03-22
               </time>
             
           </span>
@@ -382,7 +382,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  631
+                  985
                 </span>
               
 
@@ -434,11 +434,28 @@
 <hr>
 <p>When Python executes a <code>return</code> statement, the function terminates immediately. If Python reaches the end of the function body without executing a <code>return</code> statement, it will automatically return <code>None</code>.</p>
 <p>Notice also that <code>print</code> will display text <strong>without the quotes</strong>, but <code>return</code> will preserve the quotes.</p>
+<h1 id="Higher-Order-Functions"><a href="#Higher-Order-Functions" class="headerlink" title="Higher-Order Functions"></a>Higher-Order Functions</h1><p>PPT: <a href="http://inst.eecs.berkeley.edu/~cs61a/fa18/assets/slides/04-Higher-Order_Functions_full.pdf" target="_blank" rel="noopener">High order function</a> includes the vivid description about high order function and lambda expressions</p>
+<p>the difference between high order function and lambda expressions:</p>
+<p>• Both create a function with the same domain, range, and behavior.<br>• Both bind that function to the name square.<br>• Only the def statement gives the function an intrinsic name, which shows up in<br>environment diagrams but doesn’t affect execution (unless the function is printed).</p>
 <h1 id="Homework-2"><a href="#Homework-2" class="headerlink" title="Homework 2"></a>Homework 2</h1><p>To fully understand the application about the recursion method and return some function pointer in python 3, we should abandon the previous mind in C++ and Java which is like by using the parameters this functions have, we can do anything. However, in the recursion method, we could even ask for more parameters, and based on that, we could achieve something better. </p>
 <blockquote>
 <p>Implement a function <code>make_repeater</code> so that <code>make_repeater(f, n)(x)</code> returns <code>f(f(...f(x)...))</code>, where <code>f</code> is applied <code>n</code> times. That is, <code>make_repeater(f, n)</code> returns another function that can then be applied to another argument. For example, <code>make_repeater(square, 3)(42)</code> evaluates to <code>square(square(square(42)))</code>. Yes, it makes sense to apply the function zero times! See if you can figure out a reasonable function to return for that case. You may use either loops or recursion in your implementation.</p>
 </blockquote>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">make_repeater</span><span class="params">(f, n)</span>:</span></span><br><span class="line">    <span class="string">"""Return the function that computes the nth application of f.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; add_three = make_repeater(increment, 3)</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; add_three(5)</span></span><br><span class="line"><span class="string">    8</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; make_repeater(triple, 5)(1) # 3 * 3 * 3 * 3 * 3 * 1</span></span><br><span class="line"><span class="string">    243</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; make_repeater(square, 2)(5) # square(square(5))</span></span><br><span class="line"><span class="string">    625</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; make_repeater(square, 4)(5) # square(square(square(square(5))))</span></span><br><span class="line"><span class="string">    152587890625</span></span><br><span class="line"><span class="string">    &gt;&gt;&gt; make_repeater(square, 0)(5)</span></span><br><span class="line"><span class="string">    5</span></span><br><span class="line"><span class="string">    """</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">h</span><span class="params">(x)</span>:</span></span><br><span class="line">        ans = x</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, n):</span><br><span class="line">            ans = f(ans)</span><br><span class="line">        <span class="keyword">return</span> ans</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> h</span><br></pre></td></tr></table></figure>
+<h1 id="lab-2"><a href="#lab-2" class="headerlink" title="lab 2"></a>lab 2</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>b = <span class="keyword">lambda</span> x: <span class="keyword">lambda</span>: x  <span class="comment"># Lambdas can return other lambdas!</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c = b(<span class="number">88</span>)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>c</span><br></pre></td></tr></table></figure>
+<p>What would python display?</p>
+<p>这里有一个很简单的记忆方法，那就是有几个lambda，它就需要接收几次参数；如果接收的参数次数不对，那么肯定是一个lambda表达式</p>
+<hr>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="comment"># Try drawing an environment diagram if you get stuck!</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>higher_order_lambda = <span class="keyword">lambda</span> f: <span class="keyword">lambda</span> x: f(x)</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span><span class="function"><span class="keyword">def</span> <span class="title">cake</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>   print(<span class="string">'beets'</span>)</span><br><span class="line"><span class="meta">... </span>   <span class="function"><span class="keyword">def</span> <span class="title">pie</span><span class="params">()</span>:</span></span><br><span class="line"><span class="meta">... </span>       print(<span class="string">'sweets'</span>)</span><br><span class="line"><span class="meta">... </span>       <span class="keyword">return</span> <span class="string">'cake'</span></span><br><span class="line"><span class="meta">... </span>   <span class="keyword">return</span> pie</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chocolate = cake()</span><br><span class="line">beets <span class="comment"># pie just didn't run</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>chocolate()</span><br><span class="line">sweets <span class="comment"># now run the pie</span></span><br><span class="line"><span class="string">'cake'</span> <span class="comment"># return 'cake'</span></span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>more_chocolate, more_cake = chocolate(), cake</span><br><span class="line">sweets <span class="comment"># output the print information but not return information</span></span><br></pre></td></tr></table></figure>
+<h1 id="lab-4"><a href="#lab-4" class="headerlink" title="lab 4"></a>lab 4</h1><p>Recall that empty lists, <code>[]</code>, are false-y values. Therefore, you can use an if statement like the following if you only want to do operations on non-empty lists:</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> lst:</span><br><span class="line">    <span class="comment"># Do stuff with the elements of list</span></span><br></pre></td></tr></table></figure>
+<p> This is equivalent to:</p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> len(lst) &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="comment"># Do stuff</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p>List Comprehensions: The syntax is designed to read like English: <em>“Compute the expression for each element in the sequence if the conditional is true for that element.”</em></p>
+<hr>
+<p>The summation of two list is equal to combine all the elements in two lists into one list. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&gt;&gt;&gt; </span>ones = [<span class="number">1</span> <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="string">"hi"</span>, <span class="string">"bye"</span>, <span class="string">"you"</span>]]</span><br><span class="line"><span class="meta">&gt;&gt;&gt; </span>ones + [str(i) <span class="keyword">for</span> i <span class="keyword">in</span> [<span class="number">6</span>, <span class="number">3</span>, <span class="number">8</span>, <span class="number">4</span>]]</span><br><span class="line">[<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="string">'6'</span>, <span class="string">'3'</span>, <span class="string">'8'</span>, <span class="string">'4'</span>]</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -614,20 +631,17 @@
               
                 <span class="links-of-author-item">
                   <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
-                    
-                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                    GitHub</a>
                 </span>
               
                 <span class="links-of-author-item">
                   <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
-                    
-                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                    E-Mail</a>
                 </span>
               
                 <span class="links-of-author-item">
                   <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
-                    
-                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                    Instagram</a>
                 </span>
               
             
@@ -676,7 +690,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework1"><span class="nav-number">1.</span> <span class="nav-text">Homework1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab-1"><span class="nav-number">2.</span> <span class="nav-text">Lab 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework-2"><span class="nav-number">3.</span> <span class="nav-text">Homework 2</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework1"><span class="nav-number">1.</span> <span class="nav-text">Homework1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lab-1"><span class="nav-number">2.</span> <span class="nav-text">Lab 1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Higher-Order-Functions"><span class="nav-number">3.</span> <span class="nav-text">Higher-Order Functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Homework-2"><span class="nav-number">4.</span> <span class="nav-text">Homework 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lab-2"><span class="nav-number">5.</span> <span class="nav-text">lab 2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#lab-4"><span class="nav-number">6.</span> <span class="nav-text">lab 4</span></a></li></ol></div>
             
 
           </div>
@@ -710,7 +724,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">33.6k</span>
+    <span title="Site words total count">34k</span>
   
 </div>
 
