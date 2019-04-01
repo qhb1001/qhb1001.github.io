@@ -132,17 +132,19 @@
 
 
 
-<meta name="description" content="该笔记用于记录学习CMU15213时遇到的知识点 繁星点点，采摘之人不亦乐乎">
+<meta name="description" content="该笔记用于记录学习CMU15213时遇到的知识点">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CMU15213">
 <meta property="og:url" content="http://notes-hongbo.top/2019/03/26/CMU15213/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="该笔记用于记录学习CMU15213时遇到的知识点 繁星点点，采摘之人不亦乐乎">
+<meta property="og:description" content="该笔记用于记录学习CMU15213时遇到的知识点">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-27T11:40:14.958Z">
+<meta property="og:image" content="http://notes-hongbo.top/2019/03/26/CMU15213/register.png">
+<meta property="og:updated_time" content="2019-04-01T13:00:42.941Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMU15213">
-<meta name="twitter:description" content="该笔记用于记录学习CMU15213时遇到的知识点 繁星点点，采摘之人不亦乐乎">
+<meta name="twitter:description" content="该笔记用于记录学习CMU15213时遇到的知识点">
+<meta name="twitter:image" content="http://notes-hongbo.top/2019/03/26/CMU15213/register.png">
 
 
 
@@ -354,8 +356,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-27T19:40:14+08:00">
-                2019-03-27
+              <time title="Post modified" itemprop="dateModified" datetime="2019-04-01T21:00:42+08:00">
+                2019-04-01
               </time>
             
           </span>
@@ -382,7 +384,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  721
+                  1.4k
                 </span>
               
 
@@ -408,7 +410,6 @@
 
       
         <p>该笔记用于记录学习CMU15213时遇到的知识点</p>
-<p>繁星点点，采摘之人不亦乐乎</p>
 <a id="more"></a>
 <h1 id="Chapter-2-Representing-and-Manipulating-Information"><a href="#Chapter-2-Representing-and-Manipulating-Information" class="headerlink" title="Chapter 2 Representing and Manipulating Information"></a>Chapter 2 Representing and Manipulating Information</h1><h2 id="寻址与字节顺序"><a href="#寻址与字节顺序" class="headerlink" title="寻址与字节顺序"></a>寻址与字节顺序</h2><p>根据操作系统的不同，硬件存储数据的方式也可能不同，具体可以分为两派：”little endian” and “big endian”</p>
 <p>这两个词语的来源是格列佛游记里面对一个无关紧要的问题的引用，出处所争执的是剥鸡蛋应该从大端剥还是小端剥；而在计算机数据存储这里，所争论的是数据应该从高位向低位存储，还是应该从低位向高位存储，同样是一个无关痛痒的问题</p>
@@ -440,6 +441,29 @@
 <p>这里记录一下对size_t的思考</p>
 <p>后面的t，可以理解为type的缩写，该类型用于表示对象内存大小，是一个很大的非负数</p>
 <p>malloc, sizeof等涉及到内存大小的默认都会使用这种数据类型</p>
+</blockquote>
+<h2 id="Logical-amp-Arithmetic-bit-shift"><a href="#Logical-amp-Arithmetic-bit-shift" class="headerlink" title="Logical &amp; Arithmetic bit shift"></a>Logical &amp; Arithmetic bit shift</h2><ol>
+<li><p>无论是逻辑左移还是算术左移，填充的元素都是0</p>
+</li>
+<li><p>对于逻辑右移，填充的元素是0；这对于无符号数是特别方便的，因为右移的时候，最高位必须是0</p>
+</li>
+<li><p>对于算术右移，填充的元素随最高位的变化而变化，适用于有符号数</p>
+<p>由于补码的一种定义为$[b_{n - 1}…b_2b_1b_0]<em>补 = -2^{n-1} + \sum</em>{i=0}^{n-2}2^i$</p>
+<p>因此如果对负数采用逻辑右移，将会得到一个正数，这是违背常理的；正确的做法是在最高位填充1，如此依赖就可以在保持负号的同时不修改原数值</p>
+</li>
+</ol>
+<h1 id="Chapter-3-Machine-Level-Representation-of-Programs"><a href="#Chapter-3-Machine-Level-Representation-of-Programs" class="headerlink" title="Chapter 3 Machine-Level Representation of Programs"></a>Chapter 3 Machine-Level Representation of Programs</h1><h2 id="Access-Information"><a href="#Access-Information" class="headerlink" title="Access Information"></a>Access Information</h2><p><img src="register.png" alt=""></p>
+<p>上图列举了十六个整数寄存器的信息，每个寄存器的名称均由%开头标示。在目前流行的64位机器上，由于存在访问低位内存的需求，所以仍然支持历史版本的寄存器，具体信息可以在图中观察到。</p>
+<p>与之相应的，也就产生了一套对应的指令集，此处以move举例表明是如何匹配的。</p>
+<p>move指令的源操作数可以是立即数、寄存器、内存地址；而目的操作数可以是寄存器或内存地址。</p>
+<p>按照二进制位数，将寄存器的大小划分为了byte, word, long word, quad word；取每个单词的第一个字母，也就出现了moveb, movew, movel, moveq这四条数据传送指令。在x86-64体系系统中加了一条限制，传送指令的两个操作数不能都指向内存地址(如果需要这样的数据传送，必须使用两条传送指令，以一个寄存器作为中介进行数据传送)。<del>因此这就保证了数据传送指令的两个操作数必定有一个是寄存器。</del>至于具体应该使用四个move指令的哪一个，就是要看操作数中的寄存器的大小，来进行选择。</p>
+<blockquote>
+<p>the size of the register must match the size designated by the last character of the instruction (‘b’, ‘w’, ‘l ‘, or ‘q’).</p>
+</blockquote>
+<p>也就是说，只要是move指令中操作数上面的寄存器，就必须与move指令最后一个字符规定的大小匹配。</p>
+<p>另外需要注意下面这一点</p>
+<blockquote>
+<p>For most cases, the Mov instructions will only update the specific register bytes or memory locations indicated by the destination operand. The only exception is that when movl has a register as the destination, it will also set the high-order 4 bytes of the register to 0, This exception arises from the convention, adopted in x86-64, that any instruction that generates a 32-bit value for a register also sets the high-order portion of the register to 0.</p>
 </blockquote>
 
       
@@ -678,7 +702,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Representing-and-Manipulating-Information"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 Representing and Manipulating Information</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#寻址与字节顺序"><span class="nav-number">1.1.</span> <span class="nav-text">寻址与字节顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Expert-C-Programming"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">Expert C Programming</span></a></li></ol></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Representing-and-Manipulating-Information"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 Representing and Manipulating Information</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#寻址与字节顺序"><span class="nav-number">1.1.</span> <span class="nav-text">寻址与字节顺序</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Expert-C-Programming"><span class="nav-number">1.1.0.1.</span> <span class="nav-text">Expert C Programming</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Logical-amp-Arithmetic-bit-shift"><span class="nav-number">1.2.</span> <span class="nav-text">Logical &amp; Arithmetic bit shift</span></a></li></ol><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3-Machine-Level-Representation-of-Programs"><span class="nav-number">2.</span> <span class="nav-text">Chapter 3 Machine-Level Representation of Programs</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Access-Information"><span class="nav-number">2.1.</span> <span class="nav-text">Access Information</span></a></li></ol></li></div>
             
 
           </div>
@@ -712,7 +736,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">36.7k</span>
+    <span title="Site words total count">37.4k</span>
   
 </div>
 
