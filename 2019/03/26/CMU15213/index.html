@@ -140,7 +140,7 @@
 <meta property="og:description" content="该笔记用于记录学习CMU15213时遇到的知识点">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://notes-hongbo.top/2019/03/26/CMU15213/register.png">
-<meta property="og:updated_time" content="2019-04-01T13:00:42.941Z">
+<meta property="og:updated_time" content="2019-04-01T13:07:38.119Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CMU15213">
 <meta name="twitter:description" content="该笔记用于记录学习CMU15213时遇到的知识点">
@@ -356,7 +356,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-04-01T21:00:42+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2019-04-01T21:07:38+08:00">
                 2019-04-01
               </time>
             
@@ -384,7 +384,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.4k
+                  1.5k
                 </span>
               
 
@@ -436,6 +436,7 @@
 </li>
 </ol>
 </blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">typedef</span> <span class="keyword">unsigned</span> <span class="keyword">char</span>* byte_pointer;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_bytes</span><span class="params">(byte_pointer start, <span class="keyword">size_t</span> len)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">size_t</span> i = <span class="number">0</span>; i &lt; len; ++i) </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%.2x"</span>, start[i]);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_int</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    show_bytes((byte_pointer) &amp;x, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_float</span><span class="params">(<span class="keyword">float</span> x)</span> </span>&#123;</span><br><span class="line">    show_bytes((byte_pointer) &amp;x, <span class="keyword">sizeof</span>(<span class="keyword">float</span>));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">show_pointer</span><span class="params">(<span class="keyword">void</span> *x)</span> </span>&#123;</span><br><span class="line">    show_bytes((byte_pointer) &amp;x, <span class="keyword">sizeof</span>(<span class="keyword">void</span> *));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="built_in">cout</span> &lt;&lt; <span class="keyword">sizeof</span>(byte_pointer) &lt;&lt; <span class="built_in">endl</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">int</span> ival = <span class="number">12345</span>;</span><br><span class="line">    <span class="keyword">float</span> fval = <span class="number">12345.0</span>;</span><br><span class="line">    <span class="keyword">int</span> *pval = &amp;ival;</span><br><span class="line">    show_int(ival);</span><br><span class="line">    show_float(fval);</span><br><span class="line">    show_pointer(pval);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>在学习过上面的知识点之后明白了，如何解读“通过将各种类型的地址使用(unsigned char*)进行强制转换为序列数组之后，就可以得到其具体的存储方式”。这是因为(unsigned char)的大小是1字节，最小的数据类型，因此进行强制类型转换之后，通过该类型自带的偏移量就可以对任意数据类型的内部存储进行拆分观察。</p>
 <blockquote>
 <p>这里记录一下对size_t的思考</p>
@@ -516,6 +517,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/02/Django-Official-Torurial/" rel="prev" title="Django Official Torurial">
+                Django Official Torurial <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -618,7 +623,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">14</span>
+                  <span class="site-state-item-count">15</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -736,7 +741,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">37.4k</span>
+    <span title="Site words total count">39.4k</span>
   
 </div>
 
