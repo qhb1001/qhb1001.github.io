@@ -356,8 +356,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-02T21:02:18+08:00">
-                2019-05-02
+              <time title="Post modified" itemprop="dateModified" datetime="2019-05-04T09:27:00+08:00">
+                2019-05-04
               </time>
             
           </span>
@@ -410,124 +410,14 @@
 
       
         
-          
-            <a id="more"></a>
-<h1 id="Writing-your-first-Django-app-part-1"><a href="#Writing-your-first-Django-app-part-1" class="headerlink" title="Writing your first Django app, part 1"></a>Writing your first Django app, part 1</h1><h2 id="1-1-Basic-command"><a href="#1-1-Basic-command" class="headerlink" title="1.1 Basic command"></a>1.1 Basic command</h2><ol>
-<li><p><code>python -m django --version</code> 查询当前django版本</p>
-</li>
-<li><p><code>django-admin startproject mysite</code> 在当前目录下创建一个Django应用</p>
-<p>note: You’ll need to avoid naming projects after built-in Python or Django components. In particular, this means you should avoid using names like <code>django</code> (which will conflict with Django itself) or <code>test</code>(which conflicts with a built-in Python package).</p>
-</li>
-<li><p>Automatic reloading of <a href="https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-runserver" target="_blank" rel="noopener"><code>runserver</code></a></p>
-<p>The development server automatically reloads Python code for each request as needed. You don’t need to restart the server for code changes to take effect. However, some actions like adding files don’t trigger a restart, so you’ll have to restart the server in these cases.</p>
-</li>
-<li><p>Projects vs. apps</p>
-<p>What’s the difference between a project and an app? An app is a Web application that does something – e.g., a Weblog system, a database of public records or a simple poll app. A project is a collection of configuration and apps for a particular website. A project can contain multiple apps. An app can be in multiple projects.</p>
-<p>通过<code>$ python manage.py startapp polls</code>指令，创建一个名称为polls的web app</p>
-</li>
-</ol>
-<h2 id="1-2-URLconfs"><a href="#1-2-URLconfs" class="headerlink" title="1.2 URLconfs"></a>1.2 URLconfs</h2><p>下面以<code>mysite/mysite/urls.py</code>中的URLconfs对其结构进行说明</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">urlpatterns = [</span><br><span class="line">    path(<span class="string">'polls/'</span>, include(<span class="string">'polls.urls'</span>)),</span><br><span class="line">    path(<span class="string">'admin/'</span>, admin.site.urls),</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<ol>
-<li><p>The <a href="https://docs.djangoproject.com/en/2.2/ref/urls/#django.urls.include" target="_blank" rel="noopener"><code>include()</code></a> function allows referencing other URLconfs. Whenever Django encounters <a href="https://docs.djangoproject.com/en/2.2/ref/urls/#django.urls.include" target="_blank" rel="noopener"><code>include()</code></a>, it chops off whatever part of the URL matched up to that point and sends the remaining string to the included URLconf for further processing.</p>
-<p>When to use <a href="https://docs.djangoproject.com/en/2.2/ref/urls/#django.urls.include" target="_blank" rel="noopener"><code>include()</code></a></p>
-<p>You should always use <code>include()</code> when you include other URL patterns. <code>admin.site.urls</code> is the only exception to this.</p>
-<p>也就是说，在需要从一个页面指向另外一个页面的时候，需要使用include来指向另外一个页面的URLconfs</p>
-</li>
-<li><p>The <a href="https://docs.djangoproject.com/en/2.2/ref/urls/#django.urls.path" target="_blank" rel="noopener"><code>path()</code></a> function is passed four arguments, two required: <code>route</code> and <code>view</code>, and two optional: <code>kwargs</code>, and <code>name</code>.</p>
-<ul>
-<li><code>route</code> is a string that contains a URL pattern. When processing a request, Django starts at the first pattern in <code>urlpatterns</code> and makes its way down the list, comparing the requested URL against each pattern until it finds one that matches.</li>
-<li>When Django finds a matching pattern, it calls the specified view function with an <a href="https://docs.djangoproject.com/en/2.2/ref/request-response/#django.http.HttpRequest" target="_blank" rel="noopener"><code>HttpRequest</code></a> object as the first argument and any “captured” values from the route as keyword arguments.</li>
-<li>Arbitrary keyword arguments can be passed in a dictionary to the target view</li>
-<li>Naming your URL lets you refer to it unambiguously from elsewhere in Django, especially from within templates. This powerful feature allows you to make global changes to the URL patterns of your project while only touching a single file.</li>
-</ul>
-</li>
-</ol>
-<h1 id="Writing-your-first-Django-app-part-2"><a href="#Writing-your-first-Django-app-part-2" class="headerlink" title="Writing your first Django app, part 2"></a>Writing your first Django app, part 2</h1><h2 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h2><p>Now we’ll define your models – essentially, your database layout, with additional metadata.</p>
-<blockquote>
-<p>A model is the single, definitive source of truth about your data. It contains the essential fields and behaviors of the data you’re storing. Django follows the <a href="https://docs.djangoproject.com/en/2.2/misc/design-philosophies/#dry" target="_blank" rel="noopener">DRY Principle</a>. The goal is to define your data model in one place and automatically derive things from it.</p>
-</blockquote>
-<h2 id="Install-App"><a href="#Install-App" class="headerlink" title="Install App"></a>Install App</h2><p>That small bit of model code gives Django a lot of information. With it, Django is able to:</p>
-<ul>
-<li>Create a database schema (<code>CREATE TABLE</code> statements) for this app.</li>
-<li>Create a Python database-access API for accessing <code>Question</code> and <code>Choice</code> objects.</li>
-</ul>
-<p>But first we need to tell our project that the <code>polls</code> app is installed.</p>
-<p>To include the app in our project, we need to add a reference to its configuration class in the <a href="https://docs.djangoproject.com/en/2.2/ref/settings/#std:setting-INSTALLED_APPS" target="_blank" rel="noopener"><code>INSTALLED_APPS</code></a> setting. </p>
-<p><code>$ python manage.py makemigrations polls</code></p>
-<p>Migrations are how Django stores changes to your models (and thus your database schema) - they’re just files on disk. You can read the migration for your new model if you like; it’s the file <code>polls/migrations/0001_initial.py</code>. Don’t worry, you’re not expected to read them every time Django makes one, but they’re designed to be human-editable in case you want to manually tweak how Django changes things.</p>
-<p>自动生成的辅助文件可以让我们对生成的数据库有一个更加直观的理解，并且通过指令<code>python manage.py sqlmigrate polls 0001</code>，可以解读等价的SQL指令</p>
-<blockquote>
-<p>The <a href="https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-sqlmigrate" target="_blank" rel="noopener"><code>sqlmigrate</code></a> command doesn’t actually run the migration on your database - it just prints it to the screen so that you can see what SQL Django thinks is required. It’s useful for checking what Django is going to do or if you have database administrators who require SQL scripts for changes.</p>
-</blockquote>
-<p>在安装过app之后，需要进行迁移以创建相应的数据库，这是增量进行的，并不是每次重新创建全部的数据库</p>
-<p><code>python manage.py migrate</code></p>
-<blockquote>
-<p>值得注意的是，在我使用DB Browers打开数据库的时候，是没有办法对该数据库文件更新的，提示的错误信息是<code>django.db.utils.OperationalError: database is locked</code></p>
-<p>这说明在我打开数据库的时候，它是锁定的，没有办法进行写操作</p>
-</blockquote>
-<h2 id="The-Whole-Procedure"><a href="#The-Whole-Procedure" class="headerlink" title="The Whole Procedure"></a>The Whole Procedure</h2><p>Migrations are very powerful and let you change your models over time, as you develop your project, without the need to delete your database or tables and make new ones - it specializes in upgrading your database live, without losing data. We’ll cover them in more depth in a later part of the tutorial, but for now, remember the three-step guide to making model changes:</p>
-<ul>
-<li>Change your models (in <code>models.py</code>).</li>
-<li>Run <a href="https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-makemigrations" target="_blank" rel="noopener"><code>python manage.py makemigrations</code></a> to create migrations for those changes</li>
-<li>Run <a href="https://docs.djangoproject.com/en/2.2/ref/django-admin/#django-admin-migrate" target="_blank" rel="noopener"><code>python manage.py migrate</code></a> to apply those changes to the database.</li>
-</ul>
-<p>The reason that there are separate commands to make and apply migrations is because you’ll commit migrations to your version control system and ship them with your app; they not only make your development easier, they’re also usable by other developers and in production.</p>
-<h2 id="How-to-create-one-super-user"><a href="#How-to-create-one-super-user" class="headerlink" title="How to create one super user"></a>How to create one super user</h2><p><code>python manage.py createsuperuser</code></p>
-<h3 id="Make-the-poll-app-modifiable-in-the-admin¶"><a href="#Make-the-poll-app-modifiable-in-the-admin¶" class="headerlink" title="Make the poll app modifiable in the admin¶"></a>Make the poll app modifiable in the admin<a href="https://docs.djangoproject.com/en/2.2/intro/tutorial02/#make-the-poll-app-modifiable-in-the-admin" target="_blank" rel="noopener">¶</a></h3><p>But where’s our poll app? It’s not displayed on the admin index page.</p>
-<p>Just one thing to do: we need to tell the admin that <code>Question</code>objects have an admin interface. To do this, open the <code>polls/admin.py</code> file, and edit it to look like this:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.contrib <span class="keyword">import</span> admin</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Question</span><br><span class="line"></span><br><span class="line">admin.site.register(Question)</span><br></pre></td></tr></table></figure>
-<h1 id="Writing-your-first-Django-app-part-3"><a href="#Writing-your-first-Django-app-part-3" class="headerlink" title="Writing your first Django app, part 3"></a>Writing your first Django app, part 3</h1><h2 id="Writing-more-views"><a href="#Writing-more-views" class="headerlink" title="Writing more views"></a>Writing more views</h2><p>通过搭配<code>views.py</code> &amp; <code>urls.py</code>，我进一步对urlpatterns的作用有了清楚的认识</p>
-<p>在views中通过定义函数，表明在该目录polls下将会存在哪些子目录，并且规定其中的显示内容</p>
-<p>之后在urls中规定什么样的url将会激发什么样的views，甚至可以通过规定url中的格式来向其中传参</p>
-<h2 id="Write-views-that-actually-do-something"><a href="#Write-views-that-actually-do-something" class="headerlink" title="Write views that actually do something"></a>Write views that actually do something</h2><p>尽管上述通过views的方法定义了一些静态页面，但是它们的作用不是很大，django引入了自己的一套html框架，其中使用中括号作为一种自动化的措施，该框架大致如下</p>
-<p>但是也可能是因为自己对html还没有掌握好，因此尚未深入到这样的程度</p>
-<p>并且，上面的html模板定义的位置还有一个讲究，上述<code>index.html</code>文件，需要定义在<code>polls/templates/polls/</code>文件夹下面，这是为了避免出现查找模板的时候遭遇冲突</p>
-<blockquote>
-<p>Template namespacing</p>
-<p>Now we <em>might</em> be able to get away with putting our templates directly in <code>polls/templates</code> (rather than creating another <code>polls</code>subdirectory), but it would actually be a bad idea. Django will choose the first template it finds whose name matches, and if you had a template with the same name in a <em>different</em> application, Django would be unable to distinguish between them. We need to be able to point Django at the right one, and the easiest way to ensure this is by <em>namespacing</em> them. That is, by putting those templates inside <em>another</em> directory named for the application itself.</p>
-</blockquote>
-<p>同时，为了调用这个模板，需要在<code>polls/view.py</code>文件中定义这样的<code>index()</code>方法</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse</span><br><span class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> loader</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Question</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    latest_question_list = Question.objects.order_by(<span class="string">'-pub_date'</span>)[:<span class="number">5</span>]</span><br><span class="line">    template = loader.get_template(<span class="string">'polls/index.html'</span>)</span><br><span class="line">    context = &#123;</span><br><span class="line">        <span class="string">'latest_question_list'</span>: latest_question_list,</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> HttpResponse(template.render(context, request))</span><br></pre></td></tr></table></figure>
-<p><code>render(context=None, request=None)</code>方法通过context参数传入html模板里面将会出现的各种参数，而request属性是由目前的http请求得到的</p>
-<p>同时，该render还有另外的一个简便版本</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Question</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">index</span><span class="params">(request)</span>:</span></span><br><span class="line">    latest_question_list = Question.objects.order_by(<span class="string">'-pub_date'</span>)[:<span class="number">5</span>]</span><br><span class="line">    context = &#123;<span class="string">'latest_question_list'</span>: latest_question_list&#125;</span><br><span class="line">    <span class="keyword">return</span> render(request, <span class="string">'polls/index.html'</span>, context)</span><br></pre></td></tr></table></figure>
-<p>虽然上面的render方法的设计只是为了简化操作，但是类似的方法<code>get_object_or_404()</code>则起到了解耦的作用</p>
-<blockquote>
-<p>Philosophy</p>
-<p>Why do we use a helper function <a href="https://docs.djangoproject.com/en/2.2/topics/http/shortcuts/#django.shortcuts.get_object_or_404" target="_blank" rel="noopener"><code>get_object_or_404()</code></a> instead of automatically catching the <a href="https://docs.djangoproject.com/en/2.2/ref/exceptions/#django.core.exceptions.ObjectDoesNotExist" target="_blank" rel="noopener"><code>ObjectDoesNotExist</code></a> exceptions at a higher level, or having the model API raise <a href="https://docs.djangoproject.com/en/2.2/topics/http/views/#django.http.Http404" target="_blank" rel="noopener"><code>Http404</code></a> instead of<a href="https://docs.djangoproject.com/en/2.2/ref/exceptions/#django.core.exceptions.ObjectDoesNotExist" target="_blank" rel="noopener"><code>ObjectDoesNotExist</code></a>?</p>
-<p>Because that would couple the model layer to the view layer. One of the foremost design goals of Django is to maintain loose coupling. Some controlled coupling is introduced in the <a href="https://docs.djangoproject.com/en/2.2/topics/http/shortcuts/#module-django.shortcuts" target="_blank" rel="noopener"><code>django.shortcuts</code></a>module.</p>
-</blockquote>
-<h1 id="Writing-your-first-Django-app-part-4"><a href="#Writing-your-first-Django-app-part-4" class="headerlink" title="Writing your first Django app, part 4"></a>Writing your first Django app, part 4</h1><p>这一部分通过新建两个html文件<code>detail.html</code> &amp; <code>results.html</code>；建立一个通过vote更新数据的函数，使得poll应用已经能够正常使用了，下面依次记录我对它们的理解</p>
-<h2 id="detail-html"><a href="#detail-html" class="headerlink" title="detail.html"></a><code>detail.html</code></h2><h3 id="内部结构"><a href="#内部结构" class="headerlink" title="内部结构"></a>内部结构</h3><p>该页面用于进行投票，所以必须有一个数据的转移</p>
-<p>具体的实现放在了form标签的action属性中，需要注意的是，action中的内容使用了解耦的方式来编写，前面的<code>url</code>的内容，与<code>urls.py</code>文件中对应项的内容一致，<del>后面的内容目前还不了解</del>。</p>
-<h3 id="软编码"><a href="#软编码" class="headerlink" title="软编码"></a>软编码</h3><p>在part 3的最后一部分，学习了一下软编码的使用方法。所谓的软编码，就是通过向上搜索<code>urls.py</code>中定义的url路径，来填充html中的相应url。具体的使用方法为<code>url url_name</code>，其中<code>url_name</code>出现在<code>urlpatterns</code>中<code>path</code>方法的第二个参数，如果这条url中存在变量，那么其格式将是<code>url url_name variable_name</code></p>
-<p>另外一个需要注意的点，是URL的命名空间。也就是在指定<code>url_name</code>的时候，必须加上对应的前缀。</p>
-<p>与软编码使用方式相同的还有<code>django.urls</code>包中的<code>reverse()</code>函数，用于给定<code>url_name</code>，返回对应的url。需要注意的是，如果其中含有变量，那么需要第二个参数来指定变量</p>
-<h3 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h3><p>当在浏览器中输入<code>localhost:8000/polls/1</code>的时候，这条url匹配到了位于<code>polls/urls.py</code>中<code>urlpatterns</code>中的第三条路径，根据其中的参数，将会在<code>views.py</code>中寻找<code>DetailView</code>的实现</p>
-<p>根据其中指定的<code>template_name</code>，将会调用位于<code>template/polls/detail.html</code>的模板</p>
-<h2 id="views-py"><a href="#views-py" class="headerlink" title="views.py"></a><code>views.py</code></h2><h3 id="内部结构-1"><a href="#内部结构-1" class="headerlink" title="内部结构"></a>内部结构</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> HttpResponse, HttpResponseRedirect</span><br><span class="line"><span class="keyword">from</span> .models <span class="keyword">import</span> Question, Choice</span><br><span class="line"><span class="keyword">from</span> django.template <span class="keyword">import</span> loader</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> render</span><br><span class="line"><span class="keyword">from</span> django.shortcuts <span class="keyword">import</span> get_object_or_404</span><br><span class="line"><span class="keyword">from</span> django.http <span class="keyword">import</span> Http404</span><br><span class="line"><span class="keyword">from</span> django.urls <span class="keyword">import</span> reverse</span><br><span class="line"><span class="keyword">from</span> django.views <span class="keyword">import</span> generic</span><br><span class="line"><span class="comment"># Create your views here.</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IndexView</span><span class="params">(generic.ListView)</span>:</span></span><br><span class="line">    template_name = <span class="string">'polls/index.html'</span></span><br><span class="line">    context_object_name = <span class="string">'latest_question_list'</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get_queryset</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">return</span> Question.objects.order_by(<span class="string">'-pub_date'</span>)[:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DetailView</span><span class="params">(generic.DetailView)</span>:</span></span><br><span class="line">    model = Question</span><br><span class="line">    template_name = <span class="string">'polls/detail.html'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ResultsView</span><span class="params">(generic.DetailView)</span>:</span></span><br><span class="line">    model = Question</span><br><span class="line">    template_name = <span class="string">'polls/results.html'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">vote</span><span class="params">(request, question_id)</span>:</span></span><br><span class="line">    question = get_object_or_404(Question, pk=question_id)</span><br><span class="line">    <span class="keyword">try</span>:</span><br><span class="line">        selected_choice = question.choice_set.get(pk=request.POST[<span class="string">'choice'</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">except</span> (KeyError, Choice.DoesNotExist):</span><br><span class="line">        <span class="keyword">return</span> render(request, <span class="string">'polls/detail.html'</span>, &#123;</span><br><span class="line">            <span class="string">'question'</span>: question,</span><br><span class="line">            <span class="string">'error_message'</span>: <span class="string">"You didn't select a choice."</span>,</span><br><span class="line">        &#125;)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        selected_choice.votes += <span class="number">1</span></span><br><span class="line">        selected_choice.save()</span><br><span class="line">        <span class="keyword">return</span> HttpResponseRedirect(reverse(<span class="string">'polls:results'</span>, args=(question.id,)))</span><br><span class="line">    <span class="comment"># return HttpResponse("You're voting on question %s" %question_id)</span></span><br></pre></td></tr></table></figure>
-<h3 id="调用工程"><a href="#调用工程" class="headerlink" title="调用工程"></a>调用工程</h3><p>从<code>detail.html</code>中首先读取目前已经submit的选项，如果没有选择，发出错误信息；如果读取到了选择的结果，那么更新成员变量，并且返回一个<code>reuslts.html</code>视图</p>
-<h1 id="Writing-your-first-Django-app-part-5"><a href="#Writing-your-first-Django-app-part-5" class="headerlink" title="Writing your first Django app, part 5"></a>Writing your first Django app, part 5</h1><p>本节介绍了Django的测试框架</p>
-<p>相对于Python的原生测试框架，十分易用，也因此屏蔽了更多的底层内容</p>
-<h2 id="调用过程-1"><a href="#调用过程-1" class="headerlink" title="调用过程"></a>调用过程</h2><p>What happened is this:</p>
-<ul>
-<li><code>manage.py test polls</code> looked for tests in the <code>polls</code> application</li>
-<li>it found a subclass of the <a href="https://docs.djangoproject.com/en/2.2/topics/testing/tools/#django.test.TestCase" target="_blank" rel="noopener"><code>django.test.TestCase</code></a> class</li>
-<li>it created a special database for the purpose of testing</li>
-<li>it looked for test methods - ones whose names begin with <code>test</code></li>
-<li>in <code>test_was_published_recently_with_future_question</code> it created a <code>Question</code> instance whose <code>pub_date</code> field is 30 days in the future</li>
-<li>… and using the <code>assertIs()</code> method, it discovered that its<code>was_published_recently()</code> returns <code>True</code>, though we wanted it to return <code>False</code></li>
-</ul>
-<p>The test informs us which test failed and even the line on which the failure occurred.</p>
-<h2 id="测试原则"><a href="#测试原则" class="headerlink" title="测试原则"></a>测试原则</h2><p>As long as your tests are sensibly arranged, they won’t become unmanageable. Good rules-of-thumb include having:</p>
-<ul>
-<li>a separate <code>TestClass</code> for each model or view</li>
-<li>a separate test method for each set of conditions you want to test</li>
-<li>test method names that describe their function</li>
-</ul>
-
-          
+          <p>学习Django的官方教程时记录的笔记</p>
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2019/05/02/Django-Official-Torurial/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
