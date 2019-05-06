@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ANTLR,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本文用于记录使用ANTLR实现一个简单绘图语言解释器的过程">
+<meta name="keywords" content="ANTLR">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于ANTLR实现的简单绘图语言解释器">
+<meta property="og:url" content="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="本文用于记录使用ANTLR实现一个简单绘图语言解释器的过程">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/draw2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/draw3.png">
+<meta property="og:updated_time" content="2019-05-06T10:23:40.371Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于ANTLR实现的简单绘图语言解释器">
+<meta name="twitter:description" content="本文用于记录使用ANTLR实现一个简单绘图语言解释器的过程">
+<meta name="twitter:image" content="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/draw2.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/">
+
+
+
+
+
+  <title>基于ANTLR实现的简单绘图语言解释器 | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于ANTLR实现的简单绘图语言解释器</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-06T18:03:34+08:00">
+                2019-05-06
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2019-05-06T18:23:40+08:00">
+                2019-05-06
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2.8k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文用于记录使用ANTLR实现一个简单绘图语言解释器的过程</p>
+<a id="more"></a>
+<h1 id="一、实验环境"><a href="#一、实验环境" class="headerlink" title="一、实验环境"></a>一、实验环境</h1><p>本节说明完成本次实验时所用的开发环境。</p>
+<h2 id="1-1软件环境"><a href="#1-1软件环境" class="headerlink" title="1.1软件环境"></a>1.1软件环境</h2><p>操作系统： MacOS High Sierra 版本10.13.6</p>
+<p>工具： </p>
+<ul>
+<li>ANTLR 版本4.7.2  </li>
+<li>VS Code 版本 1.33.1  </li>
+<li>java 版本 1.8.0_121</li>
+</ul>
+<h2 id="1-2-硬件环境"><a href="#1-2-硬件环境" class="headerlink" title="1.2 硬件环境"></a>1.2 硬件环境</h2><p>MacBook Pro(Retina, 13-inch, Early 2015)</p>
+<p>处理器 2.7 GHz Intel Core i5</p>
+<p>内存 8 GB 1867 MHz DDR3</p>
+<p>启动磁盘 Macintosh HD</p>
+<p>图形卡 Intel Iris Graphics 6100 1536MB</p>
+<h1 id="二、实验内容"><a href="#二、实验内容" class="headerlink" title="二、实验内容"></a>二、实验内容</h1><p><strong>基本功能：</strong></p>
+<ol>
+<li><p>实现课件“上机ANTLR与漏洞分析.ppt”中规定的功能。</p>
+</li>
+<li><p>用ANTLR构造所需的词法分析器、语法分析器。</p>
+</li>
+<li><p>基于ANTLR，构造分析树的遍历器。它是语义计算模块，即解释器的后端。遍历器可选用 Listener 模式，也可选用 Visitor 模式，也可同时实现两种模式。</p>
+</li>
+<li><p>手工编写其他所需程序，包括主程序、语义分析与计算辅助程序等。</p>
+</li>
+</ol>
+<p><strong>扩展功能：</strong></p>
+<ol>
+<li><p>实现绘图操作，即：在屏幕上绘制图形，并显示出来。</p>
+</li>
+<li><p>扩展函数绘图语言的功能，包括但不限于增加绘图效果的语句，如设置绘图颜色、线条粗细（点的大小）等等。</p>
+</li>
+<li><p>能够检查输入（即函数绘图语言编写的源程序）中存在的语义错误/漏洞，如死循环、无效参数、除数为0、要绘制的点超出窗口边界等，并进行错误报告。</p>
+</li>
+<li><p>支持输入中有用户自定义变量（类型均为double），并在后续的表达式中引用这些变量。</p>
+</li>
+</ol>
+<p>​                                </p>
+<h1 id="三、方法-思路"><a href="#三、方法-思路" class="headerlink" title="三、方法/思路"></a>三、方法/思路</h1><h2 id="3-1模块划分"><a href="#3-1模块划分" class="headerlink" title="3.1模块划分"></a>3.1模块划分</h2><p>ANTLR源文件：</p>
+<p><code>DrawGraph.g4</code></p>
+<p>根据ANTLR源文件自动生成的代码：</p>
+<p><code>DrawGraph.interp、DrawGraph.tokens、DrawGraphBaseListener.java、       DrawGraphLexer.interp、DrawGraphLexer.java、DrawGraphLexer.tokens、DrawGraphListener.java、DrawGraphParser.java</code></p>
+<p>JAVA编写：</p>
+<p><code>前端源代码：FrontEnd.java</code></p>
+<p><code>后端源代码：BackEnd.java</code></p>
+<p><code>主程序源代码：DrawLangMain.java</code></p>
+<p><code>绘图相关源代码：BaseUI.java、UiPixelAttrib.java</code></p>
+<p><code>监听者模式的遍历器：DrawerListener.java</code></p>
+<h2 id="3-2重要数据结构及算法"><a href="#3-2重要数据结构及算法" class="headerlink" title="3.2重要数据结构及算法"></a>3.2重要数据结构及算法</h2><ol>
+<li><p>ANTLR源代码中出现的辅助定义:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">fragment A: [aA];</span><br><span class="line">fragment B: [bB];</span><br><span class="line">fragment C: [cC];</span><br><span class="line">...   </span><br><span class="line">fragment Z: [zZ];</span><br></pre></td></tr></table></figure>
+<p>通过引入该辅助定义，可以方便地定义大小写不敏感的简单绘图语言解释器，而不必在文法规则中繁琐地到处规定[aA]此类的形式</p>
+</li>
+<li><p>数据结构UiPixelAttrib，负责管控绘制像素的信息，具体包含RGB数值、像素点的大小</p>
+</li>
+<li><p>继承了DrawGraphBaseListener.java类的用户自定义监听者类DrawerListener.java，其中通过对ANTLR自动生成的标签接口进行重载，定义了语义对应的语法动作，以实现语法制导翻译。</p>
+</li>
+</ol>
+<h1 id="四、源代码"><a href="#四、源代码" class="headerlink" title="四、源代码"></a>四、源代码</h1><h2 id="4-1文件1-DrawGraph-g4"><a href="#4-1文件1-DrawGraph-g4" class="headerlink" title="4.1文件1: DrawGraph.g4"></a>4.1文件1: DrawGraph.g4</h2><figure class="highlight erlang"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line">grammar DrawGraph;</span><br><span class="line"></span><br><span class="line">options &#123;</span><br><span class="line">    language=Java;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">PLUS: '+';</span><br><span class="line">MINUS: '-';</span><br><span class="line">DIV: '/';</span><br><span class="line">MUL: '*';</span><br><span class="line">POWER: '**';</span><br><span class="line">SEMICO: ';';</span><br><span class="line">L_BRACKET: '(';</span><br><span class="line">R_BRACKET: ')';</span><br><span class="line">COMMA: ',';</span><br><span class="line"></span><br><span class="line">CONST_ID: Integer</span><br><span class="line">    | Real</span><br><span class="line">    | NamedConst</span><br><span class="line">    ;</span><br><span class="line">fragment Integer: Digits;</span><br><span class="line">fragment Digits: [<span class="number">0</span>-<span class="number">9</span>]+;</span><br><span class="line">fragment Real: Fraction Exponent?</span><br><span class="line">    | Digits Exponent</span><br><span class="line">    ;</span><br><span class="line">fragment Fraction: Digits? '.' Digits</span><br><span class="line">    | Digits '.'</span><br><span class="line">    ;</span><br><span class="line">fragment Exponent: E [+-]? Digits;</span><br><span class="line">fragment NamedConst: P I</span><br><span class="line">    | E</span><br><span class="line">    ;</span><br><span class="line">ORIGIN: O R I G I N;</span><br><span class="line">SCALE: S C A L E;</span><br><span class="line">ROT: R O T;</span><br><span class="line">IS: I S;</span><br><span class="line">TO: T O;</span><br><span class="line">STEP: S T E P;</span><br><span class="line">DRAW: D R A W;</span><br><span class="line">FOR: F O R;</span><br><span class="line">FROM: F R O M;</span><br><span class="line">RED: R E D;</span><br><span class="line">BLUE: B L U E;</span><br><span class="line">GREEN: G R E E N;</span><br><span class="line">COLOR: C O L O R;</span><br><span class="line">T1: T;</span><br><span class="line">WS : [ \t\f\r\n]+ -&gt; skip;</span><br><span class="line">COMMENT: (</span><br><span class="line">    '//' ~[\r\n]*</span><br><span class="line">    | '--' ~[\r\n]*</span><br><span class="line">    | '/*' .*? '*/'</span><br><span class="line">) -&gt; skip;</span><br><span class="line">ID : [a-zA-Z_][a-zA-Z_0-<span class="number">9</span>]*;</span><br><span class="line">ErrText: .;</span><br><span class="line">fragment A: [aA];</span><br><span class="line">fragment B: [bB];</span><br><span class="line">fragment C: [cC];</span><br><span class="line">fragment D: [dD];</span><br><span class="line">fragment E: [eE];</span><br><span class="line">fragment F: [fF];</span><br><span class="line">fragment G: [gG];</span><br><span class="line">fragment H: [hH];</span><br><span class="line">fragment I: [iI];</span><br><span class="line">fragment J: [jJ];</span><br><span class="line">fragment K: [kK];</span><br><span class="line">fragment L: [lL];</span><br><span class="line">fragment M: [mM];</span><br><span class="line">fragment N: [nN];</span><br><span class="line">fragment O: [oO];</span><br><span class="line">fragment P: [pP];</span><br><span class="line">fragment Q: [qQ];</span><br><span class="line">fragment R: [rR];</span><br><span class="line">fragment S: [sS];</span><br><span class="line">fragment T: [tT];</span><br><span class="line">fragment U: [uU];</span><br><span class="line">fragment V: [vV];</span><br><span class="line">fragment W: [wW];</span><br><span class="line">fragment X: [xX];</span><br><span class="line">fragment Y: [yY];</span><br><span class="line">fragment Z: [zZ];</span><br><span class="line">program: (statement SEMICO)* EOF</span><br><span class="line">    ;</span><br><span class="line">statement: originStatement</span><br><span class="line">    | scaleStatement</span><br><span class="line">    | rotStatement</span><br><span class="line">    | forStatement</span><br><span class="line">    | colorStatement</span><br><span class="line">    | variableStatement</span><br><span class="line">    ;</span><br><span class="line">variableStatement: ID '=' expr #Assign</span><br><span class="line">    ; </span><br><span class="line">originStatement: ORIGIN IS L_BRACKET expr COMMA expr R_BRACKET;</span><br><span class="line">scaleStatement: SCALE IS L_BRACKET expr COMMA expr R_BRACKET;</span><br><span class="line">rotStatement: ROT IS expr;</span><br><span class="line">forStatement: FOR T1 FROM expr TO expr STEP expr DRAW L_BRACKET expr COMMA expr R_BRACKET;</span><br><span class="line">colorStatement: COLOR IS BLUE</span><br><span class="line">    | COLOR IS GREEN</span><br><span class="line">    | COLOR IS RED</span><br><span class="line">    | COLOR IS L_BRACKET expr COMMA expr COMMA expr R_BRACKET</span><br><span class="line">    ;</span><br><span class="line">expr: &lt;assoc=right&gt; expr POWER expr #PowerExpr</span><br><span class="line">    | (PLUS|MINUS) expr #UnaryExpr</span><br><span class="line">    | expr (MUL|DIV) expr #MulDivExpr</span><br><span class="line">    | expr (PLUS|MINUS) expr #PlusMinusExpr</span><br><span class="line">    | CONST_ID #Const</span><br><span class="line">    | T1 #VarT</span><br><span class="line">    | ID L_BRACKET expr R_BRACKET #FuncExpr</span><br><span class="line">    | L_BRACKET expr R_BRACKET #NestedExpr</span><br><span class="line">    | ID #VarExpr</span><br><span class="line">    ;</span><br></pre></td></tr></table></figure>
+<h2 id="4-2-文件2-BackEnd-java"><a href="#4-2-文件2-BackEnd-java" class="headerlink" title="4.2 文件2: BackEnd.java"></a>4.2 文件2: BackEnd.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.tree.*;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.*;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BackEnd</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> ParseTree tree = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> BaseUI theUI = <span class="keyword">null</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">BackEnd</span><span class="params">(ParseTree t, BaseUI ui)</span> </span>&#123;</span><br><span class="line">        tree = t; </span><br><span class="line">        theUI = ui;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ParseTreeWalker walker = <span class="keyword">new</span> ParseTreeWalker();</span><br><span class="line">        DrawerListener eval = <span class="keyword">new</span> DrawerListener();</span><br><span class="line">        eval.setUI(theUI);</span><br><span class="line">        walker.walk(eval, tree);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-3-文件3：FrontEnd-java"><a href="#4-3-文件3：FrontEnd-java" class="headerlink" title="4.3 文件3：FrontEnd.java"></a>4.3 文件3：FrontEnd.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.io.FileInputStream;</span><br><span class="line"><span class="keyword">import</span> java.io.InputStream;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.*;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.tree.ParseTree;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrontEnd</span> </span>&#123;</span><br><span class="line">    <span class="keyword">protected</span> ParseTree tree = <span class="keyword">null</span>;</span><br><span class="line">    <span class="keyword">protected</span> String theFilePath;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">FrontEnd</span><span class="params">(String filePath)</span> </span>&#123;</span><br><span class="line">        theFilePath = filePath;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> ParseTree <span class="title">getTree</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> tree;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">doParse</span><span class="params">()</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        java.io.InputStream is = System.in;</span><br><span class="line">        <span class="keyword">if</span> (theFilePath != <span class="keyword">null</span>) is = <span class="keyword">new</span> FileInputStream(theFilePath);</span><br><span class="line">        ANTLRInputStream input = <span class="keyword">new</span> ANTLRInputStream(is);</span><br><span class="line">        DrawGraphLexer lexer = <span class="keyword">new</span> DrawGraphLexer(input);</span><br><span class="line">        CommonTokenStream tokens = <span class="keyword">new</span> CommonTokenStream(lexer);</span><br><span class="line">        DrawGraphParser parser = <span class="keyword">new</span> DrawGraphParser(tokens);</span><br><span class="line"></span><br><span class="line">        tree = parser.program();</span><br><span class="line">        <span class="keyword">int</span> nErr = parser.getNumberOfSyntaxErrors();</span><br><span class="line">        <span class="keyword">return</span> nErr;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-4-文件4：UiPixelAttrib-java"><a href="#4-4-文件4：UiPixelAttrib-java" class="headerlink" title="4.4 文件4：UiPixelAttrib.java"></a>4.4 文件4：UiPixelAttrib.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UiPixelAttrib</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">double</span> Size = <span class="number">3</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">double</span> Green = <span class="number">0</span>, Red = <span class="number">0</span>, Blue = <span class="number">0</span>;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UiPixelAttrib</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">UiPixelAttrib</span><span class="params">(<span class="keyword">double</span> red, <span class="keyword">double</span> green, <span class="keyword">double</span> blue)</span> </span>&#123;</span><br><span class="line">        Green = green;</span><br><span class="line">        Red = red;</span><br><span class="line">        Blue = blue;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSize</span><span class="params">(<span class="keyword">double</span> size)</span> </span>&#123;</span><br><span class="line">        Size = size;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">green</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> Green;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">red</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> Red;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">blue</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> Blue;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">size</span><span class="params">()</span> </span>&#123;<span class="keyword">return</span> Size;&#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-5-文件5：DrawLangMain-java"><a href="#4-5-文件5：DrawLangMain-java" class="headerlink" title="4.5 文件5：DrawLangMain.java"></a>4.5 文件5：DrawLangMain.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">DrawLangMain</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (args.length &lt; <span class="number">1</span>) &#123;</span><br><span class="line">            System.err.println(<span class="string">"未指定输入源文件\n"</span>);</span><br><span class="line">            System.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            BaseUI theUI = <span class="keyword">new</span> BaseUI();</span><br><span class="line">            DrawLangMain.doFile(args[<span class="number">0</span>], theUI);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</span><br><span class="line">            System.err.println(<span class="string">"Exception in main: "</span> + e);</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            System.exit(<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">doFile</span><span class="params">(String file, BaseUI theUI)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        FrontEnd fe = <span class="keyword">new</span> FrontEnd(file);</span><br><span class="line">        <span class="keyword">int</span> nErr = fe.doParse();</span><br><span class="line">        <span class="keyword">if</span> (nErr &gt; <span class="number">0</span>) &#123;</span><br><span class="line">            theUI.showMessage(<span class="string">"语法分析出现错误"</span>);</span><br><span class="line">            System.gc();</span><br><span class="line">            <span class="keyword">return</span> ;</span><br><span class="line">        &#125;</span><br><span class="line">        theUI.setVisible(<span class="keyword">true</span>);</span><br><span class="line"></span><br><span class="line">        BackEnd be = <span class="keyword">new</span> BackEnd(fe.getTree(), theUI);</span><br><span class="line">        be.run();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="4-6-文件6：DrawerListener-java"><a href="#4-6-文件6：DrawerListener-java" class="headerlink" title="4.6 文件6：DrawerListener.java"></a>4.6 文件6：DrawerListener.java</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.*;</span><br><span class="line"><span class="keyword">import</span> org.antlr.v4.runtime.tree.*;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.util.*;</span><br><span class="line"></span><br><span class="line"><span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"deprecation"</span>&#125;)</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">DrawerListener</span> <span class="keyword">extends</span> <span class="title">DrawGraphBaseListener</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    BaseUI    theUI       =<span class="keyword">null</span>;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">DrawerListener</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUI</span><span class="params">(BaseUI ui)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        theUI = ui;        </span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    ParseTreeProperty&lt;Double&gt; values = <span class="keyword">new</span> ParseTreeProperty&lt;Double&gt;();</span><br><span class="line">    Map&lt;String, Double&gt; memory = <span class="keyword">new</span> HashMap&lt;String, Double&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">setValue</span><span class="params">(ParseTree node, <span class="keyword">double</span> value)</span> </span>&#123;</span><br><span class="line">        values.put(node, value);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">double</span> <span class="title">getValue</span><span class="params">(ParseTree node)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> values.get(node);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> valueOfT =<span class="number">0</span>; <span class="comment">// 循环变量 T 的值</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> originX =<span class="number">0</span>; <span class="comment">// 坐标平移参数</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> originY =<span class="number">0</span>; </span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> scaleX  =<span class="number">1</span>;  <span class="comment">// 横向缩放因子</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> scaleY  =<span class="number">1</span>;  <span class="comment">// 纵向缩放因子</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">double</span> rotate  =<span class="number">0</span>;  <span class="comment">// 旋转角度</span></span><br><span class="line">    <span class="keyword">private</span> UiPixelAttrib  pixelAttrib = <span class="keyword">new</span> UiPixelAttrib();</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitOriginStatement</span><span class="params">(DrawGraphParser.OriginStatementContext ctx)</span> </span>&#123;</span><br><span class="line">        originX = getValue(ctx.expr(<span class="number">0</span>));</span><br><span class="line">        originY = getValue(ctx.expr(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitScaleStatement</span><span class="params">(DrawGraphParser.ScaleStatementContext ctx)</span> </span>&#123;</span><br><span class="line">        scaleX = getValue(ctx.expr(<span class="number">0</span>));</span><br><span class="line">        scaleY = getValue(ctx.expr(<span class="number">1</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitRotStatement</span><span class="params">(DrawGraphParser.RotStatementContext ctx)</span> </span>&#123;</span><br><span class="line">        rotate = getValue(ctx.expr());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitForStatement</span><span class="params">(DrawGraphParser.ForStatementContext ctx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(pixelAttrib == <span class="keyword">null</span>) pixelAttrib = <span class="keyword">new</span> UiPixelAttrib();</span><br><span class="line">	    <span class="keyword">double</span> Tbegin = getValue( ctx.expr(<span class="number">0</span>));</span><br><span class="line">	    <span class="keyword">double</span> Tend   = getValue( ctx.expr(<span class="number">1</span>));</span><br><span class="line">	    <span class="keyword">double</span> Tstep  = getValue( ctx.expr(<span class="number">2</span>));</span><br><span class="line"></span><br><span class="line">        ParseTreeWalker walker = <span class="keyword">new</span> ParseTreeWalker(); <span class="comment">//用于多次遍历子树</span></span><br><span class="line">	    <span class="keyword">for</span>(valueOfT = Tbegin; valueOfT &lt;Tend; valueOfT += Tstep)</span><br><span class="line">	    &#123;	        </span><br><span class="line">            walker.walk(<span class="keyword">this</span> , ctx.expr(<span class="number">3</span>));      <span class="comment">// 遍历子树，获得当前的逻辑坐标</span></span><br><span class="line">			<span class="keyword">double</span> x = getValue( ctx.expr(<span class="number">3</span>) );</span><br><span class="line">            walker.walk(<span class="keyword">this</span> , ctx.expr(<span class="number">4</span>));</span><br><span class="line">			<span class="keyword">double</span> y = getValue( ctx.expr(<span class="number">4</span>) );</span><br><span class="line"></span><br><span class="line">			x *= scaleX; y *= scaleY;           <span class="comment">// 先比例变换</span></span><br><span class="line">			<span class="keyword">double</span> tmp;</span><br><span class="line">			tmp = x*Math.cos(rotate) + y*Math.sin(rotate); <span class="comment">// 再旋转变换</span></span><br><span class="line">			y = y*Math.cos(rotate)-x*Math.sin(rotate);</span><br><span class="line">			x = tmp;</span><br><span class="line">			x+=originX; y+=originY;             <span class="comment">// 最后平移变换</span></span><br><span class="line">			theUI.drawPixel(x, y, pixelAttrib);</span><br><span class="line">			</span><br><span class="line">        <span class="comment">//  theUI.showMessage("*** PIXEL at (" + x + ", " + y + ")");</span></span><br><span class="line">	    &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitPowerExpr</span><span class="params">(DrawGraphParser.PowerExprContext ctx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> L = getValue(ctx.expr(<span class="number">0</span>));</span><br><span class="line">        <span class="keyword">double</span> R = getValue(ctx.expr(<span class="number">1</span>));</span><br><span class="line">        <span class="keyword">double</span> value = Math.pow(L, R);</span><br><span class="line">        setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitMulDivExpr</span><span class="params">(DrawGraphParser.MulDivExprContext ctx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> left = getValue(ctx.expr(<span class="number">0</span>));</span><br><span class="line">        <span class="keyword">double</span> right = getValue(ctx.expr(<span class="number">1</span>));</span><br><span class="line">        <span class="keyword">double</span> value = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (ctx.MUL() != <span class="keyword">null</span>) value = left * right;</span><br><span class="line">        <span class="keyword">else</span> value = left / right;</span><br><span class="line">        setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitVarT</span><span class="params">(DrawGraphParser.VarTContext ctx)</span> </span>&#123;</span><br><span class="line">        setValue(ctx, valueOfT);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitConst</span><span class="params">(DrawGraphParser.ConstContext ctx)</span> </span>&#123;</span><br><span class="line">	    Token tk = ctx.CONST_ID().getSymbol();    <span class="comment">// 获得记号对象</span></span><br><span class="line">	    String vName = tk.getText().toLowerCase();<span class="comment">// 获得记号对象的文本并转换为小写字母</span></span><br><span class="line">	    <span class="keyword">double</span> value = <span class="number">0</span>;</span><br><span class="line">	    </span><br><span class="line">	    <span class="keyword">if</span>(vName.equals(<span class="string">"pi"</span>)) value = Math.PI; <span class="comment">//3.1415926</span></span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span>(vName.equals(<span class="string">"e"</span>)) value = Math.E; <span class="comment">//2.7182818284</span></span><br><span class="line">	    <span class="keyword">else</span> &#123;</span><br><span class="line">	        <span class="keyword">try</span> &#123;</span><br><span class="line">	           value = Double.valueOf(vName);</span><br><span class="line">	        &#125; <span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">	            theUI.showMessage(<span class="string">"error "</span> + tk.getLine() + <span class="string">":"</span> </span><br><span class="line">	               + tk.getCharPositionInLine()</span><br><span class="line">	               + <span class="string">"  不支持的常量名 '"</span> + vName  +<span class="string">"'"</span> );</span><br><span class="line">	            value = <span class="number">0</span>;</span><br><span class="line">	        &#125;</span><br><span class="line">	    &#125;</span><br><span class="line"></span><br><span class="line">	    setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitPlusMinusExpr</span><span class="params">(DrawGraphParser.PlusMinusExprContext ctx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> left = getValue(ctx.expr(<span class="number">0</span>));</span><br><span class="line">        <span class="keyword">double</span> right = getValue(ctx.expr(<span class="number">1</span>));</span><br><span class="line">        <span class="keyword">double</span> value = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">if</span> (ctx.PLUS() != <span class="keyword">null</span>) value = left + right;</span><br><span class="line">        <span class="keyword">else</span> value = left - right;</span><br><span class="line">        setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitNestedExpr</span><span class="params">(DrawGraphParser.NestedExprContext ctx)</span> </span>&#123;</span><br><span class="line">        setValue(ctx, getValue(ctx.expr()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitUnaryExpr</span><span class="params">(DrawGraphParser.UnaryExprContext ctx)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">double</span> value = getValue(ctx.expr());</span><br><span class="line">        <span class="keyword">if</span> (ctx.PLUS() == <span class="keyword">null</span>) value = -value;</span><br><span class="line">        setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitFuncExpr</span><span class="params">(DrawGraphParser.FuncExprContext ctx)</span> </span>&#123;</span><br><span class="line">        Token id = ctx.ID().getSymbol();</span><br><span class="line">	    String funcName = id.getText().toLowerCase();</span><br><span class="line">	    <span class="keyword">double</span> value = <span class="number">0</span>;</span><br><span class="line">	    <span class="keyword">double</span> param = getValue(ctx.expr());  <span class="comment">// 函数调用的参数值</span></span><br><span class="line">	    <span class="keyword">if</span>(funcName.equals(<span class="string">"sin"</span>)) value = Math.sin(param);</span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span>(funcName.equals(<span class="string">"cos"</span>)) value = Math.cos(param);</span><br><span class="line">	    <span class="keyword">else</span> <span class="keyword">if</span>(funcName.equals(<span class="string">"tan"</span>)) value = Math.tan(param);</span><br><span class="line">	    <span class="keyword">else</span> &#123;</span><br><span class="line">	        theUI.showMessage(<span class="string">"error "</span> + id.getLine() + <span class="string">":"</span> </span><br><span class="line">	               + id.getCharPositionInLine()</span><br><span class="line">	               + <span class="string">"  不支持的函数名 '"</span> + funcName  +<span class="string">"'"</span> );</span><br><span class="line">	    &#125;</span><br><span class="line">	    setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitColorStatement</span><span class="params">(DrawGraphParser.ColorStatementContext ctx)</span> </span>&#123;</span><br><span class="line">        TerminalNode node = ctx.RED();</span><br><span class="line">	    <span class="keyword">if</span>(node != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        pixelAttrib = <span class="keyword">new</span> UiPixelAttrib(<span class="number">255</span>, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">	        <span class="keyword">return</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	    </span><br><span class="line">	    node = ctx.GREEN();</span><br><span class="line">	    <span class="keyword">if</span>(node != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        pixelAttrib = <span class="keyword">new</span> UiPixelAttrib(<span class="number">0</span>, <span class="number">255</span>, <span class="number">0</span>);</span><br><span class="line">	        <span class="keyword">return</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	    node = ctx.BLUE();</span><br><span class="line">	    <span class="keyword">if</span>(node != <span class="keyword">null</span>) &#123;</span><br><span class="line">	        pixelAttrib = <span class="keyword">new</span> UiPixelAttrib(<span class="number">0</span>, <span class="number">0</span>, <span class="number">255</span>);</span><br><span class="line">	        <span class="keyword">return</span>;</span><br><span class="line">	    &#125;</span><br><span class="line">	    </span><br><span class="line">	    <span class="keyword">double</span> r = getValue( ctx.expr(<span class="number">0</span>) );</span><br><span class="line">	    <span class="keyword">double</span> g = getValue( ctx.expr(<span class="number">1</span>) );</span><br><span class="line">	    <span class="keyword">double</span> b = getValue( ctx.expr(<span class="number">2</span>) );</span><br><span class="line">    	    </span><br><span class="line">  	    pixelAttrib = <span class="keyword">new</span> UiPixelAttrib(r, g, b);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitAssign</span><span class="params">(DrawGraphParser.AssignContext ctx)</span> </span>&#123;</span><br><span class="line">        String id = ctx.ID().getText();  <span class="comment">// id is left-hand side of '='</span></span><br><span class="line">        <span class="keyword">double</span> value = getValue(ctx.expr());  </span><br><span class="line">        memory.put(id, value);           <span class="comment">// store it in our memory</span></span><br><span class="line">        setValue(ctx, value);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span> </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">exitVarExpr</span><span class="params">(DrawGraphParser.VarExprContext ctx)</span> </span>&#123;</span><br><span class="line">        String id = ctx.ID().getText();</span><br><span class="line">        <span class="keyword">if</span> ( memory.containsKey(id) )</span><br><span class="line">            setValue(ctx, memory.get(id));</span><br><span class="line">        <span class="keyword">else</span> &#123;</span><br><span class="line">            theUI.showMessage(<span class="string">"不存在变量"</span> + id);</span><br><span class="line">        &#125;</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">visitErrorNode</span><span class="params">(ErrorNode node)</span> </span>&#123;&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="五、测试用例及运行结果"><a href="#五、测试用例及运行结果" class="headerlink" title="五、测试用例及运行结果"></a>五、测试用例及运行结果</h1><h2 id="5-1-测试用例1"><a href="#5-1-测试用例1" class="headerlink" title="5.1 测试用例1"></a>5.1 测试用例1</h2><p>测试文件1的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">// this is comment</span><br><span class="line">--pixsize is 5;</span><br><span class="line">--zonesize is (800, 600);</span><br><span class="line"></span><br><span class="line">ORIGIN IS (20,200);</span><br><span class="line">rot IS 0;</span><br><span class="line">SCALE IS(40,40);</span><br><span class="line">FOR T FROM 0 TO 2*PI+PI/50 STEP PI/50 DRAW(T, sin(T));</span><br><span class="line">COLOR IS GREEN;</span><br><span class="line">ORIGIN IS (20,240);</span><br><span class="line">FOR T FROM 0 TO 2*PI+PI/50 STEP PI/50 DRAW(T, sin(T));</span><br><span class="line">COLOR IS BLUE;</span><br><span class="line">ORIGIN IS (20,280);</span><br><span class="line">FOR T FROM 0 TO 2*PI+PI/50 STEP PI/50 DRAW(T, sin(T));</span><br><span class="line"></span><br><span class="line">ORIGIN IS (380,240);</span><br><span class="line">SCALE IS(80,80/3);</span><br><span class="line">COLOR is (255,0,255);</span><br><span class="line">ROT IS PI/2+0*PI/3;</span><br><span class="line">FOR T FROM -PI TO PI STEP PI/50 DRAW (cos(T), sin(T));</span><br><span class="line">COLOR is (128,0,255);</span><br><span class="line">ROT IS PI/2+2*PI/3;</span><br><span class="line">FOR T FROM -PI TO PI STEP PI/50 DRAW (cos(T), sin(T));</span><br><span class="line">COLOR is (0,128,255);</span><br><span class="line">ROT IS PI/2-2*PI/3;</span><br><span class="line">FOR T FROM -PI TO PI STEP PI/50 DRAW (cos(T), sin(T));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ORIGIN IS(580,240);</span><br><span class="line">SCALE IS (80,80);</span><br><span class="line">ROT IS 0;</span><br><span class="line"></span><br><span class="line">color is red;</span><br><span class="line">FOR T FROM 0 TO PI*20 STEP PI/50 </span><br><span class="line">DRAW((1-1/(10/7))*cos(T)+1/(10/7)*cos(-T*((10/7)-1)), (1-1/(10/7))*sin(T)+1/(10/7)*sin(-T*(10/7-1)));</span><br><span class="line"></span><br><span class="line">color is (128,0,0);</span><br><span class="line">FOR T FROM 0 TO 2*PI STEP PI/50 DRAW(cos(T), sin(T));</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p><img src="draw2.png" alt=""></p>
+<h2 id="5-2-测试用例2"><a href="#5-2-测试用例2" class="headerlink" title="5.2 测试用例2"></a>5.2 测试用例2</h2><p>测试文件2的内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">color is red;</span><br><span class="line">origin is (300,300);</span><br><span class="line">scale is (200,200);</span><br><span class="line">rot is 0;</span><br><span class="line">for T from 0 to 2*pi step pi/700 draw (cos(t), sin(t));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">color is (0,0,0);</span><br><span class="line">origin is (300,200);</span><br><span class="line">scale is (30,30);</span><br><span class="line">rot is 0;</span><br><span class="line">for t from 0 to 2*pi step pi/350 draw (cos(t), sin(t));</span><br><span class="line"></span><br><span class="line">color is (255,0,0);</span><br><span class="line">origin is (300,400);</span><br><span class="line">scale is (30,30);</span><br><span class="line">rot is 0;</span><br><span class="line">for t from 0 to 2*pi step pi/350 draw (cos(t), sin(t));</span><br><span class="line"></span><br><span class="line">color is (0,0,0);</span><br><span class="line">origin is (300,200);</span><br><span class="line">scale is (100,100);</span><br><span class="line">rot is pi/2;</span><br><span class="line">for t from -pi to 0 step pi/500 draw (cos(t), sin(t));</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">color is red;</span><br><span class="line">origin is (300,400);</span><br><span class="line">scale is (100,100);</span><br><span class="line">rot is 0;</span><br><span class="line">for t from -pi/2 to pi/2 step pi/500 draw (cos(t), sin(t));</span><br></pre></td></tr></table></figure>
+<p>运行结果：</p>
+<p><img src="draw3.png" alt=""></p>
+<h1 id="六、心得体会"><a href="#六、心得体会" class="headerlink" title="六、心得体会"></a>六、心得体会</h1><p>从上一学期中使用Python从头到尾设计词法分析器、语法分析器、语法制导翻译；到如今的使用ANTLR规定语法规则、词法规则自动生成前端程序，自己动手设计遍历器的语义动作，编译原理与程序分析的课程设计让我充分明白了自动化编程的工作流程与意义。</p>
+<p>经过这次实验，我体会到了避免重复造轮子的编程思想，同时也感受到了使用自动化编程工具提高生产力的力量。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/" title="基于ANTLR实现的简单绘图语言解释器">http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ANTLR/" rel="tag"># ANTLR</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/05/02/Django-Official-Torurial/" rel="next" title="Django Official Torurial">
+                <i class="fa fa-chevron-left"></i> Django Official Torurial
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">18</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">16</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="blog.three7.cc" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#一、实验环境"><span class="nav-number">1.</span> <span class="nav-text">一、实验环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1软件环境"><span class="nav-number">1.1.</span> <span class="nav-text">1.1软件环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-硬件环境"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 硬件环境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#二、实验内容"><span class="nav-number">2.</span> <span class="nav-text">二、实验内容</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#三、方法-思路"><span class="nav-number">3.</span> <span class="nav-text">三、方法/思路</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1模块划分"><span class="nav-number">3.1.</span> <span class="nav-text">3.1模块划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2重要数据结构及算法"><span class="nav-number">3.2.</span> <span class="nav-text">3.2重要数据结构及算法</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#四、源代码"><span class="nav-number">4.</span> <span class="nav-text">四、源代码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1文件1-DrawGraph-g4"><span class="nav-number">4.1.</span> <span class="nav-text">4.1文件1: DrawGraph.g4</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-文件2-BackEnd-java"><span class="nav-number">4.2.</span> <span class="nav-text">4.2 文件2: BackEnd.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-文件3：FrontEnd-java"><span class="nav-number">4.3.</span> <span class="nav-text">4.3 文件3：FrontEnd.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-文件4：UiPixelAttrib-java"><span class="nav-number">4.4.</span> <span class="nav-text">4.4 文件4：UiPixelAttrib.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-文件5：DrawLangMain-java"><span class="nav-number">4.5.</span> <span class="nav-text">4.5 文件5：DrawLangMain.java</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-文件6：DrawerListener-java"><span class="nav-number">4.6.</span> <span class="nav-text">4.6 文件6：DrawerListener.java</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#五、测试用例及运行结果"><span class="nav-number">5.</span> <span class="nav-text">五、测试用例及运行结果</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-测试用例1"><span class="nav-number">5.1.</span> <span class="nav-text">5.1 测试用例1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-测试用例2"><span class="nav-number">5.2.</span> <span class="nav-text">5.2 测试用例2</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#六、心得体会"><span class="nav-number">6.</span> <span class="nav-text">六、心得体会</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">42.9k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
