@@ -132,21 +132,21 @@
 
 
 
-<meta name="description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。 为什么需要智能指针？如果不使用智能指针，单单地使用普通指针，将可能会出现悬挂指针、内存泄漏等问题 Dangling Pointers是什么？如果指针在被释放后，仍然引用原来的内存，就叫做悬挂指针。由于指针已经被释放，对应的内存区域的值是为定义的，进行访问的话得到的值也将是未定">
+<meta name="description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。">
 <meta name="keywords" content="C++,Memory Management">
 <meta property="og:type" content="article">
 <meta property="og:title" content="C++ Smart Pointer">
 <meta property="og:url" content="http://notes-hongbo.top/2019/06/11/C-Smart-Pointer/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。 为什么需要智能指针？如果不使用智能指针，单单地使用普通指针，将可能会出现悬挂指针、内存泄漏等问题 Dangling Pointers是什么？如果指针在被释放后，仍然引用原来的内存，就叫做悬挂指针。由于指针已经被释放，对应的内存区域的值是为定义的，进行访问的话得到的值也将是未定">
+<meta property="og:description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://notes-hongbo.top/2019/06/11/C-Smart-Pointer/1.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/06/11/C-Smart-Pointer/2.png">
 <meta property="og:image" content="http://notes-hongbo.top/2019/06/11/C-Smart-Pointer/3.png">
-<meta property="og:updated_time" content="2019-06-11T03:50:52.524Z">
+<meta property="og:updated_time" content="2019-07-10T15:36:01.661Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="C++ Smart Pointer">
-<meta name="twitter:description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。 为什么需要智能指针？如果不使用智能指针，单单地使用普通指针，将可能会出现悬挂指针、内存泄漏等问题 Dangling Pointers是什么？如果指针在被释放后，仍然引用原来的内存，就叫做悬挂指针。由于指针已经被释放，对应的内存区域的值是为定义的，进行访问的话得到的值也将是未定">
+<meta name="twitter:description" content="C++ 智能指针本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。">
 <meta name="twitter:image" content="http://notes-hongbo.top/2019/06/11/C-Smart-Pointer/1.png">
 
 
@@ -359,8 +359,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-06-11T11:50:52+08:00">
-                2019-06-11
+              <time title="Post modified" itemprop="dateModified" datetime="2019-07-10T23:36:01+08:00">
+                2019-07-10
               </time>
             
           </span>
@@ -413,6 +413,7 @@
 
       
         <h1 id="C-智能指针"><a href="#C-智能指针" class="headerlink" title="C++ 智能指针"></a>C++ 智能指针</h1><p>本文将会分析C++中的一大特性 — 智能指针出现的原因以及原理，如何通过这一特性编写更加安全的C++程序。</p>
+<a id="more"></a>
 <h2 id="为什么需要智能指针？"><a href="#为什么需要智能指针？" class="headerlink" title="为什么需要智能指针？"></a>为什么需要智能指针？</h2><p>如果不使用智能指针，单单地使用普通指针，将可能会出现悬挂指针、内存泄漏等问题</p>
 <h3 id="Dangling-Pointers"><a href="#Dangling-Pointers" class="headerlink" title="Dangling Pointers"></a>Dangling Pointers</h3><h4 id="是什么？"><a href="#是什么？" class="headerlink" title="是什么？"></a>是什么？</h4><p>如果指针在被释放后，仍然引用原来的内存，就叫做悬挂指针。由于指针已经被释放，对应的内存区域的值是为定义的，进行访问的话得到的值也将是未定义的，甚至可能出现段错误等异常。该指针不指向任何有效的对象。有时称为过早释放。</p>
 <p>当出现悬挂指针的时候，可能会发生：</p>
@@ -604,6 +605,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/07/09/A-Tour-of-Go/" rel="prev" title="A Tour of Go">
+                A Tour of Go <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -683,7 +688,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">20</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -705,7 +710,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">19</span>
+                  <span class="site-state-item-count">21</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -823,7 +828,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">48.4k</span>
+    <span title="Site words total count">50.2k</span>
   
 </div>
 
