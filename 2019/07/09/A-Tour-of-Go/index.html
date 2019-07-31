@@ -132,18 +132,18 @@
 
 
 
-<meta name="description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
+<meta name="description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  How to write Go code? 配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
 <meta name="keywords" content="language,Go">
 <meta property="og:type" content="article">
 <meta property="og:title" content="A Tour of Go">
 <meta property="og:url" content="http://notes-hongbo.top/2019/07/09/A-Tour-of-Go/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
+<meta property="og:description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  How to write Go code? 配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-07-11T15:19:15.270Z">
+<meta property="og:updated_time" content="2019-07-31T11:54:24.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A Tour of Go">
-<meta name="twitter:description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
+<meta name="twitter:description" content="本文所参考的资料包含  Go官方入门文档 Go官方安装文档  How to write Go code? 配置环境变量(~/.bash_profile) 为什么要变量名在左，类型在右? len(s) &amp;amp;&amp;amp; cap(s)">
 
 
 
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-07-11T23:19:15+08:00">
-                2019-07-11
+              <time title="Post modified" itemprop="dateModified" datetime="2019-07-31T19:54:24+08:00">
+                2019-07-31
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.8k
+                  2k
                 </span>
               
 
@@ -412,6 +412,7 @@
 <ul>
 <li><a href="https://tour.golang.org/list" target="_blank" rel="noopener">Go官方入门文档</a></li>
 <li><a href="https://golang.org/doc/install?download=go1.12.7.darwin-amd64.pkg" target="_blank" rel="noopener">Go官方安装文档 </a></li>
+<li><a href="https://golang.org/doc/code.html" target="_blank" rel="noopener">How to write Go code?</a></li>
 <li><a href="https://medium.com/golang-learn/quick-go-setup-guide-on-mac-os-x-956b327222b8" target="_blank" rel="noopener">配置环境变量(~/.bash_profile)</a></li>
 <li><a href="https://blog.golang.org/gos-declaration-syntax" target="_blank" rel="noopener">为什么要变量名在左，类型在右?</a></li>
 <li><a href="https://stackoverflow.com/questions/41668053/cap-vs-len-of-slice-in-golang#answer-41668169" target="_blank" rel="noopener">len(s) &amp;&amp; cap(s)</a></li>
@@ -522,6 +523,26 @@
 </ol>
 </li>
 </ol>
+<h1 id="How-to-write-Go-code"><a href="#How-to-write-Go-code" class="headerlink" title="How to write Go code"></a>How to write Go code</h1><ol>
+<li><p>Go文件的存储主要分为两个部分，分别是</p>
+<ul>
+<li><p><code>bin</code>文件夹</p>
+<p>用于存储编译好的可执行文件，在配置好环境变量之后，如果存在这样的一个可执行文件<code>bin/hello</code></p>
+<p>那么在命令行中只需要键入<code>hello</code>即可运行该文件</p>
+</li>
+<li><p><code>src</code>文件夹</p>
+<p>源代码文件，主要包含有三部分： 包文件(package source)、命令文件(command source)、测试文件<code>test source</code></p>
+</li>
+</ul>
+</li>
+<li><p>通过<code>go install</code>命令进行编译，生成可执行文件到<code>bin</code>文件夹</p>
+<p>需要注意的是，存在所谓的<code>base path</code>，也就是说，在install的时候，要么从<code>src</code>文件夹中执行该命令；要么直接进入最底层的源代码文件夹，直接<code>go install</code></p>
+<p><code>base path</code>也适用于引用其他包</p>
+</li>
+<li><p>对于每一个源代码文件，在名称后面加上<code>xx_test.go</code>，并且在其中编写测试用例，就可以完成测试功能</p>
+<p>执行命令为<code>go test</code>，使用方法同<code>go install</code></p>
+</li>
+</ol>
 
       
     </div>
@@ -581,6 +602,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/07/13/HTTP权威指南/" rel="prev" title="HTTP权威指南">
+                HTTP权威指南 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -661,7 +686,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">23</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -683,7 +708,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">21</span>
+                  <span class="site-state-item-count">22</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -767,7 +792,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Packages-variables-and-functions"><span class="nav-number">1.</span> <span class="nav-text">Packages, variables and functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flow-control-statement-for-if-else-switch-and-defer"><span class="nav-number">2.</span> <span class="nav-text">Flow control statement: for, if, else, switch and defer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#More-types-structs-slices-and-maps"><span class="nav-number">3.</span> <span class="nav-text">More types: structs, slices, and maps</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Methods-and-interfaces"><span class="nav-number">4.</span> <span class="nav-text">Methods and interfaces</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Concurrency"><span class="nav-number">5.</span> <span class="nav-text">Concurrency</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Packages-variables-and-functions"><span class="nav-number">1.</span> <span class="nav-text">Packages, variables and functions</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Flow-control-statement-for-if-else-switch-and-defer"><span class="nav-number">2.</span> <span class="nav-text">Flow control statement: for, if, else, switch and defer</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#More-types-structs-slices-and-maps"><span class="nav-number">3.</span> <span class="nav-text">More types: structs, slices, and maps</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Methods-and-interfaces"><span class="nav-number">4.</span> <span class="nav-text">Methods and interfaces</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Concurrency"><span class="nav-number">5.</span> <span class="nav-text">Concurrency</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-to-write-Go-code"><span class="nav-number">6.</span> <span class="nav-text">How to write Go code</span></a></li></ol></div>
             
 
           </div>
@@ -801,7 +826,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">50.2k</span>
+    <span title="Site words total count">54.3k</span>
   
 </div>
 

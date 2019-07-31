@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Algorithm,ML,">
+  <meta name="keywords" content="HTTP,">
 
 
 
@@ -132,18 +132,18 @@
 
 
 
-<meta name="description" content="因为是神经网络中十分经典的算法，故特意开设一篇记录自己对其的理解，伴随着学习的深入将不断完善。">
-<meta name="keywords" content="Algorithm,ML">
+<meta name="description" content="本文是在学习美团tutor给出的资料 — 《HTTP权威指南》时记录的笔记">
+<meta name="keywords" content="HTTP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="BP Neural Network">
-<meta property="og:url" content="http://notes-hongbo.top/2018/11/05/BP-Neural-Network/index.html">
+<meta property="og:title" content="HTTP权威指南">
+<meta property="og:url" content="http://notes-hongbo.top/2019/07/13/HTTP权威指南/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="因为是神经网络中十分经典的算法，故特意开设一篇记录自己对其的理解，伴随着学习的深入将不断完善。">
+<meta property="og:description" content="本文是在学习美团tutor给出的资料 — 《HTTP权威指南》时记录的笔记">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-12-13T13:25:35.887Z">
+<meta property="og:updated_time" content="2019-07-20T02:06:23.997Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="BP Neural Network">
-<meta name="twitter:description" content="因为是神经网络中十分经典的算法，故特意开设一篇记录自己对其的理解，伴随着学习的深入将不断完善。">
+<meta name="twitter:title" content="HTTP权威指南">
+<meta name="twitter:description" content="本文是在学习美团tutor给出的资料 — 《HTTP权威指南》时记录的笔记">
 
 
 
@@ -173,13 +173,13 @@
 
 
 
-  <link rel="canonical" href="http://notes-hongbo.top/2018/11/05/BP-Neural-Network/">
+  <link rel="canonical" href="http://notes-hongbo.top/2019/07/13/HTTP权威指南/">
 
 
 
 
 
-  <title>BP Neural Network | Beyond</title>
+  <title>HTTP权威指南 | Beyond</title>
   
 
 
@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2018/11/05/BP-Neural-Network/">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/07/13/HTTP权威指南/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="秦baibai">
@@ -327,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">BP Neural Network</h1>
+          <h1 class="post-title" itemprop="name headline">HTTP权威指南</h1>
         
 
         <div class="post-meta">
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-05T23:02:27+08:00">
-                2018-11-05
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-07-13T10:39:56+08:00">
+                2019-07-13
               </time>
             
 
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2018-12-13T21:25:35+08:00">
-                2018-12-13
+              <time title="Post modified" itemprop="dateModified" datetime="2019-07-20T10:06:23+08:00">
+                2019-07-20
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  538
+                  1.3k
                 </span>
               
 
@@ -408,22 +408,79 @@
       
 
       
-        <p>因为是神经网络中十分经典的算法，故特意开设一篇记录自己对其的理解，伴随着学习的深入将不断完善。</p>
+        <p>本文是在学习美团tutor给出的资料 — 《HTTP权威指南》时记录的笔记</p>
 <a id="more"></a>
-<p>前向传输时使用sigmoid函数作为激活函数，输出层使用softmax作为输出函数。</p>
-<p>代价函数使用均方差MSE函数$J = \displaystyle \frac{1}{2}\sum_{i = 1}^{M}(t_i - y_i)^2$。使用随机梯度降SDG方法进行优化。</p>
-<p>主要框架的伪代码如下</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">backPropNeuralNetwork</span><span class="params">(training_data, epochs)</span>:</span></span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(epochs): <span class="comment"># 迭代次数</span></span><br><span class="line">        shuffle training data <span class="comment"># 打乱数据顺序</span></span><br><span class="line">        get <span class="string">"mini_batches"</span> used to train the neural network<span class="comment">#将随机后的数据分为多个batch</span></span><br><span class="line">        <span class="keyword">for</span> mini_batch <span class="keyword">in</span> mini_batches: <span class="comment"># 对于每一个mini_batch对神经网络进行训练</span></span><br><span class="line">            update_mini_batch(mini_batch)</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">update_mini_batch</span><span class="params">(mini_batch, learning_rate)</span>:</span></span><br><span class="line">    initialize the delta of weights <span class="keyword">and</span> biases matrix</span><br><span class="line">    <span class="keyword">for</span> x, y <span class="keyword">in</span> mini_batch:</span><br><span class="line">        back propogation <span class="comment"># 反向传播算法计算代价函数关于各个参数的偏导数</span></span><br><span class="line">        update the delta of weights <span class="keyword">and</span> biases matrix </span><br><span class="line">    update the weights <span class="keyword">and</span> biases matrix based on the delta matrix</span><br></pre></td></tr></table></figure>
-<p>其中反向传播算法计算偏导的公式推导如下</p>
-<p>代价函数$J = \displaystyle \frac{1}{2}\sum_{i = 1}^{M}(t_i - y_i)^2$</p>
-<p>定义误差$\delta_j^l = \displaystyle \frac{\partial J}{\partial z_j^l} $</p>
-<p>公式一：对于输出层 </p>
-<p>$\begin{cases} \displaystyle \frac{\partial J}{\partial z_j^L}=\sum_k\frac{\partial J}{\partial a _k^L}\frac{\partial a_k^L}{\partial z_j^L} = \frac{\partial J}{\partial a_j^L}\frac{\partial a_j^L}{\partial z_j^L} \\ \displaystyle \frac{\partial J}{\partial a_j^L}  = \frac{\partial (\frac{1}{2}(y_j - t_i)^2)}{\partial t_i} = t_k - y_k \\ \displaystyle \frac{\partial a_j^L }{\partial z_j^L} = \text{softmax}’(z_j) = y_i [(y_i - t_i) + \sum_{j = 1}^M (t_j - y_j)y_j] \\ \displaystyle \delta^L_j = (t_j - y_j)[(y_j - t_j) + \sum_{i = 1}^{M}(t_i - y_i)y_i]  \end{cases}$</p>
-<p>公式二：对于隐藏层</p>
-<p>$\begin{cases} \displaystyle \delta_j^l = \frac{\partial J}{ \partial z_j^l} = \sum_k \frac{\partial J}{\partial z_k^{l + 1}} \frac{\partial z_k^{l + 1}}{\partial z_j ^l} = \sum_k \frac{\partial z_k^{l + 1}}{\partial z_j ^l}\delta_k^{l + 1} \\ \displaystyle \frac{\partial z_k^{l + 1}}{\partial z_j^l} = \sum_k w_{kj}^{l + 1}\sigma’(z_j^l) \\ \displaystyle \delta _j^l = \sum_kw_{kj}^{l+1}\delta_k^{l + 1}\text{sigmoid}’(z_j^l)  \end{cases}$</p>
-<p>公式三：对于偏置量$\Delta b = \displaystyle \frac{\partial J}{\partial b}= \frac{\partial J}{\partial z}\frac{\partial z}{\partial b} = \delta$</p>
-<p>公式四：对于权重 $\Delta w_{ji}^l = \displaystyle \frac{\partial  J}{\partial w_{ji}^l} = \frac{\partial J}{\partial z_j^l}\frac{\partial z_j^l}{\partial w_{ji}^l} = \delta^l a_i^{l - 1} $</p>
+<h1 id="第一章-HTTP概述"><a href="#第一章-HTTP概述" class="headerlink" title="第一章 HTTP概述"></a>第一章 HTTP概述</h1><ol>
+<li><p>在HTTP报文中，通过<code>Content-type</code>字段存储了MIME类型，表示每一个HTTP对象的数据类型</p>
+<p>表示方法是：主要对象类型 + 特定的子类型，如<code>image/jpeg</code>, <code>text/html</code>, <code>video/quicktime</code></p>
+</li>
+<li><p>HTTP报文包括三个部分</p>
+<ul>
+<li>起始行</li>
+<li>首部字段</li>
+<li>主体</li>
+</ul>
+</li>
+</ol>
+<h1 id="第二章-URL与资源"><a href="#第二章-URL与资源" class="headerlink" title="第二章 URL与资源"></a>第二章 URL与资源</h1><ol>
+<li><p>URL是浏览器寻找信息时所需的资源位置。当浏览器指向一个URL时，后台就会发送适当的协议豹纹来获取人们所期望的资源。</p>
+</li>
+<li><p>URL最重要的三个组件：</p>
+<ul>
+<li><p>方案 scheme</p>
+<p>告知Web客户端怎样访问资源</p>
+</li>
+<li><p>服务器的位置，如<code>www.google.com</code></p>
+</li>
+<li><p>资源路径，如<code>/seasonal/index-fall.html</code> </p>
+<p>说明了请求的事服务器上哪个特定的本地资源</p>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="URL组件"><a href="#URL组件" class="headerlink" title="URL组件"></a>URL组件</h2><p>大多数URL方案的URL语法都建立在由九个部分构成的通用格式上： <code>&lt;scheme&gt;://&lt;user&gt;:&lt;password&gt;@&lt;host&gt;:&lt;port&gt;/&lt;path&gt;;&lt;params&gt;?&lt;query&gt;#&lt;frag&gt;</code></p>
+<p>下面依次介绍这些组件</p>
+<h3 id="方案"><a href="#方案" class="headerlink" title="方案"></a>方案</h3><p>规定如何访问指定资源的主要标识符</p>
+<p>方案组件必须以一个字母符号开始，由第一个“：”将其与URL其余部分分隔开来。方案名是大小写无关的。</p>
+<h3 id="主机与端口"><a href="#主机与端口" class="headerlink" title="主机与端口"></a>主机与端口</h3><p>要想在网上找到资源，应用程序药知道是哪台机器装载了资源，以及在那台机器的什么地方可以找到能对目标资源进行访问的服务器。主机和端口组件提供了这两组信息。</p>
+<p>前者标识了能够访问资源的宿主机器。可以用主机名”<a href="http://www.google.com&quot;，或者IP地址来表示主机名。" target="_blank" rel="noopener">www.google.com&quot;，或者IP地址来表示主机名。</a></p>
+<p>端口组件标识了服务器正在监听的网络端口，对于下层使用了TCP协议的HTTP来说，默认端口号为80</p>
+<h3 id="用户名和密码"><a href="#用户名和密码" class="headerlink" title="用户名和密码"></a>用户名和密码</h3><p>很多服务器都要求输入用户名和密码才会允许用户访问数据，下面给出两个例子：</p>
+<p><code>ftp://anonymous:my_passwd@ftp.prep.ai.mit.edu/pub/gnu</code></p>
+<p><code>http://joe:joespasswd@www.joes-hardware.com/sales_info.txt</code></p>
+<p>如果用户自己没有指定用户名和密码，那么</p>
+<h3 id="路径"><a href="#路径" class="headerlink" title="路径"></a>路径</h3><p>URL的路径组件说明了资源位于服务器的什么地方，它通常很像一个分级的文件系统路径</p>
+<p>使用<code>/</code>来对路径进行分级，每一级都可以有自己的参数</p>
+<h3 id="参数"><a href="#参数" class="headerlink" title="参数"></a>参数</h3><p>负责解析URL的应用程序需要协议参数来访问资源。否则另一端的服务器可能就不会为请求提供服务，或者更糟糕的是，提供错误的服务。比如，像FTP这样有两种传输模式(二进制形式和文本形式)，参数可以用来确定当前工作的事哪种模式。</p>
+<p>参数由字符”;”将其与URL的其余部分分隔开来。如<code>ftp://prep.ai.mit.edu/pub/gnu;type=d</code></p>
+<p>其中参数即为type，值为d</p>
+<h3 id="查询字符串"><a href="#查询字符串" class="headerlink" title="查询字符串"></a>查询字符串</h3><p>使用<code>?</code>将其与前面的URL进行分隔，可以认为查询字符串由多条键值对构成，每个键值对由<code>&amp;</code>分隔</p>
+<h3 id="片段"><a href="#片段" class="headerlink" title="片段"></a>片段</h3><p>对于某些资源类型，如HTML，除了资源级之外，还可以做进一步的划分。如一个带有章节的大型文本文档，资源的URL会指向整个文本文档，但理想的情况是，能够指定资源中的那些章节。</p>
+<p>为了引用部分资源或资源的一个片段，URL支持使用片段组件来表示一个资源内部的片段。</p>
+<p>片段使用<code>#</code>将其与前面的URL分隔起来。在chrome中对指定元素右键，然后点“检查”，将对应元素的id添加到片段位置即可</p>
+<h2 id="URL字符集"><a href="#URL字符集" class="headerlink" title="URL字符集"></a>URL字符集</h2><p>原本URL使用ASCII字符集，仅能表示英文以及有限的特殊符号，通过加入转义机制，即可表示所有的字符，同时避免了某些不安全字符如空格、%、或者~</p>
+<h1 id="第三章-HTTP报文"><a href="#第三章-HTTP报文" class="headerlink" title="第三章 HTTP报文"></a>第三章 HTTP报文</h1><h2 id="3-1-报文的组成部分"><a href="#3-1-报文的组成部分" class="headerlink" title="3.1 报文的组成部分"></a>3.1 报文的组成部分</h2><p>由三个部分组成：起始行、首部块、主体</p>
+<p>HTTP报文的每行都由两个字符组成的行终止序列作为结束，其中包括一个回车符\r和一个换行符\n，该行终止序列可以写做CRLF</p>
+<h2 id="3-2-报文的语法"><a href="#3-2-报文的语法" class="headerlink" title="3.2 报文的语法"></a>3.2 报文的语法</h2><p>所有的HTTP报文都可以分为两类：request message &amp; response message</p>
+<p>请求报文的格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;method&gt; &lt;request-URL&gt; &lt;version&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+<p>响应报文的格式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&lt;version&gt; &lt;status&gt; &lt;reason-phrase&gt;</span><br><span class="line">&lt;headers&gt;</span><br><span class="line">&lt;entity-body&gt;</span><br></pre></td></tr></table></figure>
+<p>一组HTTP收不总是应该以一个空行结束，甚至及时没有收不和实体的主体部分也应该是这样。</p>
+<h3 id="3-2-1-起始行"><a href="#3-2-1-起始行" class="headerlink" title="3.2.1 起始行"></a>3.2.1 起始行</h3><ol>
+<li><p>请求行</p>
+<p>包含了一个方法、一个请求URL、HTTP的版本，上面三个字短使用空格分隔</p>
+</li>
+<li><p>响应行</p>
+<p>包含了HTTP版本、数字状态码、原因短语</p>
+</li>
+<li><p>方法</p>
+<p>GET, HEAD, POST, PUT, TRACE, OPTIONS, DELETE</p>
+</li>
+<li><p>状态码</p>
+</li>
+</ol>
+<p>4001001111</p>
 
       
     </div>
@@ -444,7 +501,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://notes-hongbo.top/2018/11/05/BP-Neural-Network/" title="BP Neural Network">http://notes-hongbo.top/2018/11/05/BP-Neural-Network/</a>
+    <a href="http://notes-hongbo.top/2019/07/13/HTTP权威指南/" title="HTTP权威指南">http://notes-hongbo.top/2019/07/13/HTTP权威指南/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -459,9 +516,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
-          
-            <a href="/tags/ML/" rel="tag"># ML</a>
+            <a href="/tags/HTTP/" rel="tag"># HTTP</a>
           
         </div>
       
@@ -474,8 +529,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/10/30/Machine-Learning-notes in-Coursera/" rel="next" title="Machine Learning notes in Coursera">
-                <i class="fa fa-chevron-left"></i> Machine Learning notes in Coursera
+              <a href="/2019/07/09/A-Tour-of-Go/" rel="next" title="A Tour of Go">
+                <i class="fa fa-chevron-left"></i> A Tour of Go
               </a>
             
           </div>
@@ -484,8 +539,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2018/11/10/流浪猫Bob/" rel="prev" title="流浪猫Bob">
-                流浪猫Bob <i class="fa fa-chevron-right"></i>
+              <a href="/2019/07/15/Effective-Go/" rel="prev" title="Effective Go">
+                Effective Go <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -540,8 +595,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -654,6 +718,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一章-HTTP概述"><span class="nav-number">1.</span> <span class="nav-text">第一章 HTTP概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第二章-URL与资源"><span class="nav-number">2.</span> <span class="nav-text">第二章 URL与资源</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#URL组件"><span class="nav-number">2.1.</span> <span class="nav-text">URL组件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#方案"><span class="nav-number">2.1.1.</span> <span class="nav-text">方案</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#主机与端口"><span class="nav-number">2.1.2.</span> <span class="nav-text">主机与端口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户名和密码"><span class="nav-number">2.1.3.</span> <span class="nav-text">用户名和密码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#路径"><span class="nav-number">2.1.4.</span> <span class="nav-text">路径</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参数"><span class="nav-number">2.1.5.</span> <span class="nav-text">参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询字符串"><span class="nav-number">2.1.6.</span> <span class="nav-text">查询字符串</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#片段"><span class="nav-number">2.1.7.</span> <span class="nav-text">片段</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#URL字符集"><span class="nav-number">2.2.</span> <span class="nav-text">URL字符集</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三章-HTTP报文"><span class="nav-number">3.</span> <span class="nav-text">第三章 HTTP报文</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-报文的组成部分"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 报文的组成部分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-报文的语法"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 报文的语法</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-起始行"><span class="nav-number">3.2.1.</span> <span class="nav-text">3.2.1 起始行</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
