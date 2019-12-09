@@ -1,0 +1,1447 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Coursera,AI,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本文用于记录学习Coursera中Machine Learning课程的笔记">
+<meta name="keywords" content="Coursera,AI">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Machine Learning notes in Coursera">
+<meta property="og:url" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes in-Coursera/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="本文用于记录学习Coursera中Machine Learning课程的笔记">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure4.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure5.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure6.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure7.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure8.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure9.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure10.png">
+<meta property="og:updated_time" content="2018-12-04T12:14:10.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Machine Learning notes in Coursera">
+<meta name="twitter:description" content="本文用于记录学习Coursera中Machine Learning课程的笔记">
+<meta name="twitter:image" content="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes%20in-Coursera/figure1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes in-Coursera/">
+
+
+
+
+
+  <title>Machine Learning notes in Coursera | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes in-Coursera/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Machine Learning notes in Coursera</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-10-30T11:46:38+08:00">
+                2018-10-30
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-04T20:14:10+08:00">
+                2018-12-04
+              </time>
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/Machine-Learning/" itemprop="url" rel="index">
+                    <span itemprop="name">Machine Learning</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  8k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文用于记录学习Coursera中Machine Learning课程的笔记</p>
+<a id="more"></a>
+<p>12.4 update: fully understand the differences between supervised learning &amp; unsupervised learning <a href="https://www.reddit.com/r/learnmachinelearning/comments/5ph5br/what_the_difference_between_evaluative_feedback/" target="_blank" rel="noopener">here</a></p>
+<h1 id="第一周"><a href="#第一周" class="headerlink" title="第一周"></a>第一周</h1><ol>
+<li><p>regression: predict continuous valued output</p>
+</li>
+<li><p>supervised learning: right answer given</p>
+</li>
+<li><p>benign tumor | malignant tumor</p>
+<p>market segmentation</p>
+</li>
+<li><p>监督学习及其分类</p>
+<blockquote>
+<p>In supervised learning, we are given a data set and already know what our correct output should look like, having the idea that there is a relationship between the input and the output.</p>
+<p>Supervised learning problems are categorized into “regression” and “classification” problems. In a regression problem, we are trying to predict results within a continuous output, meaning that we are trying to map input variables to some continuous function. In a classification problem, we are instead trying to predict results in a discrete output. In other words, we are trying to map input variables into discrete categories.</p>
+</blockquote>
+</li>
+<li><p>函数h 是一个约定俗成的函数</p>
+<p>表示的内容为hypotheses，也就是经过算法学得的函数</p>
+<p>$h_{\theta}(x) = \theta_{0} + \theta _{1}x$ 表示参数变量为$\theta$，自变量为$x$的函数</p>
+<p>一般会简写为$h(x) = \theta_{0} + \theta _{1}x$ </p>
+</li>
+<li><p>cost function $J(\theta_{0}, \theta_{1}) = \displaystyle \frac{1}{2m}\sum_{i=1}^{m}(h(x^{(i)}) - y^{(i)})^2$</p>
+<p>表示代价函数的参数为theta </p>
+<p>最小化代价函数的符号为 $\underset{\theta_{0}, \theta_{1}}{\text{minimize}}J(\theta_{0}, \theta_{1})$</p>
+</li>
+<li><p>梯度下降法在进行参数的更新时，该层的参数必须使用上一层的参数进行更新，而不可以使用本层的参数</p>
+<p>即在进行某个参数的更新时，必须保证使用的参数都是上一层的</p>
+<p>使用temp0 暂存 theta0 的数据</p>
+</li>
+<li><p>关于梯度下降的公式 $\theta_{i} := \theta_{i} - \alpha \displaystyle \frac{\partial}{\partial \theta_{i}}J(\theta_{i})$</p>
+<p>为什么后面的符号为减号而不是加号</p>
+<p>总的来说，梯度下降法是寻找最小值的一种收敛法</p>
+<p><img src="figure1.png" alt=""></p>
+<p>从该图来说，如果选择50作为起始点，那么因为是为了寻找较小值，所以需要向左边移动，因此要减去该点对应的正值导数的适当比例</p>
+<p>实际上，梯度法求极值对应的自变量坐标，其中的导数不过是提供了一个方向而已</p>
+<p>前面还有fancy的参数叫做学习率，其实也就是一次的步长</p>
+<p>按理说学习率应该越小越好，因为梯度法当出现因学习率过大导致跨越了最优值时，该参数就不合适了。同时考虑到想要迭代次数尽可能小，所以学习率又需要适当大。可以说这里就是需要所谓的调参。</p>
+<p>但是需要注意的是，如果学习率过小，并且代价函数最优解附近的导数都比较小，那么将会出现每一次迭代走过的步越来越小，导致还没有到达最优解就已经停止收敛。(这个要参照退出循环的条件)</p>
+<p>所以这个参数的选择还是有一定的考究的。</p>
+<p>如果目前已经到达了最优解，那么因为该点的导数为0，所以该值不会进行更新</p>
+</li>
+<li><p>线性回归任务的代价函数一定是凸函数!!!</p>
+</li>
+</ol>
+<h1 id="第三周"><a href="#第三周" class="headerlink" title="第三周"></a>第三周</h1><p>收获：总结出了将运算向量化的步骤！深入理解了对数回归！</p>
+<ol>
+<li><p>为什么最大似然估计必定是凸函数</p>
+</li>
+<li><p>关于为什么在代价函数中总是约定$h_{\theta}(x)= \displaystyle \frac{1}{1 + e^{-\theta ^{T}x}}$，其中后面自然指数的幂次总是这样的形式？</p>
+<p>此时认为$\theta $和$x$都是列向量</p>
+<p>可是在实际应用中，总是将一个样本中的数据放到一行中进行展示，最后一列表示target。所以此处存在一个别扭的转换。</p>
+</li>
+<li><p>扩展了一些收敛迭代方法; 建议直接调用库函数，而不要自己去实现</p>
+<ul>
+<li>conjugate gradient</li>
+<li>BFGS</li>
+<li>L-BFGS</li>
+</ul>
+</li>
+<li><p>直接使用库函数会使得难以调试，但是带来的效率是值得的</p>
+</li>
+<li><p>针对多分类任务，我们设置多个不同的“假设”$h_{\theta}^{(i)}(x) = P(y = i | x; \theta)$</p>
+<p>表示目前在分类第i个类别，使用$\theta$作为参数，x作为自变量</p>
+</li>
+<li><p>假设在数据中我们有k个需要抽取出来的特征，那么我们就需要设置k个分类器</p>
+<p>这是因为每次筛选数据的时候，并不是每进行一步就将筛选出来的数据剔除</p>
+<p>而是针对每一种特征训练出来一种分类器，共需要k个分类器</p>
+</li>
+<li><p>逻辑回归 - 我的理解</p>
+<p>关于为什么使用该函数$\displaystyle \frac{1}{1 + e^{-\theta ^T x}}$ ？ 是因为该函数可导连续，并且可以很好地从原点将坐标系分为两部分</p>
+<p>insight：归根结底，是对$-\theta^T x$的拟合  =&gt; 如果大于0，那么 预测为正例，否则为反例。此时传入的参数可以为非线性的，即$x^2, x^3, x^4 …$此类，使其可以完成非线性任务。</p>
+</li>
+<li><p>处理过拟合的两种办法</p>
+<ul>
+<li><p>减少参数数量 - 可以人为选择保留的参数；可以使用模型选择算法，判断哪些参数保留，哪些扔掉</p>
+<p>该方法的缺点是也许所有的参数都有用，但是仍然会把它扔掉；</p>
+<p>归根到底还是算法或者选择不当，如果把这个因素修改完成，那么一样可以达成过拟合的目的    </p>
+</li>
+<li><p>正则化 - 保留所有参数，但是减少参数的影响；适用于有很多个参数同时每个参数都有作用</p>
+</li>
+</ul>
+</li>
+<li><p>正则化实际上就是修改代价函数，来使得某些参数应该尽可能偏小</p>
+<p>具体的方法是在代价函数后加上一些类似$1000\theta_{i}^2$这样的项，如此一来就可以达到减小该项影响的作用</p>
+<hr>
+<p>正则化中的$\lambda$是为了均衡两个目标 - 与训练集更匹配bias &amp; 函数图形更简单variance</p>
+</li>
+<li><p>在正规方程中使用正规化，甚至可以将矩阵转化为绝对可逆</p>
+</li>
+<li><p>关于运算的向量化</p>
+<p>$$\theta_j = \displaystyle \sum_{i = 1} ^{m}(h_{\theta}(x^{(i)}) - y^{(i)})x_{j}^{(i)}$$    &lt;=&gt;  <code>grad = X&#39; * (sigmoid(X * theta) - y) / m</code></p>
+<p>上式在起初学习的时候我不明白应该如何进行计算，于是使用了两个for循环来处理</p>
+<p>但是如果仔细考察的话，可以发现使用矩阵运算即可完成</p>
+<p>之前我习惯把求和以及前面的括号看成一团，后面的看成一部分，但是实际上要把求和号后面的看成一个整体</p>
+<hr>
+<p>我决定对这个东西做一个总结，这其中必定存在某种普遍使用的结论</p>
+<ul>
+<li>前面的求和号，表示括号中的元素和后面的x必定分别属于矩阵的某行某列</li>
+<li>注意到i的变化是从小到大，所以相对于矩阵运算，必定是从左到右、从上到下</li>
+<li>如果将括号中的元素视为一个列向量的话，那么x必定是从左到右；注意到其j下标是不变的，所以x矩阵中的一行，表示的是每个样本数据的第j个数据</li>
+</ul>
+<p>搞定！</p>
+</li>
+<li><p>octave中的size函数，第二个参数用来标记返回的是行数还是列数</p>
+</li>
+<li><p>在使用正则化时，注意代价函数不计算常数项的参数$\theta_0$</p>
+<p>同时在更新<code>theta(2:n)</code>的时候，仍然可以使用向量化运算，注意将n维中的第一维删除掉</p>
+</li>
+</ol>
+<h1 id="第四周"><a href="#第四周" class="headerlink" title="第四周"></a>第四周</h1><ol>
+<li><p>神经网络产生的背景</p>
+<p>当使用多项式假设时，面对多个特征，如果要暴力组合所有的配对方案，那么将会产生数目巨大的feature；而如果使用较小的feature，那么就会产生欠拟合的问题</p>
+</li>
+<li><p>每一个输入以及输出都从1开始编号，每一层都特殊设置一个偏移量，该偏移量从0开始编号</p>
+<p>也就是对应的阈值</p>
+<p>input layer + hidden layer + output layer</p>
+</li>
+<li><blockquote>
+<p>机器学习可以看做是数理统计的一个应用，在数理统计中一个常见的任务就是拟合，也就是给定一些样本点，用合适的曲线揭示这些样本点随着自变量的变化关系。</p>
+<p>深度学习同样也是为了这个目的，只不过此时，样本点不再限定为(x, y)点对，而可以是由向量、矩阵等等组成的广义点对(X,Y)。而此时，(X,Y)之间的关系也变得十分复杂，不太可能用一个简单函数表示。然而，人们发现可以用多层神经网络来表示这样的关系，而多层神经网络的本质就是一个多层复合的函数。</p>
+<p>作者：Anonymous</p>
+<p>链接：<a href="https://www.zhihu.com/question/27239198/answer/89853077" target="_blank" rel="noopener">https://www.zhihu.com/question/27239198/answer/89853077</a></p>
+</blockquote>
+</li>
+<li><p>for the parameter $\theta$ , it is a matrix with three dimensions</p>
+<p>suppose that now we are at i-th layer, then $\theta^{(i)}$ have a dimension  of $size(s_{i + 1}) \times (size(s_{i}) + 1)$, and $x^{(i)}$ has the dimension of $(size(s_i) + 1) \times 1$</p>
+<p>because in the future we are going to calculate $z^{(i+1)} = \theta^{(i)} * x^{(i)}$ where $x^{(i)} = a^{(i)}$,</p>
+<p>after we get the value of $z$ and put it into the sigmoid function, we get $a^{(i)} = g(z^{(i)})$</p>
+</li>
+<li><p>in the every layer, we can regard the parameter as one function which is learned by the nodes before it</p>
+<p>so our final result is made of many functions to evaluate the aim function.</p>
+</li>
+<li><p>network architectures refer to how the different neurons are connected to each other.</p>
+</li>
+<li><p>notes about <code>octave</code></p>
+<ul>
+<li><p><code>.*</code> will return a vector rather than a scalar value</p>
+</li>
+<li><p><code>[a, b] = max(A, [], 2)</code> will return the information about this matrix</p>
+<p>the first return parameter is maximum value in every line</p>
+<p>the second return parameter is index of every maximum value in every line</p>
+<p>in the <code>max</code> function, the first parameter is the matrix we concerned, the second is the default value which shouldn’t be changed, the third parameter represents to search according to column-1, or row-2</p>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="第五周"><a href="#第五周" class="headerlink" title="第五周"></a>第五周</h1><ol>
+<li><p>The cost function of neural networks:</p>
+<p>$J(\Theta) = \displaystyle - \frac{1}{m}\sum_{i = 1}^{m} \sum_{k = 1}^K[y_k^{(i)}log((h_{\Theta}(x^{(i)}))_k) + (1 - y_k^{(i)}) log(1 - (h_{\Theta}(x^{(i)}))<em>k)] + \frac{\lambda}{2m}\sum</em>{i = 1}^{L - 1}\sum_{i = 1}^{s_l}\sum_{j = 1}^{s_l + 1}(\Theta_{j, i}^{(l)})^2$</p>
+<p>We have added a few nested summations to account for our multiple output nodes. In the first part of the equation, before the square brackets, we have an additional nested summation that loops through the number of output nodes.</p>
+<p>In the regularization part, after the square brackets, we must account for multuple theta matrices. The number of columns in our current theta matrix is equal to the number of nodes in our current layer(including the bias unit). The number of rows in our current theta matrix is euqal to the number of nodes in the next layer(excluding the bias unit). </p>
+<p>Note:</p>
+<ul>
+<li>the double sum simply adds up the logistic regression costs calculated for each cell in the output layer </li>
+<li>the triple sum simply adds up the squares of all the individual $\Theta$s in the entire network</li>
+<li>the i in the triple sum does not reger to training example, but the part before it does!</li>
+<li>the first part of this funciton is all $K$ logistic regression added up separately.</li>
+</ul>
+</li>
+<li><blockquote>
+<p>如何直观地解释 backpropagation 算法？ - Anonymous的回答 - 知乎<br><a href="https://www.zhihu.com/question/27239198/answer/89853077" target="_blank" rel="noopener">https://www.zhihu.com/question/27239198/answer/89853077</a></p>
+</blockquote>
+<p>观后感：BP神经网络就是链式法则</p>
+<p>该文对于理解BP神经网络有极大的帮助</p>
+<p>看到评论里有人表示这个其实是动态规划，真是naive</p>
+<p>因为error的限制，只能从输出层向输入层传递，另外需要每次计算出同层的所有结点再进行传递，这大概就是BP神经网络的框架</p>
+</li>
+<li><p>BP神经网络的公式推导</p>
+<p><a href="https://www.cs.swarthmore.edu/~meeden/cs81/s10/BackPropDeriv.pdf" target="_blank" rel="noopener">https://www.cs.swarthmore.edu/~meeden/cs81/s10/BackPropDeriv.pdf</a></p>
+</li>
+<li><p>new instructions of octave</p>
+<p>if we have many matrices of different scales, and want to unroll them into one datastructure, then we can do it by <code>thetaVector = [ Theta1(:); Theta2(:); Theta3(:); ]</code></p>
+<p>and get the matrices back by</p>
+<p><code>Theta1 = reshape(thetaVector(1:110),10,11);</code></p>
+<p><code>Theta2 = reshape(thetaVector(111:220),10,11);</code></p>
+<p><code>Theta3 = reshape(thetaVector(221:231),1,11);</code></p>
+</li>
+<li><p>gradient checking, which is to check the whether the rough derivative function could get a similiar value in regard to the value we get from the derivative function of BP algorithm</p>
+</li>
+<li><p>神经网络的初始化参数问题 - 为什么不可以像回归问题一样全部置0？</p>
+<p><img src="figure2.png" alt=""></p>
+<p>考虑给定的神经网络，其中结点1, 2, 3在输入层，结点4, 5在隐含层，结点6位于输出层</p>
+<p>假定：输入各不相同；初始化全部参数为0。</p>
+<ul>
+<li><p>第一次正向传播过程中，后面结点上激活值均为0.5</p>
+</li>
+<li><p>第一次反向传播过程中，结点4, 5的输入由于相同，所以它们学得的权重相同；同时由于输入层到隐含层的参数在计算时，它们的输入也都相同，所以学得的参数也都相同</p>
+</li>
+<li>第二次正向传播过程中，结点4, 5的输入相同，所以激活值相同，进而得到输入</li>
+<li>第二次反向传播过程中，结点4, 5学得的权重仍然相同；同时结点1学得的两个权重相同、结点2学得的两个权重相同、结点3学得的两个权重相同<strong>(这是因为权重的学习与三个量相关，一个是该结点的激活值，一个是上一层的误差，一个是两层之间的权重)</strong></li>
+</ul>
+</li>
+<li><p>作业总结</p>
+<ul>
+<li><p>因为octave类似python没有先声明后使用的规则，所以会出现一种很神奇的BUG - 变量名拼错</p>
+<p>这种BUG在这种语言里面实在是危险，出现的时候不会有任何的报错信息</p>
+</li>
+<li><p>梯度降矩阵的规模与$\Theta$矩阵的规模一致，将来更新的时候也就是更新这些参数</p>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="《神经网络与深度学习》"><a href="#《神经网络与深度学习》" class="headerlink" title="《神经网络与深度学习》"></a>《神经网络与深度学习》</h1><p>吴恩达的课程解释得太浅，学得的大概只是一个神经网络的框架</p>
+<p>希望能够借助这本书来对神经网络有一个更深入的理解</p>
+<h2 id="人工神经元模型"><a href="#人工神经元模型" class="headerlink" title="人工神经元模型"></a>人工神经元模型</h2><h3 id="感知机"><a href="#感知机" class="headerlink" title="感知机"></a>感知机</h3><p><img src="figure3.png" alt=""></p>
+<p>示例中的感知机有三个输入，$x_1, x_2, x_3$</p>
+<p>$$output = \displaystyle \begin{cases} 0 &amp; \text{if } \sum_jw_jx_j \leq \text{threshold} \ 1 &amp; \text{if} \sum_j w_j x_j &gt; \text{threshold }\end{cases}$$</p>
+<p>我们可以把偏置看成一种表示让感知机输出1有多容易的估算。</p>
+<h3 id="S型神经元"><a href="#S型神经元" class="headerlink" title="S型神经元"></a>S型神经元</h3><p>如果对权重的微小改动能够仅仅引起输出的微小变化，那么我们可以利用这一事实来修改权重和偏置，让我们的网络能够表现得像我们想要的那样。我们重复这个工作，反复改动权重和偏置来产生更好的输出。这时网络就在学习。</p>
+<p>可是问题在于网络中单个感知机上一个权重或偏置的微小改动有时候会引起那个感知机的输出完全翻转。</p>
+<p>我们可以引入一种称为S型神经元的模型来克服这个问题。</p>
+<p><img src="figure3.png" alt=""></p>
+<p>正如一个感知机，S型神经元有多个输入，$x_1, x_2, …$。但是这些输入可以取0和1中的任意值，而不仅仅是0或1.其输出现在不是0或1，而是$\sigma(w \cdot x + b)$，其中$\sigma$被称为S型函数，定义为$\displaystyle \sigma(z) = \displaystyle \frac{1}{1 + e^{-z}}$</p>
+<p>$\sigma$的平滑意味着权重和偏置的微小变化，即$\Delta w_j$和$\Delta b$，会从神经元产生一个微小的输出变化$\Delta \text{output}$。实际上，微积分告诉我们</p>
+<p>$$\displaystyle \Delta \text{output} \approx \sum_j \frac{\partial\text{output}}{\partial w_j} \Delta w_j + \frac{\partial\text{output}}{\partial b} \Delta b$$</p>
+<h2 id="手写数字识别-为什么不用4个输出表示二进制数字完成任务？"><a href="#手写数字识别-为什么不用4个输出表示二进制数字完成任务？" class="headerlink" title="手写数字识别, 为什么不用4个输出表示二进制数字完成任务？"></a>手写数字识别, 为什么不用4个输出表示二进制数字完成任务？</h2><p>最终的判断是基于经验主义的：我们可以实验两种不同的⽹络设计，结果证明对于这个特定的问题而⾔，10 个输出神经元的神经⽹络⽐ 4 个的识别效果更好。但是令我们好奇的是为什么使⽤ 10 个输出神经元的神经⽹络更有效呢。有没有什么启发性的⽅法能提前告诉我们⽤ 10 个输出编码⽐使⽤ 4 个输出编码更有好呢？</p>
+<p>为了理解为什么我们这么做，我们需要从根本原理上理解神经⽹络究竟在做些什么。⾸先考虑有 10 个神经元的情况。我们⾸先考虑第⼀个输出神经元，它告诉我们⼀个数字是不是 0。它能那么做是因为可以权衡从隐藏层来的信息。隐藏层的神经元在做什么呢？假设隐藏层的第⼀个神经元只是⽤于检测如下的图像是否存在：</p>
+<p><img src="figure4.png" alt=""></p>
+<p>为了达到这个⽬的，它通过对此图像对应部分的像素赋予较⼤权重，对其它部分赋予较小的权重。同理，我们可以假设隐藏层的第⼆，第三，第四个神经元是为检测下列图⽚是否存在：</p>
+<p><img src="figure5.png" alt=""></p>
+<p>如果所有隐藏层的这四个神经元被激活那么我们就可以推断出这个数字是 0。当然，这不 是我们推断出 0 的唯⼀⽅式 —— 我们能通过很多其他合理的⽅式得到 0 （举个例⼦来说，通过 上述图像的转换，或者稍微变形）。但⾄少在这个例⼦中我们可以推断出输⼊的数字是 0。</p>
+<p>假设神经⽹络以上述⽅式运⾏，我们可以给出⼀个貌似合理的理由去解释为什么⽤ 10 个输 出而不是 4 个。如果我们有 4 个输出，那么第⼀个输出神经元将会尽⼒去判断数字的最⾼有效 位是什么。把数字的最⾼有效位和数字的形状联系起来并不是⼀个简单的问题。很难想象出有 什么恰当的历史原因，⼀个数字的形状要素会和⼀个数字的最⾼有效位有什么紧密联系。</p>
+<hr>
+<p>上述只是一个猜测… 有一些勉强的感觉… 可能这就是所谓玄学吧</p>
+<h2 id="为什么代价函数是二次代价？而不是直接最大化正确分类的数量？"><a href="#为什么代价函数是二次代价？而不是直接最大化正确分类的数量？" class="headerlink" title="为什么代价函数是二次代价？而不是直接最大化正确分类的数量？"></a>为什么代价函数是二次代价？而不是直接最大化正确分类的数量？</h2><p>这时因为被正确分类的图像数量所关于权重和偏置的函数并不是一个平滑的函数。大多情况下，对权重和偏置做出的微小变动完全不会影响被正确分类图像的数量。这回导致我们很难去解决如何改变权重和偏置来取得性能的提升。</p>
+<h2 id="梯度下降法的直观理解"><a href="#梯度下降法的直观理解" class="headerlink" title="梯度下降法的直观理解"></a>梯度下降法的直观理解</h2><p>我们想象有⼀ 个小球从⼭⾕的斜坡滚落下来。我们的⽇常经验告诉我们这个球最终会滚到⾕底。也许我们可 以⽤这⼀想法来找到函数的最小值？我们会为⼀个（假想的）球体随机选择⼀个起始位置，然 后模拟球体滚落到⾕底的运动。我们可以通过计算 C 的导数（或者⼆阶导数）来简单模拟——这些导数会告诉我们⼭⾕中局部“形状”的⼀切，由此知道我们的球将怎样滚动。</p>
+<h2 id="随机梯度下降法的直观理解"><a href="#随机梯度下降法的直观理解" class="headerlink" title="随机梯度下降法的直观理解"></a>随机梯度下降法的直观理解</h2><p>我们可以把随机梯度下降想象成一次民意调查：在一个小批量数据上采样比对一个完整数据集进行梯度下降分析要容易得多，正如进行一次民意调查比举行一次全民选举要更容易。</p>
+<p>在计算量和迭代次数上面，SGD与GD没有差别，但是在一次迭代中SGD可能会更新很多次，因此会比GD收敛得更快，这也是平时所说的SGD比GD快的意思。</p>
+<h2 id="BP神经网络公式的直观理解"><a href="#BP神经网络公式的直观理解" class="headerlink" title="BP神经网络公式的直观理解"></a>BP神经网络公式的直观理解</h2><p>回忆一下sigmoid函数，当$\sigma(z_j^L)$近似微0或者1的时候，该函数变得非常平。这时$\sigma^\prime (z_j^L) \approx 0$。所以如果输出神经元处于低激活值或者高激活值时，最终层的权重学习缓慢。这样的情形，我们常常称输出神经元已经饱和了，并且权重学习也会终止。类似的结果对于输出神经元的偏置也是成立的。</p>
+<h1 id="第六周"><a href="#第六周" class="headerlink" title="第六周"></a>第六周</h1><ol>
+<li><p>We can promote the performance of out machine learning algorithms by </p>
+<ul>
+<li>Getting more training examples</li>
+<li>Trying smaller sets of features</li>
+<li>Trying additional features</li>
+<li>Trying polynomial features</li>
+<li>Increasing or decreasing λ</li>
+</ul>
+<p>However, it is important to decide which measure to take to propmote our algorithm because any of them is time-costing.</p>
+</li>
+<li><p>A hypothesis may have a low error for the training examples but still be inaccurate because of overfitting. Thus, to evaluate a hypothesis, given a dataset of training examples, we can split up teh data into two sets: a training set and a test set. </p>
+</li>
+<li><p>Given many models with different polynomial degrees, we can use a systematic approach to identify the ‘best’ function. In order to choose the model of your hypothesis, you can test each degree of polynomial and look at the error result.</p>
+<p>One way to break down our dataset into the three sets is:</p>
+<ul>
+<li>Training set: 60%</li>
+<li>Cross validation set: 20%</li>
+<li>Test set: 20%</li>
+</ul>
+<p>We can now calculate three separate error values for the three different sets using the following method:</p>
+<ol>
+<li>Optimize the parameters in Θ using the training set for each polynomial degree.</li>
+<li>Find the polynomial degree d with the least error using the cross validation set.</li>
+<li>Estimate the generalization error using the test set with $J_{test}(\Theta^{(d)})$, (d = theta from polynomial with lower error);</li>
+</ol>
+<p>This way, the degree of the polynomial d has not been trained using the test set.</p>
+<hr>
+<p>为了使得模型的generalization能力更强，将数据分为两部分，一部分用于训练(训练集和验证集)，另一部分用于测试。</p>
+<p>训练集的数据用于训练模型，验证集的数据用于选择模型(如神经网络的结构、回归模型中的幂次等)，测试集的数据用于测试模型的performance。</p>
+<p>一般来说validation上的cost会比test上的cost要小，这是因为前者相对于后者多了一些表示模型的参数。</p>
+</li>
+<li><p>The <em>bias</em> is an error from erroneous assumptions in the learning algorithm. High bias can cause an algorithm to miss the relevant relations between features and target outputs (underfitting).</p>
+<p>The <em>variance</em> is an error from sensitivity to small fluctuations in the training set. High variance can cause an algorithm to model the random noise in the training data, rather than the intended outputs (overfitting).</p>
+</li>
+<li><p>The training error will tend to <strong>decrease</strong> as we increase the degree d of the polynomial.</p>
+<p>At the same time, the cross validation error will tend to <strong>decrease</strong> as we increase d up to a point, and then it will <strong>increase</strong> as d is increased, forming a convex curve.</p>
+<p><strong>High bias (underfitting)</strong>: both $J_{train}(\Theta)$ and $J_{CV}(\Theta)$ will be high. Also, $J_{CV}(\Theta) \approx J_{train}(\Theta)$.</p>
+<p><strong>High variance (overfitting)</strong>: $J_{train}(\Theta)$ will be low and $J_{CV}(\Theta)$ will be much greater than $J_{train}(\Theta)$.</p>
+<p><img src="figure6.png" alt=""></p>
+</li>
+<li><p>How do we choose our parameter \lambdaλ to get it ‘just right’ ? In order to choose the model and the regularization term λ, we need to:</p>
+<ol>
+<li>Create a list of lambdas (i.e. λ∈{0,0.01,0.02,0.04,0.08,0.16,0.32,0.64,1.28,2.56,5.12,10.24});</li>
+<li>Create a set of models with different degrees or any other variants.</li>
+<li>Iterate through the λs and for each λ go through all the models to learn some Θ.</li>
+<li>Compute the cross validation error using the learned Θ (computed with λ) on the $J_{CV}(\Theta)$ <strong>without</strong> regularization or λ = 0. That’s because we have got the model parameters with the effect of regularization.</li>
+<li>Select the best combo that produces the lowest error on the cross validation set.</li>
+<li>Using the best combo Θ and λ, apply it on $J_{test}(\Theta)$ to see if it has a good generalization of the problem.</li>
+</ol>
+</li>
+<li><p>learning curves</p>
+<p><strong>Experiencing high bias:</strong></p>
+<p><strong>Low training set size</strong>: causes $J_{train}(\Theta)$ to be low and $J_{CV}(\Theta)$ to be high.</p>
+<p><strong>Large training set size</strong>: causes both $J_{train}(\Theta)$ and $J_{CV}(\Theta)$ to be high with $J_{train}(\Theta)$≈$J_{CV}(\Theta)$.</p>
+<p>If a learning algorithm is suffering from <strong>high bias</strong>, getting more training data will not <strong>(by itself)</strong> help much.</p>
+<p><img src="figure7.png" alt=""></p>
+<p><strong>Experiencing high variance:</strong></p>
+<p><strong>Low training set size</strong>: $J_{train}(\Theta)$ will be low and $J_{CV}(\Theta)$ will be high.</p>
+<p><strong>Large training set size</strong>: $J_{train}(\Theta)$ increases with training set size and $J_{CV}(\Theta)$ continues to decrease without leveling off. Also, $J_{train}(\Theta)$ &lt; $J_{CV}(\Theta)$ but the difference between them remains significant.</p>
+<p>If a learning algorithm is suffering from <strong>high variance</strong>, getting more training data is likely to help.</p>
+<p><img src="figure8.png" alt=""></p>
+<hr>
+<p>当出现欠拟合时，增大数据量是没有用处的；而在过拟合时，增大数据量可以使得训练集数据与真实数据更加接近，使得模型的精度提高</p>
+</li>
+<li><p>Our decision process can be broken down as follows:</p>
+<ul>
+<li><p><strong>Getting more training examples:</strong> Fixes high variance</p>
+</li>
+<li><p><strong>Trying smaller sets of features:</strong> Fixes high variance</p>
+</li>
+<li><p><strong>Adding features:</strong> Fixes high bias</p>
+</li>
+<li><p><strong>Adding polynomial features:</strong> Fixes high bias</p>
+</li>
+<li><p><strong>Decreasing λ:</strong> Fixes high bias</p>
+</li>
+<li><p><strong>Increasing λ:</strong> Fixes high variance.</p>
+</li>
+</ul>
+</li>
+<li><p>The recommended approach to solving machine learning problems is to:</p>
+<ul>
+<li>Start with a simple algorithm, implement it quickly, and test it early on your cross validation data.</li>
+<li>Plot learning curves to decide if more data, more features, etc. are likely to help.</li>
+<li>Manually examine the errors on examples in the cross validation set and try to spot a trend where most of the errors were made.</li>
+</ul>
+</li>
+</ol>
+<h1 id="第七周"><a href="#第七周" class="headerlink" title="第七周"></a>第七周</h1><ol>
+<li><p>The form of SVM model’s cost function is similiar to the cost function of logistic regression<br>$$<br>\displaystyle minC\sum_{i=1}^{m}[y^{(i)}cost_1(\theta^Tx^{(i)}) + (1 - y^{(i)})cost_0(\theta^Tx^{(i)})] + \frac{1}{2}\sum_{i = 1} ^n \theta^2_j<br>$$<br>and the two parts of the $cost$ are some function which have the following properties<br>$$<br>\begin{cases}\theta^Tx \ge 1 &amp; y = 1 \\ \theta^Tx\le -1 &amp; y = 0\end{cases}<br>$$</p>
+</li>
+<li><p>support vector machine is also called large margin machine</p>
+</li>
+<li><p>the value of $C$ denotes the value we view to the loss of training data</p>
+<p>if $C$ is very large, then even if there are some bad data exist in the training data, the algorithm will still try to set the margin according to the training data. =&gt; high variance</p>
+<p>if $C$ is reasonably small, then the algorithm could ignore the bad data and try to get a subjective regression =&gt; high bias</p>
+</li>
+<li><p>SVM with kernels<br>$$<br>\displaystyle minC\sum_{i=1}^{m}[y^{(i)}cost_1(\theta^Tf^{(i)}) + (1 - y^{(i)})cost_0(\theta^Tf^{(i)})] + \frac{1}{2}\sum_{i = 1} ^n \theta^2_j<br>$$</p>
+</li>
+<li><p>$\sigma^2$ ‘s influence on model</p>
+<p>if it is large, then it will have very blury decision which results in high bias</p>
+<p>if it is small, it will have somewhat very critical criticism which results in high variance</p>
+</li>
+<li><p>if $n$ is much large than $m$, then it is better to use logistic regress or SVM without a kernel</p>
+<p>if $n$ is small and $m$ is intermediate(about ten times at maximum), then it is better to use SVM with Gaussian kernel</p>
+<p>if $n$ is small and $m$ is large, add more features and then use logistic regression or SVM without kernel</p>
+</li>
+</ol>
+<h1 id="第八周"><a href="#第八周" class="headerlink" title="第八周"></a>第八周</h1><h2 id="K-means-algoirithm"><a href="#K-means-algoirithm" class="headerlink" title="K-means algoirithm"></a>K-means algoirithm</h2><ol>
+<li><p>unsupervised learning algorithm is some model given unlabeled data and get to find the structure of data. There are many unsupervised learning algorithm and one of them is <code>clustering</code></p>
+</li>
+<li><p>A famous clustering algorithm - K-means algorithm</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Randomly initializa K cluster centroids </span><br><span class="line">Repeat &#123;</span><br><span class="line">	for i = 1 to m</span><br><span class="line">		assign the index of cluster centroid to every point</span><br><span class="line">	</span><br><span class="line">	for k = 1 to K</span><br><span class="line">		update the new position of the cluster centroid</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>the optimization objective of K-means algorithm  $\displaystyle \frac{1}{m} \sum_{i = 1}^m ||x^{(i)} - \mu_{c^{(i)}}||^2$, where $x^{(i)}$ is the position of i-th data and $\mu_{c^{(i)}}$ is the cluster centroid which the i-th data is assigned. In this case, the cost function will never increase during the process of algorithm. </p>
+<p>why do we care about that?</p>
+<ul>
+<li>it will help to debug</li>
+<li>we can use this to make K-means better</li>
+</ul>
+</li>
+<li><p>how to randomly initialize K cluster centroids to avoid the local optima</p>
+<ul>
+<li>randomly pick K training examples</li>
+<li>set the cluster centroids to these K examples</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">for i = 1 to 100(range from 50 to 1000)</span><br><span class="line">	randomly initialize K-means # better if K range from 2 - 10</span><br><span class="line">	run K-means</span><br><span class="line">	compute cost function</span><br><span class="line">	</span><br><span class="line">pick clustering that gave the lowest cost</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>what is the right value of K?</p>
+<p><img src="figure9.png" alt=""></p>
+</li>
+</ol>
+<h2 id="Data-demensionality-reduction"><a href="#Data-demensionality-reduction" class="headerlink" title="Data demensionality reduction"></a>Data demensionality reduction</h2><ol>
+<li><p>data compression</p>
+<p>if some features corrlate to each other, then maybe we can represent then by some curve</p>
+<p>After that, we will replace them with this only one feature which will reduce the demensionality</p>
+</li>
+<li><p>data visualization</p>
+<p>reduce the demensionality to 2D or 3D to print out the graph of data to look for some features </p>
+</li>
+<li><p>PCA(principal component analysis) is trying to find a lower dimensional surface onto which to project the data from $n$-dimensions to $k$-dimensions</p>
+<ul>
+<li>data preprocessing (feature scaling / mean normalization)</li>
+<li>compute “covariance matrix” $ \sum = \displaystyle\frac{1}{m}\sum_{i = 1}^n(x^{(i)})(x^{(i)})^T$</li>
+<li>compute “eigenvectors” of matrix $\sum$ by “Singular Value Decomposition”</li>
+<li>get the compressed data by parameters from last step</li>
+</ul>
+</li>
+<li><p>recounstuction from compressed representation<br>$$<br>z = U_{\text{reduce}}^T x   &lt;=&gt; x \approx U_{\text{reduce}}z<br>$$</p>
+</li>
+<li><p>how to choose the right number of $K$</p>
+<p>recall that the cost function of PCA is $\displaystyle \frac{1}{m}\sum_{i = 1}^m ||x^{(i)} - x_{\text{approx}}^{(i)}||^2$, and total variation in data is $\displaystyle \frac{1}{m}\sum_{i = 1}^m ||x^{(i)}||^2$. typically, choose $k$ to be smallest value so that $\frac{\displaystyle \frac{1}{m}\sum_{i = 1}^m ||x^{(i)} - x_{\text{approx}}^{(i)}||^2}{\displaystyle \frac{1}{m}\sum_{i = 1}^m ||x^{(i)} ||^2} \le 1\% $.</p>
+<p>Guess what, it can be calculated by the parameters “S” returned by SVD function, which is a diagonal matrix. And the formula is $\displaystyle 1 - \frac{\sum^k_i s_{ii}}{\sum_i^{n}s_{ii}} \le 1\% $</p>
+</li>
+<li><p>when using PCA on dataset, we should get parameters from SVD only from training set and apply it to cross validation set and test set. </p>
+</li>
+<li><p>bad use of PCA: to prevent overfitting because there would be less features after applying PCA. This might work OK, but isn’t a good way to address overfitting. Use regularization instead. </p>
+<p>The reason of that is PCA would throw some information which may be valuable.</p>
+</li>
+<li><p>PCA is sometimes used where it shouldn’t be. Think about doing the whole thing without using PCA? </p>
+<p>Before implementing PCA, first try running whatever you want to do with the original/raw data $x^{(i)}$. Only if that doesn’t do what you want, then implement PCA and consider using $z^{(i)}$</p>
+</li>
+</ol>
+<h2 id="about-assignment"><a href="#about-assignment" class="headerlink" title="about assignment"></a>about assignment</h2><ol>
+<li>$||xx||^2$ 表示的是二范数，也就是一个平方根</li>
+<li>在对矩阵操作的时候，</li>
+</ol>
+<h1 id="第九周"><a href="#第九周" class="headerlink" title="第九周"></a>第九周</h1><h2 id="anomaly-detect-algorithm"><a href="#anomaly-detect-algorithm" class="headerlink" title="anomaly detect algorithm"></a>anomaly detect algorithm</h2><ol>
+<li><p>assume that every features of data follow Gaussian distribution, and we are going to get the parameter of all these Gaussian distribution</p>
+<ul>
+<li>choose features $x_i$ that you think might be indicative of anomalous examples.</li>
+<li>fit parameters $\mu_1, \mu_2, …, \mu_n$ , $\sigma_1^2, …, \sigma_n^2$</li>
+<li>given new example $x$, compute $p(x) = \prod_{j = 1} ^np(x_j; \mu_j;\sigma_j^2)$, anomaly if $p(x) &lt; \epsilon$</li>
+</ul>
+</li>
+<li><p>suppose our model gives high accuracy when evaluating on the cross validation set or test set, maybe it still doesn’t have a good performance because of skewed classes</p>
+</li>
+<li><p>why not supervised learning algorithm?</p>
+<p>| Anomaly detection                                            | Supervised learning                                          |<br>| :———————————————————– | :———————————————————– |<br>| very small number of positve examples; <br>large number of negative examples | large number of positive and negative example                |<br>| Many different “types” of anomalies. Hard for any algorithm to learn from positive examples what the anomalies look like;<br>future anomalies may look nothing like any of the anomalous examples we’ve seen so far. | Enough positive examples for algorithm to get a sense of what positive examples are like, future positive examples likely to be similar to ones in training set. |<br>| fraud detection; <br>Manufacturing(e.g. aircraft engines)<br>monitoring machines in a data center | email spam classification<br>weather prediction<br>cancer classification |</p>
+</li>
+<li><p>choose what features to use</p>
+<p>if a certain feature doesn’t look like gaussian distribution, then maybe it is better to get a log, or get some power root</p>
+</li>
+</ol>
+<h2 id="content-based-recommender-system"><a href="#content-based-recommender-system" class="headerlink" title="content-based recommender system"></a>content-based recommender system</h2><ol>
+<li><p>give some features to the content of the  movie and score them</p>
+<p>for each user, learn a parameter. Predict user as rating movie with the parameter</p>
+</li>
+<li><p>the cost function of this algorithm is just like linear regression</p>
+</li>
+<li><p>given $x^{(1)},x^{(2)}, x^{(3)}… $, can estimate $\theta^{(1)},\theta^{(2)}, \theta^{(3)}… $</p>
+</li>
+</ol>
+<h2 id="Collaborative-Filter"><a href="#Collaborative-Filter" class="headerlink" title="Collaborative Filter"></a>Collaborative Filter</h2><ol>
+<li>the algorithm could learn what features to use</li>
+<li>given the parameter from user as same as the “content-based recommender system”, try to score the features of moive. The cost function has the same form of the linear regression</li>
+<li>given $\theta^{(1)},\theta^{(2)}, \theta^{(3)}… $, can estimate $x^{(1)},x^{(2)}, x^{(3)}… $</li>
+</ol>
+<hr>
+<p>the traditional way to compund these two algorithm is to first guess some parameter of the user favor, then use “collaborative filter” to get the features of movie, then “content-based recommender system” to get a more accurate parameter of user, and repeat on</p>
+<h2 id="Collaborative-Filtering-algorithm"><a href="#Collaborative-Filtering-algorithm" class="headerlink" title="Collaborative Filtering algorithm"></a>Collaborative Filtering algorithm</h2><ol>
+<li>if we mix these two algorithm together by put two cost function into one, then we can get a new algorithm wihich could simultaneously update the parameters of user and the features of movie</li>
+<li><p>the process of “collaborative filtering algorithm”</p>
+<ul>
+<li>initialize parameter of user and features of movie</li>
+<li>minimize using gradient descent</li>
+<li>get the prediction of user for some movie by the parameter learned before</li>
+</ul>
+</li>
+<li><p>it is also called “low rank matrix factorization”</p>
+</li>
+<li><p>how to find movies that user might favor? Try to find some data that has little difference compared to the movie user like.</p>
+</li>
+<li><p>what if a new user join in and hasn’t seen any movies? “Mean Normalization”  could fix that.</p>
+<p><img src="figure10.png" alt=""></p>
+</li>
+</ol>
+<h1 id="第十周"><a href="#第十周" class="headerlink" title="第十周"></a>第十周</h1><h2 id="Gradient-Descent"><a href="#Gradient-Descent" class="headerlink" title="Gradient Descent"></a>Gradient Descent</h2><h3 id="Batch-Gradient-Descent"><a href="#Batch-Gradient-Descent" class="headerlink" title="Batch Gradient Descent"></a>Batch Gradient Descent</h3><ol>
+<li>the normal algorithm</li>
+<li>plot $J_{\text{train}}(\theta)$ as a function of the number of iterations of gradient descent to see if it is performing well, then we can tune the learning rate or so</li>
+</ol>
+<h3 id="Stochastic-Gradient-Descent"><a href="#Stochastic-Gradient-Descent" class="headerlink" title="Stochastic Gradient Descent"></a>Stochastic Gradient Descent</h3><ol>
+<li><p>In this case, the cost funciton shouldn’t include the $m$ parameters because the batch we use doesn’t have the scale of $m$. So now the cost function is $cost(\theta, (x^{(i)}, y^{(i)})) = \frac{1}{2}(h_\theta(x^{(i)}) - y^{(i)})^2$.</p>
+<p>But as for the loss of training set, it still should use the $m$ term.</p>
+</li>
+<li><p>in every iteration, just use one example to update the $\theta$ parameters</p>
+</li>
+<li><p>stochastic gradient descent doesn’t just converge to teh global minimum, it will oscillate a bit around the global minimum.</p>
+</li>
+<li><p>as for this algorithm, we need to plot something different to get a tuition about how it is performing.</p>
+<ul>
+<li>during leartning, compute $cost(\theta, (x^{(i)}, y^{(i)}))$ before updating $\theta$ using $(x^{(i)}, y^{(i)})$. </li>
+<li>every 1000 iterations(say), plot $cost(\theta, (x^{(i)}, y^{(i)}))$ averaged over the last 1000 examples processed by algorithm.</li>
+</ul>
+</li>
+<li><p>sometimes it is better to set this number of iterations small, because we can get more detail about the performing of algorithm; However, sometimes it is better to use a large number because maybe in detail there is just noise everywhere, and the large iteraitons could get us a global plot in this case. </p>
+</li>
+<li><p>it is better to set the learning rate to decrease by time because eventually the algorithm will oscillate around the optima value. As Andrew suggest, maybe it is good to use something like $\alpha= \displaystyle \frac{const1}{iterations + const2}$</p>
+</li>
+</ol>
+<h3 id="Mini-batch-gradient-descent"><a href="#Mini-batch-gradient-descent" class="headerlink" title="Mini-batch gradient descent"></a>Mini-batch gradient descent</h3><ol>
+<li><p>every batch is a subset of training data set with the size we set, and we are going to update $\theta$ parameters based on these mini-batches</p>
+</li>
+<li><p>why look for a min batch rather than a single case of training examples?</p>
+<p>In this case, we can get a better and efficient gradient descent algorithm, because we can parallelize the calculation by vectorization.</p>
+</li>
+</ol>
+<h2 id="Online-Learning-set"><a href="#Online-Learning-set" class="headerlink" title="Online Learning set"></a>Online Learning set</h2><p>update the parameter of website or a specific user based on the data generated by them</p>
+<h2 id="Map-reduce-and-Dara-Parallelism"><a href="#Map-reduce-and-Dara-Parallelism" class="headerlink" title="Map-reduce and Dara Parallelism"></a>Map-reduce and Dara Parallelism</h2><p>many machines doing the same task separately, and the work these machines doing all together makes up the origin sing task which maybe impossible to complete in one single machine.</p>
+<h1 id="第十一周"><a href="#第十一周" class="headerlink" title="第十一周"></a>第十一周</h1><h2 id="Photo-OCR-pupeline"><a href="#Photo-OCR-pupeline" class="headerlink" title="Photo OCR pupeline"></a>Photo OCR pupeline</h2><ol>
+<li>the basic process of OCR<ul>
+<li>text detection </li>
+<li>character segmentation</li>
+<li>character classification</li>
+</ul>
+</li>
+<li>sliding windows algirithm for looking for pedestrians<ul>
+<li>slide a littel window with a fixed size to go over the all image </li>
+<li>make the window bigger and slide it all over the image, but then transform this bigger window into the fixed size just like before</li>
+</ul>
+</li>
+</ol>
+<h2 id="Artificial-Data-Synthesis"><a href="#Artificial-Data-Synthesis" class="headerlink" title="Artificial Data Synthesis"></a>Artificial Data Synthesis</h2><ol>
+<li><p>as for the example of character recognition, we can use font libraries form the internet</p>
+<p>and we can introduce distortion to the origin image </p>
+</li>
+<li><p>as for speech recognition, </p>
+<ul>
+<li>introduce a distortion such as cellphone connection, </li>
+<li>noisy background: crowd, vehicle, machinery</li>
+</ul>
+</li>
+<li><p>discussion on getting more data</p>
+<ul>
+<li>make sure you have a low bias classifier before expending the effort.</li>
+<li>“How much work would it be to get 10 times as much data as we currently have?”<ul>
+<li>artificial data synthesis</li>
+<li>collect/label it ourselves</li>
+<li>“Crowd source”</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="Ceiliing-Analysis"><a href="#Ceiliing-Analysis" class="headerlink" title="Ceiliing Analysis"></a>Ceiliing Analysis</h2><p>what part of the pipeline to work on next?</p>
+<p>assume we are part of the component of algorithm, then go from the source of data flow and get the part of job perfect, look for the final performance of algorithm. If it exert a great influence on final result, then it is worth to get more work on this part of pipeline. Then we go on to the next part while keep the previous perfect part, keep trying to see which part is more worth the studying.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2018/10/29/Machine-Learning-notes in-Coursera/" title="Machine Learning notes in Coursera">http://notes-hongbo.top/2018/10/29/Machine-Learning-notes in-Coursera/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Coursera/" rel="tag"># Coursera</a>
+          
+            <a href="/tags/AI/" rel="tag"># AI</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/11/05/BP-Neural-Network/" rel="prev" title="BP Neural Network">
+                BP Neural Network <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="blog.three7.cc" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#第一周"><span class="nav-number">1.</span> <span class="nav-text">第一周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第三周"><span class="nav-number">2.</span> <span class="nav-text">第三周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第四周"><span class="nav-number">3.</span> <span class="nav-text">第四周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第五周"><span class="nav-number">4.</span> <span class="nav-text">第五周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#《神经网络与深度学习》"><span class="nav-number">5.</span> <span class="nav-text">《神经网络与深度学习》</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#人工神经元模型"><span class="nav-number">5.1.</span> <span class="nav-text">人工神经元模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#感知机"><span class="nav-number">5.1.1.</span> <span class="nav-text">感知机</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#S型神经元"><span class="nav-number">5.1.2.</span> <span class="nav-text">S型神经元</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#手写数字识别-为什么不用4个输出表示二进制数字完成任务？"><span class="nav-number">5.2.</span> <span class="nav-text">手写数字识别, 为什么不用4个输出表示二进制数字完成任务？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么代价函数是二次代价？而不是直接最大化正确分类的数量？"><span class="nav-number">5.3.</span> <span class="nav-text">为什么代价函数是二次代价？而不是直接最大化正确分类的数量？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#梯度下降法的直观理解"><span class="nav-number">5.4.</span> <span class="nav-text">梯度下降法的直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#随机梯度下降法的直观理解"><span class="nav-number">5.5.</span> <span class="nav-text">随机梯度下降法的直观理解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BP神经网络公式的直观理解"><span class="nav-number">5.6.</span> <span class="nav-text">BP神经网络公式的直观理解</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第六周"><span class="nav-number">6.</span> <span class="nav-text">第六周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第七周"><span class="nav-number">7.</span> <span class="nav-text">第七周</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第八周"><span class="nav-number">8.</span> <span class="nav-text">第八周</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#K-means-algoirithm"><span class="nav-number">8.1.</span> <span class="nav-text">K-means algoirithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Data-demensionality-reduction"><span class="nav-number">8.2.</span> <span class="nav-text">Data demensionality reduction</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#about-assignment"><span class="nav-number">8.3.</span> <span class="nav-text">about assignment</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第九周"><span class="nav-number">9.</span> <span class="nav-text">第九周</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#anomaly-detect-algorithm"><span class="nav-number">9.1.</span> <span class="nav-text">anomaly detect algorithm</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#content-based-recommender-system"><span class="nav-number">9.2.</span> <span class="nav-text">content-based recommender system</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collaborative-Filter"><span class="nav-number">9.3.</span> <span class="nav-text">Collaborative Filter</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Collaborative-Filtering-algorithm"><span class="nav-number">9.4.</span> <span class="nav-text">Collaborative Filtering algorithm</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第十周"><span class="nav-number">10.</span> <span class="nav-text">第十周</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-Descent"><span class="nav-number">10.1.</span> <span class="nav-text">Gradient Descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Batch-Gradient-Descent"><span class="nav-number">10.1.1.</span> <span class="nav-text">Batch Gradient Descent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Stochastic-Gradient-Descent"><span class="nav-number">10.1.2.</span> <span class="nav-text">Stochastic Gradient Descent</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Mini-batch-gradient-descent"><span class="nav-number">10.1.3.</span> <span class="nav-text">Mini-batch gradient descent</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Online-Learning-set"><span class="nav-number">10.2.</span> <span class="nav-text">Online Learning set</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map-reduce-and-Dara-Parallelism"><span class="nav-number">10.3.</span> <span class="nav-text">Map-reduce and Dara Parallelism</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#第十一周"><span class="nav-number">11.</span> <span class="nav-text">第十一周</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Photo-OCR-pupeline"><span class="nav-number">11.1.</span> <span class="nav-text">Photo OCR pupeline</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Artificial-Data-Synthesis"><span class="nav-number">11.2.</span> <span class="nav-text">Artificial Data Synthesis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ceiliing-Analysis"><span class="nav-number">11.3.</span> <span class="nav-text">Ceiliing Analysis</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">54.3k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>

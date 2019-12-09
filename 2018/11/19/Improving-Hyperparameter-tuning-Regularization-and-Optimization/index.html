@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="//fonts.cat.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ML,Coursera,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="本文用于记录吴恩达deeplearning.ai系列的第二节课，涉及的内容包括调参、正则化、优化。">
+<meta name="keywords" content="ML,Coursera">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Improving: Hyperparameter tuning, Regularization and Optimization">
+<meta property="og:url" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="本文用于记录吴恩达deeplearning.ai系列的第二节课，涉及的内容包括调参、正则化、优化。">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure4.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure5.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/2.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/2.2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/2.3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/2.4.png">
+<meta property="og:updated_time" content="2018-12-13T13:25:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Improving: Hyperparameter tuning, Regularization and Optimization">
+<meta name="twitter:description" content="本文用于记录吴恩达deeplearning.ai系列的第二节课，涉及的内容包括调参、正则化、优化。">
+<meta name="twitter:image" content="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/figure1.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"hide","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/">
+
+
+
+
+
+  <title>Improving: Hyperparameter tuning, Regularization and Optimization | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Improving: Hyperparameter tuning, Regularization and Optimization</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-11-20T10:35:43+08:00">
+                2018-11-20
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2018-12-13T21:25:41+08:00">
+                2018-12-13
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.9k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本文用于记录吴恩达deeplearning.ai系列的第二节课，涉及的内容包括调参、正则化、优化。</p>
+<a id="more"></a>
+<h1 id="Week-1"><a href="#Week-1" class="headerlink" title="Week 1"></a>Week 1</h1><h2 id="Setting-up-ML-application"><a href="#Setting-up-ML-application" class="headerlink" title="Setting up ML application"></a>Setting up ML application</h2><p>it is a highly iterative process: layers, hidden unites, learning rtes, activation functions…</p>
+<p><img src="figure1.png" alt=""></p>
+<p>we need to go around this cycle many times to get the best parameters.</p>
+<h3 id="Train-dev-test-sets"><a href="#Train-dev-test-sets" class="headerlink" title="Train/dev/test sets"></a>Train/dev/test sets</h3><p>we are going to spilt the data set into three parts: training set, dev set(cross validation set), test set. </p>
+<p>When data scale is small like 100-1000-10000, it is good enough to set 60/20/20 proportion to get these data set. But in the modern big data era, like 1,000,000 training examples, just 10,000 is enough for dev set and test set. </p>
+<p>Because the aim for dev set is to test different algorithms on it and see which algorithm works better. 20% is too much for this set in big data scale. So at this time, maybe 98/1/1 or 99.5/0.4/0.1 or 99.5/0.25/0.25 is a better choice. </p>
+<hr>
+<p>Say we are getting data of cat pictures, when our training set get the cat pictures from webpages which are in high quality. However, our dev/test sets get data from users using our app which are in bad quality. These two distribution may be different. </p>
+<p>It is vital to set these data in the same distribution. </p>
+<p>It might be okay to not have a test set. The goal of the test set is to give us a unbiased estimate of the perfgormance of our final network. Because dev test has already done it for us. </p>
+<h3 id="Bias-and-Variance"><a href="#Bias-and-Variance" class="headerlink" title="Bias and Variance"></a>Bias and Variance</h3><p>high bias =&gt; underfitting</p>
+<p>high variance =&gt; overfitting </p>
+<p><img src="figure2.png" alt=""></p>
+<p>note that high bias and high variance may exist at the same time because in some parts of the classifier it is almost like linear, and in some parts it overfit the data.</p>
+<h3 id="Basic-recipe-for-machine-learning"><a href="#Basic-recipe-for-machine-learning" class="headerlink" title="Basic recipe for machine learning"></a>Basic recipe for machine learning</h3><p>High bias? =&gt; training set problem</p>
+<ul>
+<li>bigger network, </li>
+<li>train longer or try some more advanced optimization algorithms, </li>
+<li>find a new network architecture that’s better suited for this problem</li>
+</ul>
+<p>High variance? =&gt; dev set problem</p>
+<ul>
+<li>get more data</li>
+<li>regularization</li>
+<li>find a new network architecture that’s better suited for this problem</li>
+</ul>
+<p><img src="figure3.png" alt=""></p>
+<p>there is much trade-off when we deal with depp learning high variance and high bias, cause they won’t hurt each other. </p>
+<h2 id="Regularization"><a href="#Regularization" class="headerlink" title="Regularization"></a>Regularization</h2><h3 id="Logistic-regression"><a href="#Logistic-regression" class="headerlink" title="Logistic regression"></a>Logistic regression</h3><p>$L_2$ regularization $||w||<em>2^2 = \displaystyle \sum</em>{j = 1}^{n_x}w_j^2 = w^Tw$, which is also called as <code>Weight decay</code></p>
+<p>$L_1$ regulatization $\displaystyle \frac{\lambda}{2m}\sum_{i = 1}^{n_x}|w| = \frac{\lambda}{2m}||w||_1$</p>
+<p>where $\lambda$ is called as regularization parameter, note that <code>lambda</code> is a reserved word in Python, so <code>lambd</code> is used in programming. </p>
+<h3 id="Neural-network"><a href="#Neural-network" class="headerlink" title="Neural network"></a>Neural network</h3><p>$||W^{[l]}||^2 = \displaystyle \sum_{i=1}^{n^{[l-1]}}\sum_{j=1}^{n^{[l]}}(W_{ij}^{[l]})^2$</p>
+<p>this matrix norm is called as Frobenius norm of matrix, denoted with a <code>F</code></p>
+<p>And now the gradient descent as for partial derivatives turns out to be $dW^{[l]} = (\text{from backprop}) + \displaystyle \frac{\lambda}{m}W^{[l]}$</p>
+<h2 id="Why-regularization-prevent-overfitting"><a href="#Why-regularization-prevent-overfitting" class="headerlink" title="Why regularization prevent overfitting?"></a>Why regularization prevent overfitting?</h2><h3 id="L2-Regularization"><a href="#L2-Regularization" class="headerlink" title="L2 Regularization"></a>L2 Regularization</h3><p>When implementing regularization, it will be good to plot cost function after a certain times of iteration. So in this case it should decrease every time. </p>
+<h3 id="Dropout-regularization"><a href="#Dropout-regularization" class="headerlink" title="Dropout regularization"></a>Dropout regularization</h3><p>For each node, we are going to toss a coin to see whether to keep it or not. After this operation, we will get a smaller network and a simple network.</p>
+<p>About how to implement dropout?  Suppose we are in layer 3. </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line">d3 = np.random.rand(a3.shape[<span class="number">0</span>], a3.shape[<span class="number">1</span>]) &lt; keep_prob</span><br><span class="line">a3 = np.multiply(a3, d3)</span><br><span class="line">d3 /= keep_prob </span><br><span class="line"><span class="comment"># because it is reduced (1 - keep_prob)%, so </span></span><br><span class="line"><span class="comment"># in order to get the same size of a, we need to make it large by divide</span></span><br></pre></td></tr></table></figure>
+<p>Note that we are not tossing coins to dropout nodes. Because that will only add noise to our predictions. </p>
+<p>Why does it work?</p>
+<p>Intuition: can’t rely on any one feature, so have to spread out weights. </p>
+<p>In computer vision, dropout is very regular. </p>
+<p>One big downside for it is that the cost function get more comlicated. </p>
+<h3 id="Data-augmentation"><a href="#Data-augmentation" class="headerlink" title="Data augmentation"></a>Data augmentation</h3><p>Adding more data is a good way to get away overfitting. But sometimes it is very hard to do so. In this case, reverse the data or rotate the picture to some angles is the solution. Or to add some distortion is also a good choice. </p>
+<h3 id="Early-stopping"><a href="#Early-stopping" class="headerlink" title="Early stopping"></a>Early stopping</h3><p><img src="figure4.png" alt=""></p>
+<p>Its disadvantages are that it mix the two phases of the deep learning. One is tooptimize cost function $J$, which is to get the best $W$ and $b$. The another is avoid overfitting. Seperate these two phases is called <code>orthogonalization</code>.</p>
+<p>But <code>early stopping</code> couple these two phases. </p>
+<h2 id="Setting-up-optimization-problem"><a href="#Setting-up-optimization-problem" class="headerlink" title="Setting up optimization problem"></a>Setting up optimization problem</h2><h3 id="Normalizing-training-sets"><a href="#Normalizing-training-sets" class="headerlink" title="Normalizing training sets"></a>Normalizing training sets</h3><p>There are two steps to do so. First is to substract $\mu = \displaystyle \frac{1}{m}\sum_{i=1}^mx^{(i)}$(the mean of data), And the second is to divide $x$ with $\sigma^2 = \displaystyle \frac{1}{m} \sum_{i=1}^m(x^{(i)})^2$.</p>
+<p>It is very clear that the formula above turn the random distribution into a Gauss distribution. </p>
+<p><img src="figure5.png" alt=""></p>
+<h3 id="Weight-initialization-for-deep-networks"><a href="#Weight-initialization-for-deep-networks" class="headerlink" title="Weight initialization for deep networks"></a>Weight initialization for deep networks</h3><p>The scale of matrix is related to the size of the input size $n$ because it depends the number of input features for one neuron. If $n$ is big, then weight matrix should be small. So it turns out it is good to multiply weight with <code>np.sqrt(1 / n[l - 1])</code>. As for the <code>ReLU</code> activation funciton, it is better to multiply with <code>np.sqrt(2 / n[l - 1])</code>. </p>
+<p>The aim is to avoid the exploding or diminishing of gradient. </p>
+<p>About why this work: As for Xavier initialization, by applying this method, the input data and the output data will follow the approximate same distribution. But it work well for tanh funciton but not ReLU activation function. </p>
+<p>Then 何恺明 find that multiply it by 2 will get a pretty good result. Then it is called He initialization. </p>
+<h3 id="Check-derivative-computation"><a href="#Check-derivative-computation" class="headerlink" title="Check derivative computation"></a>Check derivative computation</h3><p> for each i:<br>​    $d\Theta_{\text{approx}}[i] = \displaystyle \frac{J(\theta_1, \theta_2, …, \theta_i + \epsilon, …) - J(\theta_1, \theta_2, …, \theta_i - \epsilon, …)}{2\epsilon}$<br>check $\displaystyle \frac{||d\Theta_{\text{approx}} - d\theta||<em>2}{||d\Theta</em>{\text{approx}}||_2 + ||d\theta||_2}$</p>
+<p>it suggested to take $\epsilon$ as $10^{-7}$, if the result of that fraction is about $10^{-7}$, then it is good!</p>
+<p>some tips:</p>
+<ul>
+<li>Don’t use in training - only to debug. </li>
+<li>If algorihtm fails grad check, look at components to try to identify bug.</li>
+<li>Remember regularization. </li>
+<li>Doesn’t work with dropout. </li>
+<li>Run at random initialization; perhaps again after some training. </li>
+</ul>
+<h2 id="Homework"><a href="#Homework" class="headerlink" title="Homework"></a>Homework</h2><ol>
+<li>if we use ReLU function as the activat function, then the zero initialization will make the output as zero permanently.</li>
+</ol>
+<h1 id="Week-2"><a href="#Week-2" class="headerlink" title="Week 2"></a>Week 2</h1><p>introduce some optimization algorithms</p>
+<h2 id="Mini-batch-gradient-descent"><a href="#Mini-batch-gradient-descent" class="headerlink" title="Mini-batch gradient descent"></a>Mini-batch gradient descent</h2><p>the main framework of this algorithm:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> mini_batch <span class="keyword">in</span> mini_batches:</span><br><span class="line">    Forward prop on mini_batch</span><br><span class="line">    Compute cost on mini_batch</span><br><span class="line">    Backprop to compute the gradient derivatives</span><br><span class="line">    update weights <span class="keyword">and</span> bias parameters</span><br></pre></td></tr></table></figure>
+<p>the procedure is called “1 epoch”, which means that we go through the entire data set one time. </p>
+<h3 id="cost-figure"><a href="#cost-figure" class="headerlink" title="cost figure"></a>cost figure</h3><p>During the batch gradient descent, we expect the cost function decreases in every iteration, however, in the mini-batch gradient descent, it is not necessary. </p>
+<p><img src="2.1.png" alt=""></p>
+<p>That is because different mini-batch have different features, thus result in the oscillations. </p>
+<h3 id="intuition"><a href="#intuition" class="headerlink" title="intuition"></a>intuition</h3><p>if we set the size of mini-batch to $m$, then it is Batch gradient descent which has no noise. if we set the size of mini-batch to 1, then it is Stochastic gradnet descent which has very high noise.  </p>
+<p>from what is discussed above, we can learn that mini-batch lay somewhere between these two extreme instance.</p>
+<h3 id="how-to-choose-mini-batch-size"><a href="#how-to-choose-mini-batch-size" class="headerlink" title="how to choose mini-batch size"></a>how to choose mini-batch size</h3><p>if the size of data set is small, then it is better to use batch gradient descent.</p>
+<p>then if it is necessary to choose some size for mini-batch, $2^6, 2^7, 2^8, 2^9$ is the common choice. Notice that we should make sure that memory is able to handle this mini-batch, that is to say, it could get entire mini-batch into the memory.</p>
+<h2 id="Exponentially-weighted-averages"><a href="#Exponentially-weighted-averages" class="headerlink" title="Exponentially weighted averages"></a>Exponentially weighted averages</h2><p>if the data we get is somewhat noisy, then it is good to use this method to reduce the noice. The reason why it works is that for every data point in set, it updates this point according to the data before it and the value it has. Formula:<br>$$<br>V_t = \beta V_{t - 1} + (1-\beta)\theta_t<br>$$<br>it is a very good way to reduce the use of memory and space in algorithm to get the averages and to reduce the noise of data set. </p>
+<p><img src="2.2.png" alt=""></p>
+<p>From the figure above we can know that the influence of $\displaystyle \frac{1}{1 - \beta}$ day have the proportion of that. The code </p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> matplotlib.pyplot <span class="keyword">as</span> plt</span><br><span class="line"></span><br><span class="line">x = np.arange(<span class="number">0.0001</span>, <span class="number">0.9999</span>, <span class="number">0.0001</span>)</span><br><span class="line">y = np.multiply(np.power(x, <span class="number">1</span> / (<span class="number">1</span> - x)), x)</span><br><span class="line">plt.plot(x, y)</span><br><span class="line">plt.show()</span><br></pre></td></tr></table></figure>
+<p>So I still don’t know why Andrew said that we can consider the formula only get the influence of last $\displaystyle \frac{1}{1 - \beta}$ days.</p>
+<h3 id="tutuition"><a href="#tutuition" class="headerlink" title="tutuition"></a>tutuition</h3><p><img src="2.3.png" alt=""></p>
+<p>the figure above plot the influence of every original data exert on the current data. Andrew said it is ture that the largest of $\displaystyle \beta^\frac{1}{1 - \beta}$ is 0.35, however, this value is approximate the same value of 1/e, so it is called exponentially weighted averages.<br>$$<br>(1-\epsilon)^{1/\epsilon} = 1/e<br>$$</p>
+<h3 id="bias-correction"><a href="#bias-correction" class="headerlink" title="bias correction"></a>bias correction</h3><p>it is very clear that at the beginning of this curve, the updated data is not right because we still don’t have the data from past certain days.</p>
+<p>based on the formula before, we modify it by<br>$$<br>\displaystyle \frac{V_t}{1 - \beta^t}<br>$$</p>
+<h2 id="Gradient-descent-with-momentum"><a href="#Gradient-descent-with-momentum" class="headerlink" title="Gradient descent with momentum"></a>Gradient descent with momentum</h2><p>the basic idea is to compute an exponentially weighted average of gradient to update parameters.</p>
+<p>this algorithm take the shape of contour graph into consideration, making sure that it moves formly both on vertical and horizontal direction. </p>
+<p>compared to the examples before, where we get a very noisy temperature data set and after applying the exponentially weighted averages and get a smooth figure, now we want the gradient to be smooth so it will be much easier to get to the optimization point. Formula:<br>$$<br>V_{dW} = \beta V_{dW} + (1-\beta)dW \\<br>V_{db} = \beta V_{db} + (1-\beta)db \\<br>—\\<br>W = W - \alpha V_{dW} \\<br>b = b - \alpha V_{db}<br>$$<br>we are going to update $W, b$ based on them.</p>
+<p>The most common data for $\beta$ is 0.9. And there’s no need to bother with the bias correction because the loss of beginning step is not a big deal.</p>
+<h2 id="RMSprop"><a href="#RMSprop" class="headerlink" title="RMSprop"></a>RMSprop</h2><p>stands for root mean square prop</p>
+<p>Formula:<br>$$<br>S_{dW} = \beta S_{dW} + (1-\beta)dW^2 \\<br>S_{db} = \beta S_{db} + (1-\beta)db^2 \\<br>—\\<br>W = W - \alpha \frac{dW}{\sqrt{S_{dW}}} \\<br>b = b - \alpha \frac{db}{\sqrt{S_{db}}}<br>$$<br>the reason why it works is that the division operation. If some parameters have the huge twists, then it will get bigger $S$ value, inturn get smaller update value. </p>
+<h2 id="Adam"><a href="#Adam" class="headerlink" title="Adam"></a>Adam</h2><p><img src="2.4.png" alt=""></p>
+<p>And it is common to set<br>$$<br>\beta_1 = 0.9 \\<br>\beta_2 = 0.999 \\<br>\epsilon = 10^{-8}<br>$$</p>
+<h2 id="Learning-rate-decay"><a href="#Learning-rate-decay" class="headerlink" title="Learning rate decay"></a>Learning rate decay</h2><p>$$<br>\alpha = \frac{1}{1 + \text{decay_rate} <em> \text{epoch_num}} </em> \alpha_0<br>$$</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/" title="Improving: Hyperparameter tuning, Regularization and Optimization">http://notes-hongbo.top/2018/11/19/Improving-Hyperparameter-tuning-Regularization-and-Optimization/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ML/" rel="tag"># ML</a>
+          
+            <a href="/tags/Coursera/" rel="tag"># Coursera</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/11/19/《货币金融学》/" rel="next" title="《货币金融学》">
+                <i class="fa fa-chevron-left"></i> 《货币金融学》
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/04/Reinforcement-Learning/" rel="prev" title="Reinforcement Learning Note (1)">
+                Reinforcement Learning Note (1) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="blog.three7.cc" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Week-1"><span class="nav-number">1.</span> <span class="nav-text">Week 1</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Setting-up-ML-application"><span class="nav-number">1.1.</span> <span class="nav-text">Setting up ML application</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Train-dev-test-sets"><span class="nav-number">1.1.1.</span> <span class="nav-text">Train/dev/test sets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Bias-and-Variance"><span class="nav-number">1.1.2.</span> <span class="nav-text">Bias and Variance</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Basic-recipe-for-machine-learning"><span class="nav-number">1.1.3.</span> <span class="nav-text">Basic recipe for machine learning</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Regularization"><span class="nav-number">1.2.</span> <span class="nav-text">Regularization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Logistic-regression"><span class="nav-number">1.2.1.</span> <span class="nav-text">Logistic regression</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Neural-network"><span class="nav-number">1.2.2.</span> <span class="nav-text">Neural network</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-regularization-prevent-overfitting"><span class="nav-number">1.3.</span> <span class="nav-text">Why regularization prevent overfitting?</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#L2-Regularization"><span class="nav-number">1.3.1.</span> <span class="nav-text">L2 Regularization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Dropout-regularization"><span class="nav-number">1.3.2.</span> <span class="nav-text">Dropout regularization</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Data-augmentation"><span class="nav-number">1.3.3.</span> <span class="nav-text">Data augmentation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Early-stopping"><span class="nav-number">1.3.4.</span> <span class="nav-text">Early stopping</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Setting-up-optimization-problem"><span class="nav-number">1.4.</span> <span class="nav-text">Setting up optimization problem</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Normalizing-training-sets"><span class="nav-number">1.4.1.</span> <span class="nav-text">Normalizing training sets</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Weight-initialization-for-deep-networks"><span class="nav-number">1.4.2.</span> <span class="nav-text">Weight initialization for deep networks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Check-derivative-computation"><span class="nav-number">1.4.3.</span> <span class="nav-text">Check derivative computation</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Homework"><span class="nav-number">1.5.</span> <span class="nav-text">Homework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Week-2"><span class="nav-number">2.</span> <span class="nav-text">Week 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Mini-batch-gradient-descent"><span class="nav-number">2.1.</span> <span class="nav-text">Mini-batch gradient descent</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#cost-figure"><span class="nav-number">2.1.1.</span> <span class="nav-text">cost figure</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#intuition"><span class="nav-number">2.1.2.</span> <span class="nav-text">intuition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#how-to-choose-mini-batch-size"><span class="nav-number">2.1.3.</span> <span class="nav-text">how to choose mini-batch size</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Exponentially-weighted-averages"><span class="nav-number">2.2.</span> <span class="nav-text">Exponentially weighted averages</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#tutuition"><span class="nav-number">2.2.1.</span> <span class="nav-text">tutuition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#bias-correction"><span class="nav-number">2.2.2.</span> <span class="nav-text">bias correction</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Gradient-descent-with-momentum"><span class="nav-number">2.3.</span> <span class="nav-text">Gradient descent with momentum</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RMSprop"><span class="nav-number">2.4.</span> <span class="nav-text">RMSprop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Adam"><span class="nav-number">2.5.</span> <span class="nav-text">Adam</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Learning-rate-decay"><span class="nav-number">2.6.</span> <span class="nav-text">Learning rate decay</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">54.3k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
