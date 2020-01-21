@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-12-22T16:16:26.616Z">
+<meta property="og:updated_time" content="2020-01-10T15:33:36.830Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Fully Understand Binary Search">
 <meta name="twitter:description" content="Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for">
@@ -339,7 +339,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-21T19:31:52+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-21T03:31:52-08:00">
                 2019-12-21
               </time>
             
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-12-23T00:16:26+08:00">
-                2019-12-23
+              <time title="Post modified" itemprop="dateModified" datetime="2020-01-10T07:33:36-08:00">
+                2020-01-10
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  266
+                  358
                 </span>
               
 
@@ -416,6 +416,7 @@
 <li>The scope of the initial boundary is [0, n - 1], which is the entire available elements set. The reason why we choose this could be explained by the update strategy for the boundary variables <code>l</code> and <code>r</code>. Since they are updated as <code>mid - 1</code> or <code>mid + 1</code>, they could be set to any elements inside the entire scope. So we should not make the boundary exceed the valid index set. </li>
 <li>The update strategy for the <code>l</code> and <code>r</code> is reasonable when we think about a decision tree. Take left boundary <code>l</code> for example, if the current midpoint <code>mid</code> could not meet the predefined requirement, then  all the elements on the leftside of <code>mid</code>, while including the midpoint, should be excluded from the choice scope. And we can do this by assign <code>mid + 1</code> to <code>l</code>. </li>
 <li>According to the update strategy, it is possible that we will reach the situation when <code>l</code> equals to <code>r</code>. Thus, the while clause should be <code>l &lt;= r</code>, which includes the equality situation. </li>
+<li>It is always helpful to consider the situation when the binary search hit the end, so that we can easily find the correct boundary and update strategy. For example, in leetcode [35], consider what will happen in the final step where l == r - 1, and there’s no element equal to target. According to the previous updating strategy, <code>l</code> will be set to <code>mid + 1</code> and the binary search is finished. So the final output of the algorithm will be at the first value that is equal or bigger to the target. </li>
 </ol>
 
       
@@ -476,6 +477,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/21/Computer-Networks-A-System-Approach/" rel="prev" title="Computer Networks: A System Approach">
+                Computer Networks: A System Approach <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -547,7 +552,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">24</span>
+                  <span class="site-state-item-count">27</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -569,7 +574,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-count">28</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -657,7 +662,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -671,7 +676,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">54.6k</span>
+    <span title="Site words total count">55.5k</span>
   
 </div>
 
