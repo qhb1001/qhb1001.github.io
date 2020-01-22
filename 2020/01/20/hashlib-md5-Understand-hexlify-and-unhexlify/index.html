@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="When I was implementing the Linux MD5 crypt method for the user password, I encountered this problem. To solve a problem in this low level benefit me a lot. Here is the summary for what I learned from">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-01-21T17:10:34.440Z">
+<meta property="og:updated_time" content="2020-01-22T04:05:49.753Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="hashlib.md5 - Understand hexlify and unhexlify">
 <meta name="twitter:description" content="When I was implementing the Linux MD5 crypt method for the user password, I encountered this problem. To solve a problem in this low level benefit me a lot. Here is the summary for what I learned from">
@@ -339,7 +339,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-21T08:16:41+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-20T16:16:41-08:00">
                 2020-01-21
               </time>
             
@@ -355,7 +355,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-01-22T01:10:34+08:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2020-01-21T20:05:49-08:00">
                 2020-01-22
               </time>
             
@@ -411,7 +411,7 @@
         <p>When I was implementing the Linux MD5 crypt method for the user password, I encountered this problem. To solve a problem in this low level benefit me a lot. Here is the summary for what I learned from this. </p>
 <h1 id="ASCII-Encoding"><a href="#ASCII-Encoding" class="headerlink" title="ASCII Encoding"></a>ASCII Encoding</h1><p>Basically, string in python 3 are encoded in utf-8. This is a encoding method with a variable length for each character. If we are going to operate on the byte or bit level, it is not impossible to do that based on this encoding method. This we need to convert the string to another data structure - bytes. </p>
 <p>However, there exists many ways to interpret the original string to a bytes array. And the defualt translation method is <code>utf-8</code> for the <code>encode()</code> method of data structure <code>str</code>. No matter what encoding methods we are going to use, they are operating on the character level. That is to say, every character will be encoded in different ways based on the request encoding method. </p>
-<h1 id="digest-amp-hexdigest"><a href="#digest-amp-hexdigest" class="headerlink" title="digest &amp; hexdigest"></a><code>digest</code> &amp; <code>hexdigest</code></h1><p>These are the method included in the data structure <code>_Hash</code>, which is the return value of <code>hashlib.md5(bytes)</code>. We have two ways to get the printable result from it:</p>
+<h1 id="digest-amp-hexdigest"><a href="#digest-amp-hexdigest" class="headerlink" title="digest  &amp; hexdigest"></a>digest  &amp; hexdigest</h1><p>These are the method included in the data structure <code>_Hash</code>, which is the return value of <code>hashlib.md5(bytes)</code>. We have two ways to get the printable result from it:</p>
 <ul>
 <li><p><code>digest()</code></p>
 <p>return the ascii encoding style result: every character in the output has the size of 8 bit, which means that there will be totally 16 characters (maybe includes invisible character). </p>
@@ -421,7 +421,7 @@
 <p>For every ASCII character, extract the two hex character from the original representation. For example, <code>\x65\xa9</code> will be transformed to <code>65a9</code>. </p>
 </li>
 </ul>
-<h1 id="hexlify-amp-unhexlify"><a href="#hexlify-amp-unhexlify" class="headerlink" title="hexlify &amp; unhexlify"></a><code>hexlify</code> &amp; <code>unhexlify</code></h1><p>These are the method included in the package <code>binascii</code>, which is aimed to convert binary to ascii character, and vice versa. </p>
+<h1 id="exlify-amp-unhexlify"><a href="#exlify-amp-unhexlify" class="headerlink" title="exlify &amp; unhexlify"></a>exlify &amp; unhexlify</h1><p>These are the method included in the package <code>binascii</code>, which is aimed to convert binary to ascii character, and vice versa. </p>
 <ul>
 <li>We can pass the result from <code>digest()</code> method to <code>hexlify</code>, and we will get the same result with <code>unhexlify</code>.</li>
 <li>We can pass the result from <code>hexdigest()</code> method to <code>unhexlify</code>, and we will get the same result with <code>hexlify</code>. </li>
@@ -678,7 +678,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ASCII-Encoding"><span class="nav-number">1.</span> <span class="nav-text">ASCII Encoding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#digest-amp-hexdigest"><span class="nav-number">2.</span> <span class="nav-text">digest &amp; hexdigest</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#hexlify-amp-unhexlify"><span class="nav-number">3.</span> <span class="nav-text">hexlify &amp; unhexlify</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-to-learn-Python"><span class="nav-number">4.</span> <span class="nav-text">How to learn Python</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ASCII-Encoding"><span class="nav-number">1.</span> <span class="nav-text">ASCII Encoding</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#digest-amp-hexdigest"><span class="nav-number">2.</span> <span class="nav-text">digest  &amp; hexdigest</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#exlify-amp-unhexlify"><span class="nav-number">3.</span> <span class="nav-text">exlify &amp; unhexlify</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#How-to-learn-Python"><span class="nav-number">4.</span> <span class="nav-text">How to learn Python</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
