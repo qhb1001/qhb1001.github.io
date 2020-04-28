@@ -140,10 +140,15 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This is the note of the textbook “Introduction to Reliable and Secure Dsitributed Programming” to the graduate course CS247 “The Principles of Distributed Computing” in UCR.  Reference:  Algorithm Ann">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-27T05:15:48.920Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/2.6.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/2.6.3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.2.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.2.2.png">
+<meta property="og:updated_time" content="2020-04-28T05:24:00.928Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Reliable and Secure Distributed Programming">
 <meta name="twitter:description" content="This is the note of the textbook “Introduction to Reliable and Secure Dsitributed Programming” to the graduate course CS247 “The Principles of Distributed Computing” in UCR.  Reference:  Algorithm Ann">
+<meta name="twitter:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/2.6.png">
 
 
 
@@ -339,7 +344,7 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-26T09:54:56+08:00">
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-25T18:54:56-07:00">
                 2020-04-26
               </time>
             
@@ -355,8 +360,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-04-27T13:15:48+08:00">
-                2020-04-27
+              <time title="Post modified" itemprop="dateModified" datetime="2020-04-27T22:24:00-07:00">
+                2020-04-28
               </time>
             
           </span>
@@ -428,14 +433,14 @@
 <li><p>The Perfect Failure Detection algorithm is introduced, which is implemented by the heartbeat mechanism. The logic is quite simple. </p>
 </li>
 <li><p>The Leader Election algorithm is implemented with the base of the Perfect Failure Detection algorithm. The algorithm assigns the hosts in the cluster a specific rank. It will keep trying to check whether the current leader is valid and it is the node with the highest rank among all the available nodes.</p>
-<p><a href="2.6.png"></a></p>
+<p><img src="2.6.png" alt=""></p>
 </li>
 </ul>
 <p>And here is the partial synchronous system verison of the above algorithms.</p>
 <ul>
 <li><p>The Eventual Failure Detection algorithm in partial synchronous system is introduced. The <code>deday</code> variable will increment a delta time, if there are suspected node in the alive list. Under the hook, this situation could only happen when the current node receives a reply message from the suspected node. </p>
 <p>If the algorithm didn’t receive the reply from specific node and it has not been suspected, then it will be appended to the suspected list. Else if the algorithm receive the reply from specific node and it has been suspected, then it will be removed from that list. </p>
-<p><a href="2.6.3.png"></a></p>
+<p><img src="2.6.3.png" alt=""></p>
 </li>
 <li><p>The Eventual leader election algorithm </p>
 <p>the only diff between the Perfect Leader election algorithm is that, it uses the Eventual Failure Detection algorithm as the base.</p>
@@ -449,7 +454,7 @@
 <li><p>Regular Reliable Broadcast (RRB)</p>
 <p>The limitation of BEB is that, the nodes may not agree on the delivery of the message: If the sender fails, some processes might deliver the message and others might not deliver it. </p>
 <p>The semantics of a reliable broadcast algorithm ensures that the correct processes agree on the set of messages they deliver, even when the senders of these messages crash during the transmission. </p>
-<p><a href="3.2.1.png"></a></p>
+<p><img src="3.2.1.png" alt=""></p>
 <p>The most interesting line in the algorithm is </p>
 <blockquote>
 <p>  if s crashes during the broadcast, </p>
@@ -467,7 +472,7 @@
 </li>
 <li><p>Uniform Reliable Broadcast (URB)</p>
 <p>The limitation of RRB is that, the nodes may crash right after it re-broadcasts the message, and before it make the BEB to other nodes. In this case, the same problem from the BEB will occur. </p>
-<p><a href="3.2.2.png"></a></p>
+<p><img src="3.2.2.png" alt=""></p>
 <p>Once the difference between broadcast and deliver is awared of, we can know that the <em>upon event &lt;beb, Deliver | p, [DATA, s, m]&gt;</em> is the overloaded event from the BEB module. And in this case, the algorithm will not deliver the message to the upper layer once it is received. Actually, the data structure <code>ack</code> will be updated to record that the message has been broadcast to the node <code>p</code>. </p>
 <p>Only when all the correct nodes have received the message, will the node deliver the message to the application layer. </p>
 </li>

@@ -132,18 +132,20 @@
 
 
 
-<meta name="description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.">
+<meta name="description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.   SPIN Exokernel Scheduler Activation - Redesign the user-level thread Lottery Scheduler Algorithm">
 <meta name="keywords" content="Operating System,Critique">
 <meta property="og:type" content="article">
 <meta property="og:title" content="CS202: OS Paper Critique">
 <meta property="og:url" content="http://notes-hongbo.top/2020/04/25/CS202-OS-Paper-Critique/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.">
+<meta property="og:description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.   SPIN Exokernel Scheduler Activation - Redesign the user-level thread Lottery Scheduler Algorithm">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-04-26T16:34:55.255Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/CS202-OS-Paper-Critique/SPIN.png">
+<meta property="og:updated_time" content="2020-04-28T06:30:04.839Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CS202: OS Paper Critique">
-<meta name="twitter:description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.">
+<meta name="twitter:description" content="Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR.   SPIN Exokernel Scheduler Activation - Redesign the user-level thread Lottery Scheduler Algorithm">
+<meta name="twitter:image" content="http://notes-hongbo.top/2020/04/25/CS202-OS-Paper-Critique/SPIN.png">
 
 
 
@@ -355,8 +357,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-04-26T09:34:55-07:00">
-                2020-04-27
+              <time title="Post modified" itemprop="dateModified" datetime="2020-04-27T23:30:04-07:00">
+                2020-04-28
               </time>
             
           </span>
@@ -383,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.5k
+                  1.6k
                 </span>
               
 
@@ -409,10 +411,18 @@
 
       
         <p>Record the critiques that I made for the graduate course CS202: Advanced Opearting System in UCR. </p>
+<ul>
+<li>SPIN</li>
+<li>Exokernel</li>
+<li>Scheduler Activation - Redesign the user-level thread</li>
+<li>Lottery Scheduler Algorithm</li>
+</ul>
 <a id="more"></a>
 <h1 id="SPIN-OS"><a href="#SPIN-OS" class="headerlink" title="SPIN OS"></a>SPIN OS</h1><h2 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h2><p>This paper named “Extensibility, Safety and Performance in the SPIN Operating System”, was developed by the Washington University in 1995. The history context of the paper is the time when the operating system is still in the phase of researching rather than stable version. And the monolithic operating system at that time is the mainstream among all the os. In this paper, the author challenges the view that the extenability and safety could coexist at the same operating system. </p>
 <h2 id="2-Summary"><a href="#2-Summary" class="headerlink" title="2. Summary"></a>2. Summary</h2><p>By utilizing four techniques at the level of the language or run-time services, the goal of the operating system is achieved. They are co-location, enforced modularity, logical protection domains and dynamic call binding. </p>
 <p>The core system services like memory management and thread management are linked to the kernel space by the co-location technique, in which case greatly reduce the overhead of the context switching. While the modularity and logical proection domains are mainly responsible for the safety of the system. </p>
+<p><img src="SPIN.png" alt=""></p>
+<p>The structure of the SPIN OS is kind of like the microkernel architecture. But the base services like the memory mangement, CPU scheduler, etc. could be set in the different application address space. Actually, the modules are registered and co-located to the base of the application. In a word, extend the kernel at runtime through statically-checked extensions.  <a href="http://www.cs.cornell.edu/courses/cs6410/2010fa/lectures/08-extensible-kernels.pdf" title="Cornell Slides" target="_blank" rel="noopener">Cornell Slides</a></p>
 <h2 id="3-Critical-Evaluation"><a href="#3-Critical-Evaluation" class="headerlink" title="3. Critical Evaluation"></a>3. Critical Evaluation</h2><p>Overrall, the authors do achieve their goals on the operating system. And here are my critiques on the implementation of the SPIN operating system. </p>
 <h3 id="3-1-Concerns-on-Co-location"><a href="#3-1-Concerns-on-Co-location" class="headerlink" title="3.1 Concerns on Co-location"></a>3.1 Concerns on Co-location</h3><p>The operating system will link the user-defined scheduler and memory management details into the kernel space, in order to reduce the overhead of the operations. However, it should be noted that the user program is unsafe compared to the system itself. And there are chances that the user-defined code in the kernel space could be buggy. </p>
 <p>In this case, extra work has been done to ensure that then extension should at least not influence the base kernel if the bugs appear, which should be guaranteed by the programming language. </p>
