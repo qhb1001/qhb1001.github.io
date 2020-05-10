@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Course,Lecture Notes,">
 
 
 
@@ -132,17 +132,18 @@
 
 
 
-<meta name="description" content="学习一下近期新兴的一个方向Graph Neural Network(GNN)，从这篇2018年清华发表的科普类文章开始">
+<meta name="description" content="This is the lecture notes that I took when attending the graduate course CS204: Computer Networks in UC Riverside.">
+<meta name="keywords" content="Course,Lecture Notes">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Graph Neural Networks: A Review of Methods and Applications">
-<meta property="og:url" content="http://notes-hongbo.top/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/index.html">
+<meta property="og:title" content="CS204: Advanced Computer Networks">
+<meta property="og:url" content="http://notes-hongbo.top/2020/04/27/CS204-Advanced-Computer-Networks/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="学习一下近期新兴的一个方向Graph Neural Network(GNN)，从这篇2018年清华发表的科普类文章开始">
+<meta property="og:description" content="This is the lecture notes that I took when attending the graduate course CS204: Computer Networks in UC Riverside.">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-09T07:26:32.000Z">
+<meta property="og:updated_time" content="2020-04-28T18:00:13.143Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Graph Neural Networks: A Review of Methods and Applications">
-<meta name="twitter:description" content="学习一下近期新兴的一个方向Graph Neural Network(GNN)，从这篇2018年清华发表的科普类文章开始">
+<meta name="twitter:title" content="CS204: Advanced Computer Networks">
+<meta name="twitter:description" content="This is the lecture notes that I took when attending the graduate course CS204: Computer Networks in UC Riverside.">
 
 
 
@@ -172,13 +173,13 @@
 
 
 
-  <link rel="canonical" href="http://notes-hongbo.top/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/">
+  <link rel="canonical" href="http://notes-hongbo.top/2020/04/27/CS204-Advanced-Computer-Networks/">
 
 
 
 
 
-  <title>Graph Neural Networks: A Review of Methods and Applications | Beyond</title>
+  <title>CS204: Advanced Computer Networks | Beyond</title>
   
 
 
@@ -309,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/04/27/CS204-Advanced-Computer-Networks/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="秦baibai">
@@ -326,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Graph Neural Networks: A Review of Methods and Applications</h1>
+          <h1 class="post-title" itemprop="name headline">CS204: Advanced Computer Networks</h1>
         
 
         <div class="post-meta">
@@ -338,8 +339,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-08T00:37:23-08:00">
-                2019-03-08
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-04-28T10:50:34+08:00">
+                2020-04-28
               </time>
             
 
@@ -354,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2019-03-08T23:26:32-08:00">
-                2019-03-09
+              <time title="Post modified" itemprop="dateModified" datetime="2020-04-29T02:00:13+08:00">
+                2020-04-29
               </time>
             
           </span>
@@ -382,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  766
+                  146
                 </span>
               
 
@@ -407,28 +408,11 @@
       
 
       
-        <p>学习一下近期新兴的一个方向Graph Neural Network(GNN)，从这篇2018年清华发表的科普类文章开始</p>
+        <p>This is the lecture notes that I took when attending the graduate course CS204: Computer Networks in UC Riverside. </p>
 <a id="more"></a>
-<h1 id="1-Introduction"><a href="#1-Introduction" class="headerlink" title="1. Introduction"></a>1. Introduction</h1><h2 id="Motivation"><a href="#Motivation" class="headerlink" title="Motivation"></a>Motivation</h2><p>CNN具有提取多尺度局部空间特征并将其组合以构建高度表达的表示的能力，并且在深度学习中的表现十分出色，因此对于图神经网络，可以考虑借鉴CNN的优点。总结出来，可以得到</p>
-<ul>
-<li><p>图是一种<a href="https://stats.stackexchange.com/questions/159588/how-does-local-connection-implied-in-the-cnn-algorithm" target="_blank" rel="noopener">locally connected structure</a>，相对于全连接网络而言。因此能够很容易地提取出feature来。</p>
-<p>读到这里，我回想起了<em>hierarchy SDN</em>论文中我提出的对网络进行合理划分的概念。如果在处理路径规划的时候仍然使用GNN的话，很明显对于图而言是不足以解决问题的，我认为此处的卷积化也应该是对一个强连通分量进行卷积。</p>
-</li>
-<li><p>共享参数</p>
-</li>
-<li><p>多层次结构</p>
-</li>
-</ul>
-<p>另外一个motivation就是<a href="https://datascience.stackexchange.com/questions/24081/what-are-graph-embedding" target="_blank" rel="noopener">graph embedding</a>(查看第二个答案)，输入一个图输出一个低维向量，该向量包含了图中的特征信息。该方法在NLP领域取得了很大的突破，但是在图结构中，由于规模太大而不好处理。因此需要投入更多的研究。</p>
-<h2 id="Why-GNN"><a href="#Why-GNN" class="headerlink" title="Why GNN?"></a>Why GNN?</h2><p>第一、标准的神经网络如CNN以及RNN均无法处理图结构，因为它们将会把结点的排列顺序视为一种特征。于是为了能够让CNN与RNN对图进行运算，就有必要将图中结点排列的所有可能都输入给算法，这就使得规模过大无法处理。</p>
-<p>第二、神经网络在处理edge时，将其视为某种信息。而GNN则可以通过edge，将其邻居结点的信息汇集起来更新某个结点。</p>
-<p>第三、如judea Pearl在NIPS 2017会议上提出的，标准神经网络不可能具备“推理”能力，并且关于CNN &amp; RNN为什么可以有效地解决很多问题，仍然没有得到解释。</p>
-<p>给出了一些其他概括GNN的论文。</p>
-<p>给出了该论文：第二部分探讨GNN的原始框架及其局限，之后介绍多种变形，最后介绍目前常用的GNN框架；第三部分介绍当前GNN的主要应用场景，包括结构化场景、非结构化场景以及其他。</p>
-<h1 id="2-Models"><a href="#2-Models" class="headerlink" title="2. Models"></a>2. Models</h1><h2 id="2-1-Graph-Neural-Networks"><a href="#2-1-Graph-Neural-Networks" class="headerlink" title="2.1 Graph Neural Networks"></a>2.1 Graph Neural Networks</h2><p>GNN的原始框架在<a href="F. Scarselli, M. Gori, A. C. Tsoi, M. Hagenbuchner, and G. Mon-fardini. The graph neural network model. IEEE Transactions on Neural Networks, 20(1">论文</a>:61–80, 2009.)中首次被提出</p>
-<p>通过运用Banach的不动点定理，实现输入的图到输出的一个映射。更新方式为迭代更新。</p>
-<p>看起来原始GNN要处理的仍然是监督学习问题，根据输出结果以及标签，进行梯度更新。因此适用于图像分类、文本分类等问题。</p>
-<p>需要注意的是，原始的GNN的基础，是RNN以及马克多夫链模型。当时提出的目的，是为了应对文本分析、图像分类、化合物结构分析等。</p>
+<h1 id="TCP"><a href="#TCP" class="headerlink" title="TCP"></a>TCP</h1><h2 id="MPTCP"><a href="#MPTCP" class="headerlink" title="MPTCP"></a>MPTCP</h2><p>One device could have several connections to the same server. For example, the phone needs to download the data from the internet, and at the same time, it may upload the data to the same server. In this way, multiple TCP connections is necessary. </p>
+<p>TCP protocol implements MPTCP by adding the option field during the conneciton initialization period. To be specific, the host which objectively opens the connection will add the field <code>MPTCP-Capable</code> to notify the server that it supports MPTCP. And when the hosts want to open another connection, the field <code>MPTCP JOIN</code> will be added to the TCP packet. </p>
+<p>It should be noticed that some middle boxes may not support MPTCP, and the middleboxes could remove the specific fields that associated with the MPTCP. </p>
 
       
     </div>
@@ -449,7 +433,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://notes-hongbo.top/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/" title="Graph Neural Networks: A Review of Methods and Applications">http://notes-hongbo.top/2019/03/08/Graph-Neural-Networks-A-Review-of-Methods-and-Applications/</a>
+    <a href="http://notes-hongbo.top/2020/04/27/CS204-Advanced-Computer-Networks/" title="CS204: Advanced Computer Networks">http://notes-hongbo.top/2020/04/27/CS204-Advanced-Computer-Networks/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -462,6 +446,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Course/" rel="tag"># Course</a>
+          
+            <a href="/tags/Lecture-Notes/" rel="tag"># Lecture Notes</a>
+          
+        </div>
+      
 
       
       
@@ -471,8 +463,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/03/04/Deep-Q-learning-Algorithm/" rel="next" title="Deep Q-learning Algorithm">
-                <i class="fa fa-chevron-left"></i> Deep Q-learning Algorithm
+              <a href="/2020/04/25/Reliable-and-Secure-Distributed-Programming/" rel="next" title="Reliable and Secure Distributed Programming">
+                <i class="fa fa-chevron-left"></i> Reliable and Secure Distributed Programming
               </a>
             
           </div>
@@ -480,10 +472,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/03/10/《Deep-Learning》/" rel="prev" title="《Deep Learning》">
-                《Deep Learning》 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -670,7 +658,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-Introduction"><span class="nav-number">1.</span> <span class="nav-text">1. Introduction</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Motivation"><span class="nav-number">1.1.</span> <span class="nav-text">Motivation</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Why-GNN"><span class="nav-number">1.2.</span> <span class="nav-text">Why GNN?</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Models"><span class="nav-number">2.</span> <span class="nav-text">2. Models</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Graph-Neural-Networks"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 Graph Neural Networks</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TCP"><span class="nav-number">1.</span> <span class="nav-text">TCP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#MPTCP"><span class="nav-number">1.1.</span> <span class="nav-text">MPTCP</span></a></li></ol></li></ol></div>
             
 
           </div>

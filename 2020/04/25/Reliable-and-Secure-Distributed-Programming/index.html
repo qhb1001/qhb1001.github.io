@@ -144,7 +144,9 @@
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/2.6.3.png">
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.2.1.png">
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.2.2.png">
-<meta property="og:updated_time" content="2020-04-28T05:24:00.928Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.12.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.13.png">
+<meta property="og:updated_time" content="2020-05-10T02:01:16.904Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Reliable and Secure Distributed Programming">
 <meta name="twitter:description" content="This is the note of the textbook “Introduction to Reliable and Secure Dsitributed Programming” to the graduate course CS247 “The Principles of Distributed Computing” in UCR.  Reference:  Algorithm Ann">
@@ -360,8 +362,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-04-27T22:24:00-07:00">
-                2020-04-28
+              <time title="Post modified" itemprop="dateModified" datetime="2020-05-09T19:01:16-07:00">
+                2020-05-10
               </time>
             
           </span>
@@ -388,7 +390,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  903
+                  1.1k
                 </span>
               
 
@@ -446,7 +448,7 @@
 <p>the only diff between the Perfect Leader election algorithm is that, it uses the Eventual Failure Detection algorithm as the base.</p>
 </li>
 </ul>
-<h1 id="Chapter-3-Reliable-Broadcast"><a href="#Chapter-3-Reliable-Broadcast" class="headerlink" title="Chapter 3: Reliable Broadcast"></a>Chapter 3: Reliable Broadcast</h1><p>Before we dive into the ralm of broadcast, the difference between broadcast and deliver should be clarified. While the first term means that the communication between the same layer, i.e. the peer nodes. And the deliver means that the message delivery to the upper layer of application inside the same node. Sometimes we may not want to immediately deliver the message once it is received, such as the agreement issue [see more on URB algorithm]. </p>
+<h1 id="Chapter-3-Reliable-Broadcast"><a href="#Chapter-3-Reliable-Broadcast" class="headerlink" title="Chapter 3: Reliable Broadcast"></a>Chapter 3: Reliable Broadcast</h1><h2 id="3-1-Regular-Reliable-Broadcast"><a href="#3-1-Regular-Reliable-Broadcast" class="headerlink" title="3.1 Regular Reliable Broadcast"></a>3.1 Regular Reliable Broadcast</h2><p>Before we dive into the ralm of broadcast, the difference between broadcast and deliver should be clarified. While the first term means that the communication between the same layer, i.e. the peer nodes. And the deliver means that the message delivery to the upper layer of application inside the same node. Sometimes we may not want to immediately deliver the message once it is received, such as the agreement issue [see more on URB algorithm]. </p>
 <ul>
 <li><p>Best-Effort Broadcast (BEB) </p>
 <p>In the module, there are only two methods, one for the sender <code>Broadcast</code>, the other for the receiver <code>Deliver</code>, which is used to deliver the message to the other receiver. </p>
@@ -477,7 +479,25 @@
 <p>Only when all the correct nodes have received the message, will the node deliver the message to the application layer. </p>
 </li>
 </ul>
-
+<h2 id="3-2-FIFO-and-Causal-Broadcast"><a href="#3-2-FIFO-and-Causal-Broadcast" class="headerlink" title="3.2 FIFO and Causal Broadcast"></a>3.2 FIFO and Causal Broadcast</h2><p>Sometimes, the order of the messages in the broadcast matters. </p>
+<ul>
+<li><p>FOFI-Order </p>
+<p>A FIFO-order is one of the simplest possible orderings and guarantees that messages from the same sender are delivered in the same sequence as they were broadcast by the sender. Note, this does not affect messages from different senders. </p>
+<p><img src="3.12.png" alt=""></p>
+<p>The key point is the sequence number <code>lsn</code>. The process also maintains an array <code>next</code>, which contains an entry for every process <code>p</code> with the sequence number of the next message to be <code>frb-delivered</code> from sender <code>p</code>. </p>
+</li>
+<li><p>Causal-Order </p>
+<p>The <em>causal order</em> property for a broadcast abstraction ensures that messages are delivered such that they respect all cause-effect relations. </p>
+<p>As is evident from the condition described above, a causal-order broadcast primitive provides also FIFO-order reliable broadcast. </p>
+<ul>
+<li><p><em>no-waiting</em></p>
+<p><img src="3.13.png" alt=""></p>
+<p>We call the algorithm <em>no-waiting</em> because whenever a process rb-delivers a message m, it crb-delivers m without waiting for further messages to be rb-delivered. Each message arrives to a node with the preceeding message ahead it. The receiver has to first crb-deliver the past messages, and after it finished, the current message could then be delivered. In order to disseminate its own causal past, each process p stores all the messages it has crb-broadcast or crb-delivered in a local variable past, and rb-broadcasts past together with every crb-broadcast message.  </p>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>
       
     </div>
     
@@ -538,6 +558,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/27/CS204-Advanced-Computer-Networks/" rel="prev" title="CS204: Advanced Computer Networks">
+                CS204: Advanced Computer Networks <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -618,7 +642,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">31</span>
+                  <span class="site-state-item-count">32</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -640,7 +664,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -724,7 +748,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Basic-Abstractions"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 - Basic Abstractions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Timing-Assumptions"><span class="nav-number">1.1.</span> <span class="nav-text">2.5 Timing Assumptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Abstracting-time"><span class="nav-number">1.2.</span> <span class="nav-text">2.6 Abstracting time</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3-Reliable-Broadcast"><span class="nav-number">2.</span> <span class="nav-text">Chapter 3: Reliable Broadcast</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Basic-Abstractions"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 - Basic Abstractions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Timing-Assumptions"><span class="nav-number">1.1.</span> <span class="nav-text">2.5 Timing Assumptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Abstracting-time"><span class="nav-number">1.2.</span> <span class="nav-text">2.6 Abstracting time</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3-Reliable-Broadcast"><span class="nav-number">2.</span> <span class="nav-text">Chapter 3: Reliable Broadcast</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Regular-Reliable-Broadcast"><span class="nav-number">2.1.</span> <span class="nav-text">3.1 Regular Reliable Broadcast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-FIFO-and-Causal-Broadcast"><span class="nav-number">2.2.</span> <span class="nav-text">3.2 FIFO and Causal Broadcast</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -758,7 +782,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">58.9k</span>
+    <span title="Site words total count">59.3k</span>
   
 </div>
 
