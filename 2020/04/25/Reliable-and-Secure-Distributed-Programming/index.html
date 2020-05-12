@@ -146,7 +146,20 @@
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.2.2.png">
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.12.png">
 <meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.13.png">
-<meta property="og:updated_time" content="2020-05-10T02:01:16.904Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/3.14.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/4.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/4.2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/4.3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/4.4.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/4.5.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.2.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.2.2.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.3.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.4.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.5.1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/04/25/Reliable-and-Secure-Distributed-Programming/5.5.2.png">
+<meta property="og:updated_time" content="2020-05-12T08:31:45.531Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Reliable and Secure Distributed Programming">
 <meta name="twitter:description" content="This is the note of the textbook “Introduction to Reliable and Secure Dsitributed Programming” to the graduate course CS247 “The Principles of Distributed Computing” in UCR.  Reference:  Algorithm Ann">
@@ -362,8 +375,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-05-09T19:01:16-07:00">
-                2020-05-10
+              <time title="Post modified" itemprop="dateModified" datetime="2020-05-12T01:31:45-07:00">
+                2020-05-12
               </time>
             
           </span>
@@ -390,7 +403,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.1k
+                  2.6k
                 </span>
               
 
@@ -492,9 +505,111 @@
 <ul>
 <li><p><em>no-waiting</em></p>
 <p><img src="3.13.png" alt=""></p>
-<p>We call the algorithm <em>no-waiting</em> because whenever a process rb-delivers a message m, it crb-delivers m without waiting for further messages to be rb-delivered. Each message arrives to a node with the preceeding message ahead it. The receiver has to first crb-deliver the past messages, and after it finished, the current message could then be delivered. In order to disseminate its own causal past, each process p stores all the messages it has crb-broadcast or crb-delivered in a local variable past, and rb-broadcasts past together with every crb-broadcast message.  </p>
+<p>We call the algorithm <em>no-waiting</em> because whenever a process rb-delivers a message m, it crb-delivers m without waiting for further messages to be rb-delivered. Each message arrives to a node with the preceeding message ahead it. The receiver has to first crb-deliver the past messages, and after it finished, the current message could then be delivered. In order to disseminate its own causal past, each process p stores all the messages it has crb-broadcast or crb-delivered in a local variable past, and rb-broadcasts past together with every crb-broadcast message. </p>
+</li>
+<li><p>Garbage-Collection built upon <em>no-waiting</em> algorithm</p>
+<p>This is a simple optimization of the “No-Waiting Causal Broadcast” algorithm to delete messages from the <code>past</code> variable.</p>
+<p>When a process rb-delivers a message m, the process rb-broadcasts an ACK to all processes; when an ACK for m has been rb-delivered from all correct processes, then m is purged from <em>past</em>.</p>
+<p><img src="3.14.png" alt=""></p>
 </li>
 </ul>
+</li>
+</ul>
+<h1 id="Chapter-4-Shared-Memory"><a href="#Chapter-4-Shared-Memory" class="headerlink" title="Chapter 4: Shared Memory"></a>Chapter 4: Shared Memory</h1><h2 id="4-1-Regular-Register"><a href="#4-1-Regular-Register" class="headerlink" title="4.1 Regular Register"></a>4.1 Regular Register</h2><h3 id="Specification"><a href="#Specification" class="headerlink" title="Specification"></a>Specification</h3><p>Only one process is allowed to write, and multiple processes could read at the same. We call this kind of register as (1, N) regular register. </p>
+<p>It should satisfy the following properties: </p>
+<ul>
+<li>Read() will return the last value writted if there is no concurrent operation or failed operations; </li>
+<li>otherwise, the last value writted or any value concurrently written, i.e. the input parameter of some write() function call.</li>
+</ul>
+<h3 id="Algorithm"><a href="#Algorithm" class="headerlink" title="Algorithm"></a>Algorithm</h3><p>Here are two algorithm within the range of regular register</p>
+<ul>
+<li><p>Fail-Stop Algorithm</p>
+<p>Every process has its own copy of the register. When a writer makes changes to the shared register, it will first update all the other copy. Only when receiving ACK from all other correct processes, it will execute the WriteReturn call.</p>
+<p><img src="4.1.png" alt=""></p>
+</li>
+<li><p>Fail-Silent Algorithm</p>
+<p><img src="4.2.png" alt=""></p>
+<p>Writer will execute WriteReturn only when received majority ACK. </p>
+<p>To read a value, a reader process beb-broadcasts a READ message to all processes, every process replies with the stored value and its timestamp, and the reader selects the value with the largest time stampt from a majority of the replies. The processes in this majority act as witnesses of what was written before. <strong>This majority does not have to be the same as the one used by the writer.</strong> </p>
+</li>
+</ul>
+<h2 id="4-2-Atomic-Register"><a href="#4-2-Atomic-Register" class="headerlink" title="4.2 Atomic Register"></a>4.2 Atomic Register</h2><h3 id="Specification-1"><a href="#Specification-1" class="headerlink" title="Specification"></a>Specification</h3><ul>
+<li><p>Every failed (write) operation appears to be either complete or not to have been invoked at all</p>
+</li>
+<li><p>Every complete operation appears to be executed at some instant between its invocation and reply time events </p>
+</li>
+</ul>
+<p>In the testbook of 4.3.1 section, the author illustrates the reasons why the previous algorithms are not atomic, even if they are failure-free.</p>
+<h3 id="Atomic-VS-Regular"><a href="#Atomic-VS-Regular" class="headerlink" title="Atomic VS Regular"></a>Atomic VS Regular</h3><ul>
+<li><p>With one writer and no failed <strong><em>Write(),\</em></strong> for a a regular register to be atomic, two successive <strong><em>Read()\</em></strong> must not overlap a <strong><em>Write()\</em></strong> </p>
+<p>This statement does not make any sense to me. </p>
+</li>
+<li><p>The regular register might in this case allow the first <strong><em>Read()\</em></strong> to obtain the new value and the second <strong><em>Read()\</em></strong> to obtain the old value</p>
+</li>
+</ul>
+<h3 id="Algorithm-1"><a href="#Algorithm-1" class="headerlink" title="Algorithm"></a>Algorithm</h3><h4 id="fail-stop-1-1-atomic-register"><a href="#fail-stop-1-1-atomic-register" class="headerlink" title="fail-stop (1, 1) atomic register"></a>fail-stop (1, 1) atomic register</h4><p><img src="4.3.png" alt=""></p>
+<ul>
+<li><p>To ooar-write a value v to the atomic register, the writer p increments its timestamp wts and onrr-writes the pair (wts, v) into the underlying regular register. </p>
+</li>
+<li><p>To ooar-read a value from the atomic register, the reader q first onrr-reads a timestamp/value pair from the underlying regular register. If the returned timestamp ts’ is larger than the local timestamp ts, then q stores ts’ together with the returned value v in the local variables, and returns v. Otherwise, the reader simple returns the value from val, which it has already stored locally. </p>
+<p>Remark: The key difference between the atomic register and the regular register is that, the value read from other peers is guaranteed to have a timestamp larger than or equal to the previous value read. </p>
+</li>
+</ul>
+<h4 id="fail-stop-1-N-atomic-register"><a href="#fail-stop-1-N-atomic-register" class="headerlink" title="fail-stop (1, N) atomic register"></a>fail-stop (1, N) atomic register</h4><p><img src="4.4.png" alt=""></p>
+<ul>
+<li>Both write and read operations require N registers to be updated; </li>
+<li>And both write and read operations will update the local variable right now;</li>
+<li>The variable is guaranteed to be newer than before;</li>
+<li>limitation: we can’t not generalize this algorithm to (N, N) because we are considering one global register with one sequence number.</li>
+<li>Note that the read operation actually calls the beb-broadcast write operation with the current timestamp, which will not influence the newer value. In this case, the read operation will try to update other processes with their vaule before returning it. </li>
+</ul>
+<h4 id="fail-stop-N-N-atomic-register"><a href="#fail-stop-N-N-atomic-register" class="headerlink" title="fail-stop (N, N) atomic register"></a>fail-stop (N, N) atomic register</h4><p>specification: An (N, N) atomic register is a strict generalization of a (1, N) register in the sense that every execution of a (1, N) atomic register is also an execution of an (N, N) atomic register, but not vice versa. </p>
+<p>Process: First collect the largest timestamp, and then locate the variable with <code>pid</code>. Broadcast the tuple &lt;timestamp, pid&gt; when writing. Update the register based on the timestamp (as the first priority order) and a fixed order between processes (as the second priority order).</p>
+<p><img src="4.5.png" alt=""></p>
+<p>Key idea: To coordinate the writer so that they explicitly create a happened-before relation among the information they write, all teachers associate a global timestamp with every written value. When the writer first writes <code>w</code>, it will first read the shared register and finds <code>v</code> and an associated timestamp there. And then it will increment the ts and associates it with <code>w</code>, representing that <code>w</code> was written after <code>v</code>. </p>
+<p>Reads will also try to update other processes with their value before returning it. </p>
+<h1 id="Chapter-5-Consensus"><a href="#Chapter-5-Consensus" class="headerlink" title="Chapter 5: Consensus"></a>Chapter 5: Consensus</h1><h2 id="5-1-Specification"><a href="#5-1-Specification" class="headerlink" title="5.1 Specification"></a>5.1 Specification</h2><p>In the consensus problem, the processes propose value and have to agree on one among these values. Solving consensus is the key to solving many problems in distributed computing. </p>
+<ul>
+<li>Regular consensus<ol>
+<li>Validity: Any value decided is a value proposed before.</li>
+<li>Agreement: No two <strong>correct</strong> processes decide differently.</li>
+<li>Termination: Every correct process eventually decides.</li>
+<li>Integrity: No process decides twice.</li>
+</ol>
+</li>
+<li>Uniform consensus<ol>
+<li>Validity: Any value decided is a value proposed.</li>
+<li>Uniform Agreement: No two processes decide differently. [even failed process should have the correct consensus]</li>
+<li>Termination: Every correct process eventually decides</li>
+<li>Integrity: No process decides twice.</li>
+</ol>
+</li>
+</ul>
+<h2 id="5-2-Algorithm"><a href="#5-2-Algorithm" class="headerlink" title="5.2 Algorithm"></a>5.2 Algorithm</h2><h3 id="5-2-1-P-based-regualr-consensus-algorithm"><a href="#5-2-1-P-based-regualr-consensus-algorithm" class="headerlink" title="5.2.1 P-based regualr consensus algorithm"></a>5.2.1 P-based regualr consensus algorithm</h3><p>Key idea: The “Hierarchical Consensus” algorithm works in rounds and relies on a best-effort broadcast abstraction and on a perfect failure detector abstratction. In ruond <code>i</code>, the process p with rank i decides its proposal and broadcasts it to all processes in a DECIDED messgae. All other processes that reach round i wait before taking any actions, until they deliver this message or until detector detects the crash of p. No other process than p broadcasts any message in round i. A process collects the ranks of the processes detected to have crashed by detector in a variable detectedranks. </p>
+<p><img src="5.1.png" alt=""></p>
+<h3 id="5-2-2-P-based-uniform-consensus-algorithm"><a href="#5-2-2-P-based-uniform-consensus-algorithm" class="headerlink" title="5.2.2 P-based uniform consensus algorithm"></a>5.2.2 P-based uniform consensus algorithm</h3><p>Key idea: Don’t let a process decide and then crash before imposing its value on everyone. The correct process may be the last one. Therefore, we delaying the decision to the last round. The processes exchange and update proposal in rounds, and after n rounds decide on the current proposal value. </p>
+<p>The processes go through rounds incrementally (1 to n): in each round i, process pi sends its currentProposal to all. A process adopts any currentProposal it receives. </p>
+<p><img src="5.2.1.png" alt=""></p>
+<p><img src="5.2.2.png" alt=""></p>
+<h3 id="5-2-3-lt-gt-P-based-uniform-consensus-algorithm"><a href="#5-2-3-lt-gt-P-based-uniform-consensus-algorithm" class="headerlink" title="5.2.3 &lt;&gt;P-based uniform consensus algorithm"></a>5.2.3 &lt;&gt;P-based uniform consensus algorithm</h3><p>We introduce two abstractions to build our fail-noisy consensus algorithm. The first one is epoch-change primitive that is responsible for triggering the sequence of epochs at all processes. The second one is an epoch consensus abstraction, whose goal is to reach consensus in a given epoch. Since one epoch might be aborted, the consensus algorithm will invoke multiple epoch consensus instances in sequence, governed by the outputs from the epoch-chage primitive. </p>
+<p>&lt;&gt;P-based is the eventually perfect failure detector, which ensres 1. Strong completeness (eventually every process that crashes is permanently suspected by all correct processes) 2. eventual strong accuracy (eventually no correct process is suspected by any process)</p>
+<ul>
+<li><p>Epoch-Change</p>
+<p>A fail-noisy model, relying on an eventual leader detector.</p>
+<p>The epoch-change abstraction signals the start of a new epoch by triggering a <startepoch |="" ts,="" l=""> event, when a leader is suspected. Apart from the implicit initialization, the epoch-change abstraction receives no requests. </startepoch></p>
+<p><img src="5.3.png" alt=""></p>
+<p>Every process p maintains two timestamps: <code>lastts</code> of the last epoch that it started, and <code>ts</code> of the last epoch that it attempted to start with itself as leader. </p>
+<p>Initially, the process sets <code>ts</code> to its rank. Whenever the leader detector subsequently makes p trust itself, p adds N to ts and sends a ENWEPOCH message with ts. When process p receives a NEWEPOCH message with a parameter newts &gt; lastts from some process l and p most recently trusted l, then the process triggers a <startepoch> event with parameters newts and l. Otherwise, the process informs the aspiring leader l with a NACK message that the new epoch could noe be started. </startepoch></p>
+<p>In a word, when omega (eventual leader detector) indicates a different leader is trusted, the process will increment timestamp, broadcast a NEWEPOCH message; when delivering a NEWEPOCH message, the process will trigger the start of a new EPOCH. </p>
+</li>
+<li><p>Epoch Consensus</p>
+<p>A fail-silent model, provided only that a majority of the processes is correct. </p>
+<p>It only represents an attempt to reach consensus; epoch consensus may not terminate and can be aborted when it does not decide or when the next epoch should already be started by the higher-level algorithm. </p>
+<p><img src="5.4.png" alt=""></p>
+</li>
+<li><p>By combining the above two module together, we can finally device the fail-noisy algorithm: Leader-Driver Consensus. </p>
+<p> <img src="5.5.1.png" alt=""></p>
+<p><img src="5.5.2.png" alt=""></p>
 </li>
 </ul>
 <h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>
@@ -748,7 +863,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Basic-Abstractions"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 - Basic Abstractions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Timing-Assumptions"><span class="nav-number">1.1.</span> <span class="nav-text">2.5 Timing Assumptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Abstracting-time"><span class="nav-number">1.2.</span> <span class="nav-text">2.6 Abstracting time</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3-Reliable-Broadcast"><span class="nav-number">2.</span> <span class="nav-text">Chapter 3: Reliable Broadcast</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Regular-Reliable-Broadcast"><span class="nav-number">2.1.</span> <span class="nav-text">3.1 Regular Reliable Broadcast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-FIFO-and-Causal-Broadcast"><span class="nav-number">2.2.</span> <span class="nav-text">3.2 FIFO and Causal Broadcast</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">3.</span> <span class="nav-text">Reference</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Basic-Abstractions"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 - Basic Abstractions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Timing-Assumptions"><span class="nav-number">1.1.</span> <span class="nav-text">2.5 Timing Assumptions</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Abstracting-time"><span class="nav-number">1.2.</span> <span class="nav-text">2.6 Abstracting time</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-3-Reliable-Broadcast"><span class="nav-number">2.</span> <span class="nav-text">Chapter 3: Reliable Broadcast</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Regular-Reliable-Broadcast"><span class="nav-number">2.1.</span> <span class="nav-text">3.1 Regular Reliable Broadcast</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-FIFO-and-Causal-Broadcast"><span class="nav-number">2.2.</span> <span class="nav-text">3.2 FIFO and Causal Broadcast</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-4-Shared-Memory"><span class="nav-number">3.</span> <span class="nav-text">Chapter 4: Shared Memory</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Regular-Register"><span class="nav-number">3.1.</span> <span class="nav-text">4.1 Regular Register</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Specification"><span class="nav-number">3.1.1.</span> <span class="nav-text">Specification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Algorithm"><span class="nav-number">3.1.2.</span> <span class="nav-text">Algorithm</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Atomic-Register"><span class="nav-number">3.2.</span> <span class="nav-text">4.2 Atomic Register</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Specification-1"><span class="nav-number">3.2.1.</span> <span class="nav-text">Specification</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Atomic-VS-Regular"><span class="nav-number">3.2.2.</span> <span class="nav-text">Atomic VS Regular</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Algorithm-1"><span class="nav-number">3.2.3.</span> <span class="nav-text">Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#fail-stop-1-1-atomic-register"><span class="nav-number">3.2.3.1.</span> <span class="nav-text">fail-stop (1, 1) atomic register</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fail-stop-1-N-atomic-register"><span class="nav-number">3.2.3.2.</span> <span class="nav-text">fail-stop (1, N) atomic register</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#fail-stop-N-N-atomic-register"><span class="nav-number">3.2.3.3.</span> <span class="nav-text">fail-stop (N, N) atomic register</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-5-Consensus"><span class="nav-number">4.</span> <span class="nav-text">Chapter 5: Consensus</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-Specification"><span class="nav-number">4.1.</span> <span class="nav-text">5.1 Specification</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-Algorithm"><span class="nav-number">4.2.</span> <span class="nav-text">5.2 Algorithm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-P-based-regualr-consensus-algorithm"><span class="nav-number">4.2.1.</span> <span class="nav-text">5.2.1 P-based regualr consensus algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-2-P-based-uniform-consensus-algorithm"><span class="nav-number">4.2.2.</span> <span class="nav-text">5.2.2 P-based uniform consensus algorithm</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-3-lt-gt-P-based-uniform-consensus-algorithm"><span class="nav-number">4.2.3.</span> <span class="nav-text">5.2.3 &lt;&gt;P-based uniform consensus algorithm</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Reference"><span class="nav-number">5.</span> <span class="nav-text">Reference</span></a></li></ol></div>
             
 
           </div>
@@ -782,7 +897,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">59.3k</span>
+    <span title="Site words total count">60.8k</span>
   
 </div>
 
