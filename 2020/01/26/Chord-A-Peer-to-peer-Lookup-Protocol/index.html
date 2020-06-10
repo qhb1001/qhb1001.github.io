@@ -91,7 +91,7 @@
   
     
     
-    <link href="//fonts.cat.net/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
   
 
 
@@ -140,12 +140,12 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="Chord: A Scalable Peer-to-peer Lookup Protocol for Internet ApplicationsSystem ModelSupport the following features:  load balance: spreading keys evenly over the nodes decentralization: fully distribu">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="http://notes-hongbo.top/Users/qinhongbo/Desktop/Blog/source/_posts/Chord-A-Peer-to-peer-Lookup-Protocol/finger.png">
-<meta property="og:updated_time" content="2020-01-27T02:18:52.515Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/01/26/Chord-A-Peer-to-peer-Lookup-Protocol/finger.png">
+<meta property="og:updated_time" content="2020-06-10T21:30:46.097Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Chord: A Peer-to-peer Lookup Protocol">
 <meta name="twitter:description" content="Chord: A Scalable Peer-to-peer Lookup Protocol for Internet ApplicationsSystem ModelSupport the following features:  load balance: spreading keys evenly over the nodes decentralization: fully distribu">
-<meta name="twitter:image" content="http://notes-hongbo.top/Users/qinhongbo/Desktop/Blog/source/_posts/Chord-A-Peer-to-peer-Lookup-Protocol/finger.png">
+<meta name="twitter:image" content="http://notes-hongbo.top/2020/01/26/Chord-A-Peer-to-peer-Lookup-Protocol/finger.png">
 
 
 
@@ -357,8 +357,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-01-26T18:18:52-08:00">
-                2020-01-27
+              <time title="Post modified" itemprop="dateModified" datetime="2020-06-10T14:30:46-07:00">
+                2020-06-11
               </time>
             
           </span>
@@ -421,7 +421,7 @@
 <h2 id="The-Chord-Protocol"><a href="#The-Chord-Protocol" class="headerlink" title="The Chord Protocol"></a>The Chord Protocol</h2><p>The consistent hash function assigns each node and key an <em>m</em>-bit identifier using SHA-1 as a base hash function. A node’s identifier is chosen by hashing the node’s IP address, while a key identifier is produced by hashing the key. The identifier length <em>m</em> must be large enough to make the probability of two nodes or keys hashing to the same identifier negligible. </p>
 <p>The range of the identifier circle is $2^m$. Key <em>k</em> is assigned to the first node whose identifier is equal to or follows <em>k</em> in the circle. </p>
 <p>The lookup algorithm makes use of binary search tech. Every node will store a table with <em>m</em> entries. The $i^{th}$ entry in the table at node <em>n</em> contains the identity of the <em>first</em> node <em>s</em> that succeeds <em>n</em> by at least $2^{i-1}$ on the circle. We denote the $i^{th}$ entry of node <em>n</em> by $n.finger[i]$. </p>
-<p><img src="/Users/qinhongbo/Desktop/Blog/source/_posts/Chord-A-Peer-to-peer-Lookup-Protocol/finger.png" alt="finger"></p>
+<p><img src="finger.png" alt="finger"></p>
 <p>Since from any node, we can reach  half of the entire Chord circle, the lookup operation would take O($\log n$) cost. </p>
 <p>Impact of node joins on lookups: Sometimes the nodes in the affected region have incorrect successor pointers, or keys may not yet have migrated to newly joined nodes, and the lookup may fail. The higher-layer software using Chord has to notice that the desired data was not found, and has the option of retrying the lookup after a pause. </p>
 
@@ -567,7 +567,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">32</span>
+                  <span class="site-state-item-count">35</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -707,7 +707,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">60.8k</span>
+    <span title="Site words total count">63.2k</span>
   
 </div>
 

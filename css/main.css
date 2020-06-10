@@ -1139,7 +1139,7 @@ pre .javascript .function {
   bottom: 19px;
 }
 .header {
-  background-image: url("https://qhb-1001-picture.s3.us-east-2.amazonaws.com/blog.jpg");
+  background-image: url("https://s3.us-east-2.amazonaws.com/notes-hongbo.top/background.jpg");
 }
 .header-inner {
   position: relative;
@@ -1886,7 +1886,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #da582f;
+  background: #9d2d25;
 }
 .links-of-blogroll {
   font-size: 13px;
