@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.googleapis.com/css/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Computer Networks,Paper,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="该算法为UCR CS204 Advanced Computer Networks 项目，目的在于深入研究由MIT提出的RemyCC算法，并且在不同环境下进行测试，来探究其性能，尝试找出其限制。">
+<meta name="keywords" content="Computer Networks,Paper">
+<meta property="og:type" content="article">
+<meta property="og:title" content="RemyCC Algorithm">
+<meta property="og:url" content="http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="该算法为UCR CS204 Advanced Computer Networks 项目，目的在于深入研究由MIT提出的RemyCC算法，并且在不同环境下进行测试，来探究其性能，尝试找出其限制。">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-05-18T01:19:19.858Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RemyCC Algorithm">
+<meta name="twitter:description" content="该算法为UCR CS204 Advanced Computer Networks 项目，目的在于深入研究由MIT提出的RemyCC算法，并且在不同环境下进行测试，来探究其性能，尝试找出其限制。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/">
+
+
+
+
+
+  <title>RemyCC Algorithm | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">RemyCC Algorithm</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-17T14:58:44-07:00">
+                2020-05-17
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-05-17T18:19:19-07:00">
+                2020-05-17
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.2k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>该算法为UCR CS204 Advanced Computer Networks 项目，目的在于深入研究由MIT提出的RemyCC算法，并且在不同环境下进行测试，来探究其性能，尝试找出其限制。</p>
+<a id="more"></a>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>该论文从当下TCP拥塞控制协议的出发点进行研究，认为目前现存的算法都是人为地特定不同网络环境来设计算法，这样子虽然针对特定网络环境有良好的表现，但是比较笨重。于是设计了拥塞控制算法生成器Remy，其生成的拥塞控制协议称为RemyCC，并且在评估过程中明显优于经典的TCP拥塞控制算法。</p>
+<h1 id="拥塞控制问题的建模"><a href="#拥塞控制问题的建模" class="headerlink" title="拥塞控制问题的建模"></a>拥塞控制问题的建模</h1><p>下面首先介绍Remy的三个输入参数：先验假设、流量发送模型、目标优化方程。</p>
+<h2 id="网络的先验假设"><a href="#网络的先验假设" class="headerlink" title="网络的先验假设"></a>网络的先验假设</h2><p>从节点的角度来看，我们可以认为网络是随机产生的。并且我们可以将网络假设为 Markovian，即其具备“将来的状态只与现在的状态相关”这样的性质。</p>
+<p>接下来，我们将使用三个参数来描述一个网络：bottleneck links的速度，传输延迟时间以及链路的复用情况。</p>
+<h2 id="流量发送模型"><a href="#流量发送模型" class="headerlink" title="流量发送模型"></a>流量发送模型</h2><p>Remy 将给定的链路之间的容量视为一个随机过程。即switch可能会在随机事件内进行数据传输，之后随机关闭一段时间。节点之间相互独立不影响。</p>
+<h3 id="目标优化方程"><a href="#目标优化方程" class="headerlink" title="目标优化方程"></a>目标优化方程</h3><p>TCP的数学模型中，有提到一个unitility function </p>
+<p>$$\displaystyle\frac{x^{1-\alpha}}{1-\alpha}$$</p>
+<p>该函数在alpha取不同值的时候有不同的优化目标，也因此有了不同指标之间的trade off。该论文针对吞吐量以及RTT设计了一个新的目标方程</p>
+<p>$$U_{\alpha}(x) - \delta \times U_\beta(y)$$</p>
+<p>其中x表示单条路径上的平均吞吐量，y表示该路径上的RTT延迟。这里 alpha 和 beta 参数是 fairness 与 efficiency之间的权衡；而 delta 表示的是延迟与吞吐量之间的权衡。</p>
+<h1 id="Remy的生成算法过程"><a href="#Remy的生成算法过程" class="headerlink" title="Remy的生成算法过程"></a>Remy的生成算法过程</h1><p>下面首先介绍sender 以及 RemyCC的工作原理，之后介绍Remy算法的细节。</p>
+<h2 id="sender"><a href="#sender" class="headerlink" title="sender"></a>sender</h2><p>每当sender收到一条ACK，它将会记录下列数据。称这样的三元组为 memory：</p>
+<ol>
+<li>ack_ewma: 两次ACK间隔时间的估测指 </li>
+<li>send_ewma: 两次ACK中TCP时间戳的估测值 </li>
+<li>rtt_ratio: 最近观测到的RTT 与 观测到的最小RTT 之比</li>
+</ol>
+<p>其中ewma表示 exponentially-weighted moving average，是使用观测过的历史值来估测真值的方法。</p>
+<p>需要注意的是，其中没有记录经典TCP拥塞控制协议中的 packet loss 以及 RTT，这是因为假设了网络状态良好；并且想要算法从RTT的变化趋势中学习，而不是具体的RTT。</p>
+<h2 id="mapping-the-memory-to-an-action"><a href="#mapping-the-memory-to-an-action" class="headerlink" title="mapping the memory to an action"></a>mapping the memory to an action</h2><p>RemyCC在观测到一条memory之后，将会根据其lookup table查找对应的action。设计该lookup table的任务是由Remy来完成的。具体来说，一条action包含以下信息：</p>
+<ol>
+<li>m: cwnd的乘系数，表示将要对窗口进行的变化</li>
+<li>b: cwnd的加系数，与m相配合来完成窗口的变化</li>
+<li>r: 连续发送的最小时间间隔</li>
+</ol>
+<h2 id="算法过程"><a href="#算法过程" class="headerlink" title="算法过程"></a>算法过程</h2><p>Remy首先根据给定的网络参数生成多个随机的网络 (16个或以上)，之后运行当前的RemyCC算法在生成的网络上 (运行大概100s)。RemyCC的起始状态为映射所有的memory到一条规则 (m=1, b=1, r=0.01)</p>
+<blockquote>
+<p>   详见论文</p>
+</blockquote>
+<h1 id="思考"><a href="#思考" class="headerlink" title="思考"></a>思考</h1><ol>
+<li><p>论文中关于memory只含有三个参数，其中不包含packet loss 以及具体的 RTT，那么可以针对这一假设探究在loss较大 或者 RTT较大的网络中的算法表现</p>
+</li>
+<li><p>关于网络的先验假设参数，是否还有其他的可供描述参数？并且其对网络的影响较大？如bandwidth</p>
+</li>
+<li><blockquote>
+<p>  用Remy搜索找到的最佳RemyCC，当把它用于和生成RemyCC时使用的网络相似的网络上时，效果当然非常不错，但一旦用于不同类型网络时，效果就不太如意了。这里当然是因为RemyCC只能预测它所见过的网络的最优决策，一旦遇到没见过的网络，RemyCC仍使用本身的预见方法来应对，这显然是不够灵活的。</p>
+<p>  作者：折佩zhepei<br>  链接：<a href="https://www.jianshu.com/p/af616f4aa822" target="_blank" rel="noopener">https://www.jianshu.com/p/af616f4aa822</a><br>  来源：简书<br>  著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。</p>
+</blockquote>
+<p>该算法虽然属于贪心暴力算法，但是因为十分依靠输入的参数，所以感觉有一点点神经网络算法的特点：如十分依赖输入集，在其他网络下的表现可能不是很好。或许可以通过测试验证这一点。</p>
+</li>
+</ol>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/" title="RemyCC Algorithm">http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Computer-Networks/" rel="tag"># Computer Networks</a>
+          
+            <a href="/tags/Paper/" rel="tag"># Paper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/28/CS204-Advanced-Computer-Networks/" rel="next" title="CS204: Advanced Computer Networks">
+                <i class="fa fa-chevron-left"></i> CS204: Advanced Computer Networks
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/19/Critique-of-MapReduce/" rel="prev" title="Critique of MapReduce">
+                Critique of MapReduce <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.three7.cc/" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#总结"><span class="nav-number">1.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#拥塞控制问题的建模"><span class="nav-number">2.</span> <span class="nav-text">拥塞控制问题的建模</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#网络的先验假设"><span class="nav-number">2.1.</span> <span class="nav-text">网络的先验假设</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#流量发送模型"><span class="nav-number">2.2.</span> <span class="nav-text">流量发送模型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#目标优化方程"><span class="nav-number">2.2.1.</span> <span class="nav-text">目标优化方程</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Remy的生成算法过程"><span class="nav-number">3.</span> <span class="nav-text">Remy的生成算法过程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#sender"><span class="nav-number">3.1.</span> <span class="nav-text">sender</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mapping-the-memory-to-an-action"><span class="nav-number">3.2.</span> <span class="nav-text">mapping the memory to an action</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#算法过程"><span class="nav-number">3.3.</span> <span class="nav-text">算法过程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#思考"><span class="nav-number">4.</span> <span class="nav-text">思考</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考资料"><span class="nav-number">5.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">64.8k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
