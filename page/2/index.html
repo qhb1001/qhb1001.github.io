@@ -309,6 +309,181 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/01/21/hashlib-md5-Understand-hexlify-and-unhexlify/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/hashlib-md5-Understand-hexlify-and-unhexlify/" itemprop="url">hashlib.md5 - Understand hexlify and unhexlify</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-21T08:16:41-08:00">
+                2020-01-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-01-21T20:05:49-08:00">
+                2020-01-21
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  421
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>When I was implementing the Linux MD5 crypt method for the user password, I encountered this problem. To solve a problem in this low level benefit me a lot. Here is the summary for what I learned from this. </p>
+<h1 id="ASCII-Encoding"><a href="#ASCII-Encoding" class="headerlink" title="ASCII Encoding"></a>ASCII Encoding</h1><p>Basically, string in python 3 are encoded in utf-8. This is a encoding method with a variable length for each character. If we are going to operate on the byte or bit level, it is not impossible to do that based on this encoding method. This we need to convert the string to another data structure - bytes. </p>
+<p>However, there exists many ways to interpret the original string to a bytes array. And the defualt translation method is <code>utf-8</code> for the <code>encode()</code> method of data structure <code>str</code>. No matter what encoding methods we are going to use, they are operating on the character level. That is to say, every character will be encoded in different ways based on the request encoding method. </p>
+<h1 id="digest-amp-hexdigest"><a href="#digest-amp-hexdigest" class="headerlink" title="digest  &amp; hexdigest"></a>digest  &amp; hexdigest</h1><p>These are the method included in the data structure <code>_Hash</code>, which is the return value of <code>hashlib.md5(bytes)</code>. We have two ways to get the printable result from it:</p>
+<ul>
+<li><p><code>digest()</code></p>
+<p>return the ascii encoding style result: every character in the output has the size of 8 bit, which means that there will be totally 16 characters (maybe includes invisible character). </p>
+<p>If we directly print the result to the console, we will get the format like <code>\x..\x..\x..</code>. That’s the low level storage method for ASCII encoding method. </p>
+</li>
+<li><p><code>hexdigest()</code></p>
+<p>For every ASCII character, extract the two hex character from the original representation. For example, <code>\x65\xa9</code> will be transformed to <code>65a9</code>. </p>
+</li>
+</ul>
+<h1 id="exlify-amp-unhexlify"><a href="#exlify-amp-unhexlify" class="headerlink" title="exlify &amp; unhexlify"></a>exlify &amp; unhexlify</h1><p>These are the method included in the package <code>binascii</code>, which is aimed to convert binary to ascii character, and vice versa. </p>
+<ul>
+<li>We can pass the result from <code>digest()</code> method to <code>hexlify</code>, and we will get the same result with <code>unhexlify</code>.</li>
+<li>We can pass the result from <code>hexdigest()</code> method to <code>unhexlify</code>, and we will get the same result with <code>hexlify</code>. </li>
+</ul>
+<h1 id="How-to-learn-Python"><a href="#How-to-learn-Python" class="headerlink" title="How to learn Python"></a>How to learn Python</h1><p>When coming into contact with a new package or function, it is necessary to find out what exactly it is designed to do. And the official document is a good resource to read about. </p>
+<p>For example, only after this experience, I got the idea of what the package <code>binascii</code> is doing. </p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.daniweb.com/programming/software-development/threads/494123/how-can-i-add-add-x" target="_blank" rel="noopener">https://www.daniweb.com/programming/software-development/threads/494123/how-can-i-add-add-x</a></li>
+<li><a href="http://www.asciitable.com/" target="_blank" rel="noopener">http://www.asciitable.com/</a></li>
+<li><a href="https://200ok.ch/posts/2018-12-09_unhexlify.html" target="_blank" rel="noopener">https://200ok.ch/posts/2018-12-09_unhexlify.html</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/01/07/Leetcode-14-Longest-Common-Prefix/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1709,161 +1884,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/05/02/Django-Official-Torurial/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="秦baibai">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Beyond">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/02/Django-Official-Torurial/" itemprop="url">Django Official Torurial</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-02T20:52:30-07:00">
-                2019-05-02
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-16T20:32:50-07:00">
-                2019-05-16
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  2.6k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>学习Django的官方教程时记录的笔记</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/02/Django-Official-Torurial/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1918,7 +1938,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1940,7 +1960,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">39</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -1998,15 +2018,15 @@
                   </li>
                 
                   <li class="links-of-blogroll-item">
-                    <a href="https://undefinedf.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                    <a href="https://tobiaslee.top/" title="TobiasLee" target="_blank">TobiasLee</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://aidenfan.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
                   </li>
                 
                   <li class="links-of-blogroll-item">
                     <a href="http://blog.three7.cc/" title="37as" target="_blank">37as</a>
-                  </li>
-                
-                  <li class="links-of-blogroll-item">
-                    <a href="https://tobiaslee.top/" title="TobiasLee" target="_blank">TobiasLee</a>
                   </li>
                 
               </ul>
@@ -2046,7 +2066,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">64.8k</span>
+    <span title="Site words total count">65.5k</span>
   
 </div>
 
