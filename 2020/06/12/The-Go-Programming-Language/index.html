@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This post is meant to record the fundamentals of Golang. The main material I used for this post is “The Go Programming Language”, which is the well-known tutorial book for the Golang beginner. Apart f">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-13T02:21:38.892Z">
+<meta property="og:updated_time" content="2020-06-16T06:17:44.619Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Go Programming Language">
 <meta name="twitter:description" content="This post is meant to record the fundamentals of Golang. The main material I used for this post is “The Go Programming Language”, which is the well-known tutorial book for the Golang beginner. Apart f">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-06-12T19:21:38-07:00">
-                2020-06-12
+              <time title="Post modified" itemprop="dateModified" datetime="2020-06-15T23:17:44-07:00">
+                2020-06-15
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  693
+                  1k
                 </span>
               
 
@@ -410,7 +410,7 @@
       
         <p>This post is meant to record the fundamentals of Golang. The main material I used for this post is “The Go Programming Language”, which is the well-known tutorial book for the Golang beginner. Apart from that, I’ll lookup the topic that I’m confused on Internet. </p>
 <a id="more"></a>
-<h1 id="Chapter-2"><a href="#Chapter-2" class="headerlink" title="Chapter 2"></a>Chapter 2</h1><h2 id="The-Scenarios-for-var-and"><a href="#The-Scenarios-for-var-and" class="headerlink" title="The Scenarios for var and :="></a>The Scenarios for <code>var</code> and <code>:=</code></h2><p>Because of the brevity and flexibility of short variable declarations, they are used to declare and initialize the majority of local variables. A <code>var</code> declaration tends to be reserved for local variables that need an explicit type that differs from that of the initializer expression, or for when the variable will be assigned a value letter and its initial value is unimportant. </p>
+<h1 id="Chapter-2-Program-Structure"><a href="#Chapter-2-Program-Structure" class="headerlink" title="Chapter 2 Program Structure"></a>Chapter 2 Program Structure</h1><h2 id="The-Scenarios-for-var-and"><a href="#The-Scenarios-for-var-and" class="headerlink" title="The Scenarios for var and :="></a>The Scenarios for <code>var</code> and <code>:=</code></h2><p>Because of the brevity and flexibility of short variable declarations, they are used to declare and initialize the majority of local variables. A <code>var</code> declaration tends to be reserved for local variables that need an explicit type that differs from that of the initializer expression, or for when the variable will be assigned a value letter and its initial value is unimportant. </p>
 <p>A short variable declaration must declare at least one new variable. </p>
 <h2 id="Lifetime-of-variables"><a href="#Lifetime-of-variables" class="headerlink" title="Lifetime of variables"></a>Lifetime of variables</h2><p>Golang maintains one graph for all the variables. The nodes in graph are the package or function entry, which are kind of like the namespace of the variable. When the variable is not reachable, it will be released. </p>
 <blockquote>
@@ -432,6 +432,12 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cwd <span class="keyword">string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123; </span><br><span class="line">    cwd, err := os.Getwd() <span class="comment">// <span class="doctag">NOTE:</span> wrong!</span></span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalf(<span class="string">"os.Getwd failed: %v"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">    log.Printf(<span class="string">"Working directory = %s"</span>, cwd)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>The global <code>cwd</code> variable remains uninitialized, and the apparently normal log output obfuscates the bug. Thus, we should be careful when using the global variable, each time we should try out best to use the assignment rather than short declaration syntax:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> cwd <span class="keyword">string</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">var</span> err error</span><br><span class="line">    cwd, err = os.Getwd()</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatalf(<span class="string">"os.Getwd failed: %v"</span>, err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Chapter-4-Composite-Types"><a href="#Chapter-4-Composite-Types" class="headerlink" title="Chapter 4 Composite Types"></a>Chapter 4 Composite Types</h1><h2 id="Arrays"><a href="#Arrays" class="headerlink" title="Arrays"></a>Arrays</h2><p>The size of an array is part of its type, so [3]int and [4]int are different types. The size must be a constant expression, that is, an expression whose value can be computed as the program is being compiled. </p>
+<p>When a function is called, a copy of eac hargument value is assigned to the corresponding parameter variable. In this regard, it would be inefficient to pass in the copied version. Using a pointer to an array is efficient and allows the called function to mutate the caller’s variable, but arrays are still inherently inflexible because of their fixed size. For these reasons, other than the specific situation, we will use slices for this purpose. </p>
+<h2 id="Slices"><a href="#Slices" class="headerlink" title="Slices"></a>Slices</h2><p>Slices represent variable-length sequences whose elements all have the same type. A slice type is written as []T, where the elements have type T. A slice has three components: a pointer, a length, and a capacity. </p>
+<p>The slice operation <code>s[i:j]</code> would create a new slice that refers to elements in the range [i, j). Here <code>s</code> may be an array variable, a pointer to an array, or another slice. Note that this does not apply to the string. The slices on string would result in another string, rather than slices. </p>
+<p>Also note that the length and capacity are two different concepts. For example, we can get a slice with size 3 from one array with size 10. But the capacity of the slice could not be 3. It could be 5. In this case, we can still get the access to the elements beyond the length. The slice would automatically extend itself. </p>
+<p>When calling <code>append()</code> function, it is uncertain and not suggested for user to guess when will the re-allocation happen. The best way to use <code>append</code> is <code>rune = append(rune, r)</code>. Updating the slice variable is required not just when calling append, but for any function that may change the length or capacity of a slice or make it refer to a different underlying array. </p>
 
       
     </div>
@@ -679,7 +685,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Scenarios-for-var-and"><span class="nav-number">1.1.</span> <span class="nav-text">The Scenarios for var and :=</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lifetime-of-variables"><span class="nav-number">1.2.</span> <span class="nav-text">Lifetime of variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Package-Initialization"><span class="nav-number">1.3.</span> <span class="nav-text">Package Initialization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scope"><span class="nav-number">1.4.</span> <span class="nav-text">Scope</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Program-Structure"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 Program Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Scenarios-for-var-and"><span class="nav-number">1.1.</span> <span class="nav-text">The Scenarios for var and :=</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lifetime-of-variables"><span class="nav-number">1.2.</span> <span class="nav-text">Lifetime of variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Package-Initialization"><span class="nav-number">1.3.</span> <span class="nav-text">Package Initialization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scope"><span class="nav-number">1.4.</span> <span class="nav-text">Scope</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-4-Composite-Types"><span class="nav-number">2.</span> <span class="nav-text">Chapter 4 Composite Types</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays"><span class="nav-number">2.1.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slices"><span class="nav-number">2.2.</span> <span class="nav-text">Slices</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -713,7 +719,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">65.5k</span>
+    <span title="Site words total count">65.8k</span>
   
 </div>
 
