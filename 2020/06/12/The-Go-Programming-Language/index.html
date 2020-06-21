@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This post is meant to record the fundamentals of Golang. The main material I used for this post is “The Go Programming Language”, which is the well-known tutorial book for the Golang beginner. Apart f">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-06-16T16:41:54.192Z">
+<meta property="og:updated_time" content="2020-06-19T18:23:04.590Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="The Go Programming Language">
 <meta name="twitter:description" content="This post is meant to record the fundamentals of Golang. The main material I used for this post is “The Go Programming Language”, which is the well-known tutorial book for the Golang beginner. Apart f">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-06-16T09:41:54-07:00">
-                2020-06-16
+              <time title="Post modified" itemprop="dateModified" datetime="2020-06-19T11:23:04-07:00">
+                2020-06-19
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.2k
+                  1.4k
                 </span>
               
 
@@ -443,6 +443,9 @@
 <p>Since we know the final size of names from the outset, it is more efficient to allocate an array ofthe required size up front. </p>
 <p>As with slices, maps cannot be compared to ech other; the only legal comparison is with nil. To test whether two maps contain the same keys and the same associated values, we must write a loop:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">equal</span><span class="params">(x, y <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">int</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(x) != <span class="built_in">len</span>(y) &#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> k, xv := <span class="keyword">range</span> x &#123;</span><br><span class="line">        <span class="keyword">if</span> yv, ok := y[k]; !ok || yv != xv &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="Chapter-5-Functions"><a href="#Chapter-5-Functions" class="headerlink" title="Chapter 5. Functions"></a>Chapter 5. Functions</h1><h2 id="Anonymous-Functions-Capturing-Iteration-Variables"><a href="#Anonymous-Functions-Capturing-Iteration-Variables" class="headerlink" title="Anonymous Functions - Capturing Iteration Variables"></a>Anonymous Functions - Capturing Iteration Variables</h2><p>Consider a program that must create a set of directories and later remove them. We can use a slice of function values to hold the clean-up operations. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> rmdirs []<span class="function"><span class="keyword">func</span><span class="params">()</span></span></span><br><span class="line"><span class="function"><span class="title">for</span> _, <span class="title">d</span> := <span class="title">range</span> <span class="title">tempDirs</span><span class="params">()</span></span> &#123;</span><br><span class="line">    dir := d</span><br><span class="line">    os.MkdirAll(dir, <span class="number">0755</span>)</span><br><span class="line">    rmdirs = <span class="built_in">append</span>(rmdirs, <span class="function"><span class="keyword">func</span><span class="params">()</span></span> &#123;</span><br><span class="line">        os.RemoveAll(dir)</span><br><span class="line">    &#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// do some work</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> _, rmdir := <span class="keyword">range</span> rmdirs &#123;</span><br><span class="line">    rmdir()</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Here it is neccessary to assign the enumerating variable <code>d</code> to the local varibale <code>dir</code>. Because the lexical scope of <code>d</code> is within the for-loop. And the content of the variable will be changing during every iteration. Thus <code>d</code> holds the value from the final iteration, and consequently all calls to <code>os.RemoveAll</code> will attampt to remove the same directory if we don’t declare the local variable. </p>
 
       
     </div>
@@ -694,7 +697,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Program-Structure"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 Program Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Scenarios-for-var-and"><span class="nav-number">1.1.</span> <span class="nav-text">The Scenarios for var and :=</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lifetime-of-variables"><span class="nav-number">1.2.</span> <span class="nav-text">Lifetime of variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Package-Initialization"><span class="nav-number">1.3.</span> <span class="nav-text">Package Initialization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scope"><span class="nav-number">1.4.</span> <span class="nav-text">Scope</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-4-Composite-Types"><span class="nav-number">2.</span> <span class="nav-text">Chapter 4 Composite Types</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays"><span class="nav-number">2.1.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slices"><span class="nav-number">2.2.</span> <span class="nav-text">Slices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">2.3.</span> <span class="nav-text">Map</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-2-Program-Structure"><span class="nav-number">1.</span> <span class="nav-text">Chapter 2 Program Structure</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#The-Scenarios-for-var-and"><span class="nav-number">1.1.</span> <span class="nav-text">The Scenarios for var and :=</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Lifetime-of-variables"><span class="nav-number">1.2.</span> <span class="nav-text">Lifetime of variables</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Package-Initialization"><span class="nav-number">1.3.</span> <span class="nav-text">Package Initialization</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Scope"><span class="nav-number">1.4.</span> <span class="nav-text">Scope</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-4-Composite-Types"><span class="nav-number">2.</span> <span class="nav-text">Chapter 4 Composite Types</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Arrays"><span class="nav-number">2.1.</span> <span class="nav-text">Arrays</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Slices"><span class="nav-number">2.2.</span> <span class="nav-text">Slices</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Map"><span class="nav-number">2.3.</span> <span class="nav-text">Map</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Chapter-5-Functions"><span class="nav-number">3.</span> <span class="nav-text">Chapter 5. Functions</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Anonymous-Functions-Capturing-Iteration-Variables"><span class="nav-number">3.1.</span> <span class="nav-text">Anonymous Functions - Capturing Iteration Variables</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -728,7 +731,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">66.8k</span>
+    <span title="Site words total count">67.5k</span>
   
 </div>
 
