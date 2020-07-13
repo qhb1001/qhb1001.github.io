@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.googleapis.com/css/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
+<meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Dragonfly - Source Code Note">
+<meta property="og:url" content="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2020-07-13T05:56:09.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Dragonfly - Source Code Note">
+<meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/">
+
+
+
+
+
+  <title>Dragonfly - Source Code Note | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Dragonfly - Source Code Note</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-08T18:17:47-07:00">
+                2020-07-08
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-12T22:56:09-07:00">
+                2020-07-12
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.1k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity. </p>
+<p>This <a href="https://www.codedump.info/post/20190324-how-to-read-code/" target="_blank" rel="noopener">blog (how to read source code?)</a> helps me a lot from the perpective of theory of source code reading. While for the methodology, I will first locate the interested part of the source code, and then using githistory.xyz tool to keep track of the code from the very beginning of the development. With the help of the githistory.xyz, I could find the associated code together with the part that I’m focused on by looking at every commit of the file. </p>
+<blockquote>
+<p>  Linus说： “烂程序员关心的是代码。好程序员关心的是数据结构和它们之间的关系。”</p>
+</blockquote>
+<a id="more"></a>
+<h1 id="Overrall"><a href="#Overrall" class="headerlink" title="Overrall"></a>Overrall</h1><p>This section includes my understanding of the entire Dragonfly framework. </p>
+<h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
+<h2 id="dfget-core-downloader"><a href="#dfget-core-downloader" class="headerlink" title="dfget/core/downloader"></a>dfget/core/downloader</h2><p>There are three patterns currently in the Dragonfly, which are source, p2p and cdn. We can find the entrance of the downloading process in the Start() function, which is the  <code>downloadFile()</code> function. And I will mainly focus on the p2p downloading pattern. </p>
+<blockquote>
+<p>  The abstraction of the p2p downloader is really great: The downloader only cares about the downloading interface, without the necessarily to concern about the detailed client writer. While the client writer has two implementations, which are local client writer, and p2p client writer. This decouples the relationship between the downloader and writer. </p>
+</blockquote>
+<p>Question:</p>
+<ul>
+<li><p><del>What’s the relationship between the cfg.BackSourceReason and P2P downloader?</del></p>
+<p>BackSource is to directly download the file from the super node?</p>
+<p>There are many kinds of back source reason. We can find those flags in the <code>dfget/config/constants.go</code> file.</p>
+</li>
+<li><p>In the initialization process of the <code>init()</code> function in  <code>p2p_downloader.go</code> file, why is the piece size recorded twice in the pieceSizeHistory data structure?</p>
+</li>
+<li><p>In the <code>client_writer.go</code> file, why does Dragonfly create the hard link for the temp target file, which will be deleted by the second <code>fileutils.Link()</code> call for the service file? </p>
+<p>used to check whether the target file and the service file exist in two file systems or not.</p>
+</li>
+<li><p>What’s the usage of the temp target file and the service file in the configuration file?</p>
+</li>
+<li><p>What’s the usage of the TargetDir and DataDir field in the RuntimeVariable struct?</p>
+</li>
+<li><p>Inside the <code>ClientWriter</code> struct, when will the reset situation occur? </p>
+<p>In the <code>write()</code> method, why is the p2p mode, <code>acrossWrite</code> filed would result in different behavior?</p>
+</li>
+<li><p>Which and how will the uploader fill the clientQueue with data?</p>
+</li>
+<li><p>What’s the usage of the sync queue in <code>PreRun()</code> method in <code>ClientWriter</code>?</p>
+</li>
+<li><p><del>What’s the diff between flags <code>last</code> and <code>reset</code> in <code>Run()</code> method of <code>TargetWriter</code> struct?</del></p>
+<p>There three cases of the transmitted pieces: last, reset, normal? </p>
+<p>The first one means that the current piece is the last one of the file, while the reset flag signals that the previous received pieces should be dropped and start over again. And the final case means that the downloading process continues.</p>
+<p>When <code>p2p.pieceSizeHistory[0] != p2p.pieceSizeHistory[1]</code>, flag <code>reset</code> is pushed into the <code>P2PDownloader.clientQueue</code></p>
+</li>
+<li><p>What’s the diff between <code>TargetWritter.pieceQueue</code> and <code>ClientWriter.ClientQueue</code>?</p>
+</li>
+<li><p>In the <code>writePieceToFile()</code> method of <code>client_writer.go</code> file, what’s the point of header? </p>
+</li>
+<li><p>How does the <code>range</code> field of <code>P2PDownloader</code> struct in method <code>getItem</code> come into effect?</p>
+</li>
+</ul>
+<h3 id="Overview-of-Current-P2P-Downloader"><a href="#Overview-of-Current-P2P-Downloader" class="headerlink" title="Overview of Current P2P Downloader"></a>Overview of Current P2P Downloader</h3><p>The download flow of the p2p downloader is that, the p2p downloader will first call the <code>PreRun()</code> method of the <code>pieceWriter</code> with interface type <code>PieceWriter</code>, and the default concrete implementation is <code>client_writer</code> struct. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">PreRun</span><span class="params">(ctx context.Context)</span> <span class="params">(err error)</span></span> &#123;</span><br></pre></td></tr></table></figure>
+<p>will be called to create the files, queues, and <code>targetWriter</code>. And then the <code>Run()</code> method of the <code>PieceWriter</code> is ran in the go routine. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Run starts writing downloading file.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">Run</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br></pre></td></tr></table></figure>
+<p>Inside the method, the main body of the function will loop forever until all pieces of the file is downloaded successfully. And those successfully downloaded pieces will be put from the <code>ClientWriter.clientQueue</code> to <code>clientWriter.targetWriter.targetQueue</code>, and the <code>clientWriter.serviceFile</code>. What’s more, in the <code>Run()</code> method of <code>ClientWriter</code>, another new go routine is created to run the <code>Run()</code> method of <code>targetWriter</code>, which will wirte the same content in the <code>targetQueue</code>. (Why is the value type not a pointer?)</p>
+<p>Two main questions:</p>
+<ul>
+<li>What’s the usage of target file and temp target file, which are maintained by the client writer and target writer?</li>
+<li>When will across write occur? Will that be the cloud disk?</li>
+<li>What’s the download flow of P2P downloader? The piece simple is first pushed into the p2p.queue, and then all other pieces will be requested by the HTTP request formed from simple piece. Then what? What’s the diff between process piece method and pull piece method? Why are new pieces requests formed by the received pieces?</li>
+</ul>
+<h2 id="dfget-locator"><a href="#dfget-locator" class="headerlink" title="dfget/locator"></a>dfget/locator</h2><p>SupernodeLocator defines the way how to get available supernodes for clients. </p>
+<p>From the <a href="https://github.com/dragonflyoss/Dragonfly/commit/122ac3c429f8a7bf5075d1ddb0732db90564d649#diff-2b63ff7c308e37755e95a4794445472dR55" target="_blank" rel="noopener">line</a>, we can see that during the initialial phase of every downloading task, the locator will be called to get the available supernode. By default, the static locator will be created as the supernode locator. </p>
+<p>The locator will be initializaed in the dfget/core/register process. From the configuration file, every super node is associated with a weight, which will be parsed in the static locator. After that, the <strong><em>regist.NewSupernodeRegister()</em></strong> method will be called to connect to the supernode. Inside this method, the way of decouple the locator and the registor is very subtle: the registor could directly call the <strong><em>Get() method and Next() method</em></strong> without the necessarity to concern about the detail of the locator. </p>
+<ul>
+<li><p>dfget/core/core.go:Start()</p>
+<p>The Start() method is the entrance of the whole downloading process. Thus, it is very necessary to fully understand this part of code. The method first declares <code>supernodeAPI</code>, <code>supernodeLocator</code> based on configuration file, <code>register</code> which is the combination of the configuration file, supernodeAPI, and locator.</p>
+<p>After that, the <code>prepare()</code> method is called to prepare the runtime variable related information and create the corresponding files, such as target directory, temp target directory, metadata file, work home directory and system data directory. The connection with the supernode is also checked in the <code>prepare()</code> method. </p>
+<p>Next, <code>registerToSuperNode()</code> method first checks the transport pattern by the <code>cfg.Pattern</code> field. Then, the <code>register.Register()</code> method is called. The file length and the pieces are requested by the HTTP protocol to supernode. <code>*register.RegisterResult</code> is returned. </p>
+<p>After all of the above preparation are done, the downloading process finally starts.  </p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/" title="Dragonfly - Source Code Note">http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
+          
+            <a href="/tags/Dragonfly/" rel="tag"># Dragonfly</a>
+          
+            <a href="/tags/P2P/" rel="tag"># P2P</a>
+          
+            <a href="/tags/CNCF/" rel="tag"># CNCF</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/19/How-to-interview/" rel="next" title="How to interview">
+                <i class="fa fa-chevron-left"></i> How to interview
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">40</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tobiaslee.top/" title="TobiasLee" target="_blank">TobiasLee</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://aidenfan.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.three7.cc/" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.1.</span> <span class="nav-text">dfget/core/downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview-of-Current-P2P-Downloader"><span class="nav-number">2.1.1.</span> <span class="nav-text">Overview of Current P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.2.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">69.8k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
