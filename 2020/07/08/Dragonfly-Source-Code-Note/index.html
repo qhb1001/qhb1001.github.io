@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF,">
+  <meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF,">
 
 
 
@@ -133,14 +133,14 @@
 
 
 <meta name="description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
-<meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF">
+<meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dragonfly - Source Code Note">
 <meta property="og:url" content="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/index.html">
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-13T05:56:09.649Z">
+<meta property="og:updated_time" content="2020-07-14T01:24:39.285Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-12T22:56:09-07:00">
-                2020-07-12
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-13T18:24:39-07:00">
+                2020-07-13
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.1k
+                  1.7k
                 </span>
               
 
@@ -415,8 +415,23 @@
 </blockquote>
 <a id="more"></a>
 <h1 id="Overrall"><a href="#Overrall" class="headerlink" title="Overrall"></a>Overrall</h1><p>This section includes my understanding of the entire Dragonfly framework. </p>
+<h2 id="Dragonfly-P2P-Downloader"><a href="#Dragonfly-P2P-Downloader" class="headerlink" title="Dragonfly P2P Downloader"></a>Dragonfly P2P Downloader</h2><p>The entrance of the p2p downloader lies at the <code>dfget/core/downloader/downloader.go</code> file. The file will call the main function of the p2p downloader inside the <code>./p2p_downloader/p2p_downloader.go</code> file, whcih is the <code>run()</code> method. Here is the psuedocode of the method. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p2p * P2PDownloader)</span> <span class="title">run</span><span class="params">(ctx context.Context, pieceWriter PieceWriter)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    # initialization the piece writer, the concrete implementation includes client_writer.</span><br><span class="line">    pieceWriter.initialization()</span><br><span class="line">    </span><br><span class="line">    # keep polling the piece writer<span class="string">'s queue, and write the content to the target file</span></span><br><span class="line"><span class="string">    go func() &#123;</span></span><br><span class="line"><span class="string">        pieceWriter.run()</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    # downloading</span></span><br><span class="line"><span class="string">    for &#123;</span></span><br><span class="line"><span class="string">        # the initial element in the p2p.queue is the start piece. </span></span><br><span class="line"><span class="string">        # once the supernode receive the first piece, it will start to upload the following piece info.</span></span><br><span class="line"><span class="string">        # The initial piece includes the status `start`, while the other pieces may have the status as `running`</span></span><br><span class="line"><span class="string">        curItem := p2p.getItem()</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        # pull the piece download task from supernode, note that this is not downloading data</span></span><br><span class="line"><span class="string">        # but the metadata of the interested piece, eg. which peer has the piece.</span></span><br><span class="line"><span class="string">        # The supernode may return the metadata of the next available piece.</span></span><br><span class="line"><span class="string">        response, err := p2p.pullPieceTask(&amp;curItem)</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        if err != nil &#123;</span></span><br><span class="line"><span class="string">            error handler</span></span><br><span class="line"><span class="string">        &#125; else &#123;</span></span><br><span class="line"><span class="string">            # download the piece, and push the piece into the writer queue</span></span><br><span class="line"><span class="string">            p2p.processPiece(response, &amp;curItem)</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>And that’s all about the downloader. After the Dragonfly has successfully download the piece and push it to the writer queue, the <code>pieceWriter</code> will start to write the piece to the local disk and the target file. </p>
+<p>Note that the two files are different: the first one is to be sure located in the local file system, while for the later one, it may reside in the cluod disk, or another disk in local disk. Actually, there are two writers which corresponds to them: <code>client_writer</code> and <code>target_writer</code>. In this case, the writing process would be the network IO, and that will be the bottleneck of the whole system. </p>
 <h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
-<h2 id="dfget-core-downloader"><a href="#dfget-core-downloader" class="headerlink" title="dfget/core/downloader"></a>dfget/core/downloader</h2><p>There are three patterns currently in the Dragonfly, which are source, p2p and cdn. We can find the entrance of the downloading process in the Start() function, which is the  <code>downloadFile()</code> function. And I will mainly focus on the p2p downloading pattern. </p>
+<h2 id="Current-P2P-Downloader"><a href="#Current-P2P-Downloader" class="headerlink" title="Current P2P Downloader"></a>Current P2P Downloader</h2><h3 id="Questions-Encountered-During-Source-Code-Reading"><a href="#Questions-Encountered-During-Source-Code-Reading" class="headerlink" title="Questions Encountered During Source Code Reading"></a>Questions Encountered During Source Code Reading</h3><p>The download flow of the p2p downloader is that, the p2p downloader will first call the <code>PreRun()</code> method of the <code>pieceWriter</code> with interface type <code>PieceWriter</code>, and the default concrete implementation is <code>client_writer</code> struct. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">PreRun</span><span class="params">(ctx context.Context)</span> <span class="params">(err error)</span></span> &#123;</span><br></pre></td></tr></table></figure>
+<p>will be called to create the files, queues, and <code>targetWriter</code>. And then the <code>Run()</code> method of the <code>PieceWriter</code> is ran in the go routine. </p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Run starts writing downloading file.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">Run</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br></pre></td></tr></table></figure>
+<p>Inside the method, the main body of the function will loop forever until all pieces of the file is downloaded successfully. And those successfully downloaded pieces will be put from the <code>ClientWriter.clientQueue</code> to <code>clientWriter.targetWriter.targetQueue</code>, and the <code>clientWriter.serviceFile</code>. What’s more, in the <code>Run()</code> method of <code>ClientWriter</code>, another new go routine is created to run the <code>Run()</code> method of <code>targetWriter</code>, which will wirte the same content in the <code>targetQueue</code>. (Why is the value type not a pointer?)</p>
+<p>Three main questions are:</p>
+<ul>
+<li>What’s the usage of target file and temp target file, which are maintained by the client writer and target writer?</li>
+<li>When will across write occur? Will that be the cloud disk?</li>
+<li>What’s the download flow of P2P downloader? The piece simple is first pushed into the p2p.queue, and then all other pieces will be requested by the HTTP request formed from simple piece. Then what? What’s the diff between process piece method and pull piece method? Why are new pieces requests formed by the received pieces?</li>
+</ul>
+<h3 id="dfget-core-downloader"><a href="#dfget-core-downloader" class="headerlink" title="dfget/core/downloader"></a>dfget/core/downloader</h3><p>There are three patterns currently in the Dragonfly, which are source, p2p and cdn. We can find the entrance of the downloading process in the Start() function, which is the  <code>downloadFile()</code> function. And I will mainly focus on the p2p downloading pattern. </p>
 <blockquote>
 <p>  The abstraction of the p2p downloader is really great: The downloader only cares about the downloading interface, without the necessarily to concern about the detailed client writer. While the client writer has two implementations, which are local client writer, and p2p client writer. This decouples the relationship between the downloader and writer. </p>
 </blockquote>
@@ -454,18 +469,19 @@
 <li><p>How does the <code>range</code> field of <code>P2PDownloader</code> struct in method <code>getItem</code> come into effect?</p>
 </li>
 </ul>
-<h3 id="Overview-of-Current-P2P-Downloader"><a href="#Overview-of-Current-P2P-Downloader" class="headerlink" title="Overview of Current P2P Downloader"></a>Overview of Current P2P Downloader</h3><p>The download flow of the p2p downloader is that, the p2p downloader will first call the <code>PreRun()</code> method of the <code>pieceWriter</code> with interface type <code>PieceWriter</code>, and the default concrete implementation is <code>client_writer</code> struct. </p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">PreRun</span><span class="params">(ctx context.Context)</span> <span class="params">(err error)</span></span> &#123;</span><br></pre></td></tr></table></figure>
-<p>will be called to create the files, queues, and <code>targetWriter</code>. And then the <code>Run()</code> method of the <code>PieceWriter</code> is ran in the go routine. </p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Run starts writing downloading file.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">Run</span><span class="params">(ctx context.Context)</span></span> &#123;</span><br></pre></td></tr></table></figure>
-<p>Inside the method, the main body of the function will loop forever until all pieces of the file is downloaded successfully. And those successfully downloaded pieces will be put from the <code>ClientWriter.clientQueue</code> to <code>clientWriter.targetWriter.targetQueue</code>, and the <code>clientWriter.serviceFile</code>. What’s more, in the <code>Run()</code> method of <code>ClientWriter</code>, another new go routine is created to run the <code>Run()</code> method of <code>targetWriter</code>, which will wirte the same content in the <code>targetQueue</code>. (Why is the value type not a pointer?)</p>
-<p>Two main questions:</p>
-<ul>
-<li>What’s the usage of target file and temp target file, which are maintained by the client writer and target writer?</li>
-<li>When will across write occur? Will that be the cloud disk?</li>
-<li>What’s the download flow of P2P downloader? The piece simple is first pushed into the p2p.queue, and then all other pieces will be requested by the HTTP request formed from simple piece. Then what? What’s the diff between process piece method and pull piece method? Why are new pieces requests formed by the received pieces?</li>
+<h3 id="P2P-Streaming-Uploader-Design"><a href="#P2P-Streaming-Uploader-Design" class="headerlink" title="P2P Streaming Uploader Design"></a>P2P Streaming Uploader Design</h3><ul>
+<li><p>Since there could be multiple tasks running at the same time, which means that one peer server could have multiple client stream writers at the same time, it is necessary to add <code>csw []*ClientStreamWriter</code> field to the current <code>peerServer</code> struct in <code>dfget/core/uploader/peer_server.go</code> file.</p>
+</li>
+<li><p>Add Locker for the cache field in <code>ClientStreamWriter</code> struct in <code>dfget/core/downloader/p2p_downloader/client_stream_writer.go</code> file.</p>
+</li>
+<li><p>Extract <code>PeerServer</code> launch process from <code>registerToSuperNode()</code> method to the <code>Start()</code> method.</p>
+<p>And register the client stream writer to peer server after the download process is created in <code>Start()</code> method. </p>
+<p>The <code>Start()</code> method lies at the <code>dfget/core/core.go</code> file.</p>
+</li>
+<li><p>Separate the stream uploading branch and normal uploading branch apart in the <code>uploadHandler()</code> of <code>dfget/core/uploader/peer_server.go</code> file. Add handler process <code>streamingUpload()</code> method and <code>normalUpload()</code> method. </p>
+</li>
 </ul>
-<h2 id="dfget-locator"><a href="#dfget-locator" class="headerlink" title="dfget/locator"></a>dfget/locator</h2><p>SupernodeLocator defines the way how to get available supernodes for clients. </p>
+<h2 id="Bandwidth-Optimization"><a href="#Bandwidth-Optimization" class="headerlink" title="Bandwidth Optimization"></a>Bandwidth Optimization</h2><h3 id="dfget-locator"><a href="#dfget-locator" class="headerlink" title="dfget/locator"></a>dfget/locator</h3><p>SupernodeLocator defines the way how to get available supernodes for clients. </p>
 <p>From the <a href="https://github.com/dragonflyoss/Dragonfly/commit/122ac3c429f8a7bf5075d1ddb0732db90564d649#diff-2b63ff7c308e37755e95a4794445472dR55" target="_blank" rel="noopener">line</a>, we can see that during the initialial phase of every downloading task, the locator will be called to get the available supernode. By default, the static locator will be created as the supernode locator. </p>
 <p>The locator will be initializaed in the dfget/core/register process. From the configuration file, every super node is associated with a weight, which will be parsed in the static locator. After that, the <strong><em>regist.NewSupernodeRegister()</em></strong> method will be called to connect to the supernode. Inside this method, the way of decouple the locator and the registor is very subtle: the registor could directly call the <strong><em>Get() method and Next() method</em></strong> without the necessarity to concern about the detail of the locator. </p>
 <ul>
@@ -476,6 +492,7 @@
 <p>After all of the above preparation are done, the downloading process finally starts.  </p>
 </li>
 </ul>
+<h1 id="Program-Design"><a href="#Program-Design" class="headerlink" title="Program Design"></a>Program Design</h1><h2 id="API-variable"><a href="#API-variable" class="headerlink" title="API variable"></a>API variable</h2><p>Sometimes structs are used only for the collection of methods. In this case, the empty struct with a lot of API could be used as the API variable. For example, in the <code>dfget/core/api/download_api.go</code> file, the downloadAPI is used to conveniently aggregrate a set of downloading related methods. And this struct could be passed to other function as one parameter. </p>
 
       
     </div>
@@ -511,11 +528,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/P2P/" rel="tag"># P2P</a>
+          
             <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
           
             <a href="/tags/Dragonfly/" rel="tag"># Dragonfly</a>
-          
-            <a href="/tags/P2P/" rel="tag"># P2P</a>
           
             <a href="/tags/CNCF/" rel="tag"># CNCF</a>
           
@@ -729,7 +746,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.1.</span> <span class="nav-text">dfget/core/downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Overview-of-Current-P2P-Downloader"><span class="nav-number">2.1.1.</span> <span class="nav-text">Overview of Current P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.2.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.1.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.1.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.1.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.1.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.2.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.2.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -763,7 +780,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">69.8k</span>
+    <span title="Site words total count">70.3k</span>
   
 </div>
 
