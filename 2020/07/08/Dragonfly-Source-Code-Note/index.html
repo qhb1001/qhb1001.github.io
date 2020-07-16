@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-14T01:24:39.285Z">
+<meta property="og:updated_time" content="2020-07-16T01:51:01.939Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-13T18:24:39-07:00">
-                2020-07-13
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-15T18:51:01-07:00">
+                2020-07-15
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  1.7k
+                  2.4k
                 </span>
               
 
@@ -420,6 +420,29 @@
 <p>And that’s all about the downloader. After the Dragonfly has successfully download the piece and push it to the writer queue, the <code>pieceWriter</code> will start to write the piece to the local disk and the target file. </p>
 <p>Note that the two files are different: the first one is to be sure located in the local file system, while for the later one, it may reside in the cluod disk, or another disk in local disk. Actually, there are two writers which corresponds to them: <code>client_writer</code> and <code>target_writer</code>. In this case, the writing process would be the network IO, and that will be the bottleneck of the whole system. </p>
 <h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
+<h2 id="Supernode-Scheduler"><a href="#Supernode-Scheduler" class="headerlink" title="Supernode Scheduler"></a>Supernode Scheduler</h2><h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>Client ID is defined in the <code>apis/types/df_get_task.go#DfGetTask</code> struct. And it is generated during the <code>dfget/core/core.go#prepare</code> method with the structure <code>rv.LocalIP-cfg.Sign</code>. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// CID means the client ID. It maps to the specific dfget process.</span><br><span class="line">// When user wishes to download an image/file, user would start a dfget process to do this.</span><br><span class="line">// This dfget is treated a client and carries a client ID.</span><br><span class="line">// Thus, multiple dfget processes on the same peer have different CIDs.</span><br></pre></td></tr></table></figure>
+<p>TaskID could be used to uniquely define xxx. It is requested by the <code>dfget</code> from <code>supernode</code> in <code>dfget/core/regist/register.go#Register</code> method, which will call the <code>df/get/core/api/supernode_api.go#Register</code> method to request the register response from supernode. From the url, we can see that it is calling the <code>/peer/registry</code> API in supernode. From the <code>supernode/server/router.go#initRoute</code> method, which includes all the HTTP handlers, we can find the corresponding registry function in the <code>supernode/server/0.3_bridge.go#registry</code> method. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// /apis/types/task_register_request.go</span><br><span class="line">// Dfdaemon or dfget could specific the taskID which will represents the key of this resource</span><br><span class="line">// in supernode.</span><br></pre></td></tr></table></figure>
+<p>Inside the registry method, the peer instance in supernode is created, where the peerID is created for supernode to index peer server. What’s more, the task is added or updated after the creation of peer instance. </p>
+<p>PeerID is formed during the registry process of download process. It follows the format of <code>fmt.Sprintf(&quot;%s-%s-%d&quot;, peerInfo.HostName.String(), peerInfo.IP.String(), time.Now().UnixNano())</code>. </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// generatePeerID generates an ID with hostname and ip.</span><br><span class="line">// Use timestamp to ensure the uniqueness.</span><br></pre></td></tr></table></figure>
+<h3 id="Questions-encountered-during-reading"><a href="#Questions-encountered-during-reading" class="headerlink" title="Questions encountered during reading"></a>Questions encountered during reading</h3><ul>
+<li><p>Why dose dfget defer deleting the dfget task in the <code>supernode/daemon/mgr/task/manager.go#Register</code> method?</p>
+<p>Answer: Note that the delete statement is in the if checking. And the deletion will only occur when the err != nil. </p>
+</li>
+<li><p>Would p2p downloading process share the same taskID with backsource downloading? </p>
+<p>Answer: No. The only difference between the p2p downloader and backsource downloader is at the <code>dfget/core/core.go#doDownload</code> method, when the <code>cfg.BackSourceReason &gt; 0</code>, the downloader will be set to backsource downloader, and the downloading workflow continues. The taskID remains unchanged. </p>
+</li>
+<li><p>Would different CID match the same taskID? For example, one to download, another to upload? I think this possibility is very large, because taskID fundamentally is the resource in supernode with the form between dfget and daemon. </p>
+<p>Answer: CID means the downloading process, rather than all the process in one node. Thus, for the uploading process, it does not have any CID. </p>
+</li>
+<li><p>How is <code>syncTaskMap</code> field maintained in the <code>peerServer</code> struct? I think there exists the communication between the downloader and uploader. </p>
+<p>Answer: Once the file is successfully uploaded, the peerServer API <code>oneFinishedHandler</code> is called to store the metadata of finished file to the <code>syncTaskMap</code>. </p>
+</li>
+<li><p>Would it be possible for node in peer network to specify the other peer by the peerID without its uniqueness? </p>
+</li>
+</ul>
 <h2 id="Current-P2P-Downloader"><a href="#Current-P2P-Downloader" class="headerlink" title="Current P2P Downloader"></a>Current P2P Downloader</h2><h3 id="Questions-Encountered-During-Source-Code-Reading"><a href="#Questions-Encountered-During-Source-Code-Reading" class="headerlink" title="Questions Encountered During Source Code Reading"></a>Questions Encountered During Source Code Reading</h3><p>The download flow of the p2p downloader is that, the p2p downloader will first call the <code>PreRun()</code> method of the <code>pieceWriter</code> with interface type <code>PieceWriter</code>, and the default concrete implementation is <code>client_writer</code> struct. </p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(cw *ClientWriter)</span> <span class="title">PreRun</span><span class="params">(ctx context.Context)</span> <span class="params">(err error)</span></span> &#123;</span><br></pre></td></tr></table></figure>
 <p>will be called to create the files, queues, and <code>targetWriter</code>. And then the <code>Run()</code> method of the <code>PieceWriter</code> is ran in the go routine. </p>
@@ -493,6 +516,12 @@
 </li>
 </ul>
 <h1 id="Program-Design"><a href="#Program-Design" class="headerlink" title="Program Design"></a>Program Design</h1><h2 id="API-variable"><a href="#API-variable" class="headerlink" title="API variable"></a>API variable</h2><p>Sometimes structs are used only for the collection of methods. In this case, the empty struct with a lot of API could be used as the API variable. For example, in the <code>dfget/core/api/download_api.go</code> file, the downloadAPI is used to conveniently aggregrate a set of downloading related methods. And this struct could be passed to other function as one parameter. </p>
+<p>And those API structs have the HTTP request method to send datagram and get the response. </p>
+<h2 id="Reuse-the-code-for-different-branches"><a href="#Reuse-the-code-for-different-branches" class="headerlink" title="Reuse the code for different branches"></a>Reuse the code for different branches</h2><p>I was going to seperate the stream upadloing branch and regular uploading branch apart in the <code>uploadHandler()</code> of <code>df/get/core/uploader/peer_server.go</code> file. But my mentor hints me that, it would be better to add another interface to do the job. In this way, the current code would not be effected at all, while the actual action of the uploader would differ. </p>
+<p>That’s really a good lesson on resuing the current code. </p>
+<h2 id="Supernode-Framework"><a href="#Supernode-Framework" class="headerlink" title="Supernode Framework"></a>Supernode Framework</h2><h1 id="Lesson-on-Behavior"><a href="#Lesson-on-Behavior" class="headerlink" title="Lesson on Behavior"></a>Lesson on Behavior</h1><h2 id="Impossible-Feature-Issue-1403"><a href="#Impossible-Feature-Issue-1403" class="headerlink" title="Impossible Feature: Issue #1403"></a>Impossible Feature: Issue #1403</h2><p>I was assigned this issue as the first step for the ASoC to familiar myself with Dragonfly community. But it turns out that this feature is impossible to implement. Check my <a href="https://notes-hongbo.top/2020/07/14/Dragonfly-Feature-Request-supporting-sendfile-in-dfget-1403/">post</a> to get more information. </p>
+<p>So in this step, I know that it is impossible to implement the feature in two ways: one is to modify the type of limit reader, the other is to move the sendFile handler from system library to user space. </p>
+<p>But I was getting shy on talking about my results. For one thing, I didn’t directly comment my thoughts under the issue, rather I first went to the DingTalk to share it with mentor. This is not right. For another, I didn’t describe all my thoughts clear. Even if the other way is not impossible to implement, I should talk it aloud to prove that I worked on this. </p>
 
       
     </div>
@@ -750,7 +779,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.1.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.1.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.1.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.1.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.2.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.2.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.1.</span> <span class="nav-text">Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.1.1.</span> <span class="nav-text">Identifiers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.1.2.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.2.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.2.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.2.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.2.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.3.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.3.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.2.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.3.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">4.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">4.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -784,7 +813,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">70.7k</span>
+    <span title="Site words total count">71.5k</span>
   
 </div>
 
