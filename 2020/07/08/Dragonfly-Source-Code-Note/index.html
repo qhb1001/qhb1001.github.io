@@ -140,7 +140,7 @@
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-16T01:51:01.939Z">
+<meta property="og:updated_time" content="2020-07-16T22:44:52.748Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-15T18:51:01-07:00">
-                2020-07-15
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-16T15:44:52-07:00">
+                2020-07-16
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2.4k
+                  2.7k
                 </span>
               
 
@@ -420,7 +420,32 @@
 <p>And that’s all about the downloader. After the Dragonfly has successfully download the piece and push it to the writer queue, the <code>pieceWriter</code> will start to write the piece to the local disk and the target file. </p>
 <p>Note that the two files are different: the first one is to be sure located in the local file system, while for the later one, it may reside in the cluod disk, or another disk in local disk. Actually, there are two writers which corresponds to them: <code>client_writer</code> and <code>target_writer</code>. In this case, the writing process would be the network IO, and that will be the bottleneck of the whole system. </p>
 <h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
-<h2 id="Supernode-Scheduler"><a href="#Supernode-Scheduler" class="headerlink" title="Supernode Scheduler"></a>Supernode Scheduler</h2><h3 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h3><p>Client ID is defined in the <code>apis/types/df_get_task.go#DfGetTask</code> struct. And it is generated during the <code>dfget/core/core.go#prepare</code> method with the structure <code>rv.LocalIP-cfg.Sign</code>. </p>
+<h2 id="Supernode-Scheduler"><a href="#Supernode-Scheduler" class="headerlink" title="Supernode Scheduler"></a>Supernode Scheduler</h2><ul>
+<li><p>How does the current supernode schedule? </p>
+<p>The initial piece is a simple to heat the downloading process. It only has the following content:</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &amp;Piece&#123;</span><br><span class="line">	TaskID:    taskID,</span><br><span class="line">	SuperNode: node,</span><br><span class="line">	Status:    status,</span><br><span class="line">	Result:    constants.ResultInvalid,</span><br><span class="line">	Content:   &amp;bytes.Buffer&#123;&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>where status is <code>constants.TaskStatusStart</code>. Every piece status is related with the DfgetTaskStatus code. Check it out at <code>supernode/server/0.3_bridge.go:65</code>. This status code corresponds to the <code>DfgetTaskStatus</code> code <code>types.PiecePullRequestDfgetTaskStatusSTARTED</code>. </p>
+</li>
+<li><p>Would uploader register the upload task to supernode? Considering the <code>path</code> field in <code>apis/types/task_create_request.go</code> file.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">// path is used in one peer A for uploading functionality. When peer B hopes</span><br><span class="line">// to get piece C from peer A, B must provide a URL for piece C.</span><br><span class="line">// Then when creating a task in supernode, peer A must provide this URL in request.</span><br><span class="line">//</span><br><span class="line">Path string `json:&quot;path,omitempty&quot;`</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>When would the <code>dfget/core/downloader/p2p_downloader/p2p_downloader.go#getItem</code> encounter the merge situation? </p>
+</li>
+<li><p><code>supernode/daemon/mgr/task/manage.go#Register</code> The PieceSize and PieceTotal are calculated inside the method. </p>
+<p>How to get the file length by HTTP request to origin http server?</p>
+</li>
+<li><p>??? <code>supernode/daemon/mgr/task/manager.go:242</code> what’s the diff between dfgetTask and task?</p>
+<p>It seems that the dfget task is the downloading task in supernode side to download the images from cdn. While the task is the downloading task initialized by the client. </p>
+</li>
+<li><p>When is the progress updated? I didn’t notice the entry of the updation to client, supernode progress state. Understand the progess state. </p>
+<p>Once the piece in the dfget client is successfully downloaded, it will report to the supernode about the piece status. </p>
+<p>Client means the node that is downloading the pieces. </p>
+</li>
+<li><p>Why is piece number calculated as <code>startIndex / (endIndex - startIndex + 1)</code>? </p>
+<p>I think the piece size is a fixed value?</p>
+</li>
+</ul>
+<h2 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h2><p>Client ID is defined in the <code>apis/types/df_get_task.go#DfGetTask</code> struct. And it is generated during the <code>dfget/core/core.go#prepare</code> method with the structure <code>rv.LocalIP-cfg.Sign</code>. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">// CID means the client ID. It maps to the specific dfget process.</span><br><span class="line">// When user wishes to download an image/file, user would start a dfget process to do this.</span><br><span class="line">// This dfget is treated a client and carries a client ID.</span><br><span class="line">// Thus, multiple dfget processes on the same peer have different CIDs.</span><br></pre></td></tr></table></figure>
 <p>TaskID could be used to uniquely define xxx. It is requested by the <code>dfget</code> from <code>supernode</code> in <code>dfget/core/regist/register.go#Register</code> method, which will call the <code>df/get/core/api/supernode_api.go#Register</code> method to request the register response from supernode. From the url, we can see that it is calling the <code>/peer/registry</code> API in supernode. From the <code>supernode/server/router.go#initRoute</code> method, which includes all the HTTP handlers, we can find the corresponding registry function in the <code>supernode/server/0.3_bridge.go#registry</code> method. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">// /apis/types/task_register_request.go</span><br><span class="line">// Dfdaemon or dfget could specific the taskID which will represents the key of this resource</span><br><span class="line">// in supernode.</span><br></pre></td></tr></table></figure>
@@ -779,7 +804,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.1.</span> <span class="nav-text">Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.1.1.</span> <span class="nav-text">Identifiers</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.1.2.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.2.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.2.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.2.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.2.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.3.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.3.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.2.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.3.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">4.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">4.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.1.</span> <span class="nav-text">Supernode Scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.2.</span> <span class="nav-text">Identifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.2.1.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.3.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.3.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.3.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.3.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.4.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.4.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.2.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.3.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">4.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">4.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -813,7 +838,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">71.5k</span>
+    <span title="Site words total count">71.8k</span>
   
 </div>
 
