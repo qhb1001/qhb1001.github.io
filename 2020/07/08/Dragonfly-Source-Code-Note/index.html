@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF,">
+  <meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF,">
 
 
 
@@ -133,17 +133,19 @@
 
 
 <meta name="description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
-<meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF">
+<meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dragonfly - Source Code Note">
 <meta property="og:url" content="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/index.html">
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-16T22:44:52.748Z">
+<meta property="og:image" content="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png">
+<meta property="og:updated_time" content="2020-07-20T21:42:37.177Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png">
 
 
 
@@ -355,8 +357,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-16T15:44:52-07:00">
-                2020-07-16
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-20T14:42:37-07:00">
+                2020-07-20
               </time>
             
           </span>
@@ -383,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  2.7k
+                  3.5k
                 </span>
               
 
@@ -419,8 +421,58 @@
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p2p * P2PDownloader)</span> <span class="title">run</span><span class="params">(ctx context.Context, pieceWriter PieceWriter)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">    # initialization the piece writer, the concrete implementation includes client_writer.</span><br><span class="line">    pieceWriter.initialization()</span><br><span class="line">    </span><br><span class="line">    # keep polling the piece writer<span class="string">'s queue, and write the content to the target file</span></span><br><span class="line"><span class="string">    go func() &#123;</span></span><br><span class="line"><span class="string">        pieceWriter.run()</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">    </span></span><br><span class="line"><span class="string">    # downloading</span></span><br><span class="line"><span class="string">    for &#123;</span></span><br><span class="line"><span class="string">        # the initial element in the p2p.queue is the start piece. </span></span><br><span class="line"><span class="string">        # once the supernode receive the first piece, it will start to upload the following piece info.</span></span><br><span class="line"><span class="string">        # The initial piece includes the status `start`, while the other pieces may have the status as `running`</span></span><br><span class="line"><span class="string">        curItem := p2p.getItem()</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        # pull the piece download task from supernode, note that this is not downloading data</span></span><br><span class="line"><span class="string">        # but the metadata of the interested piece, eg. which peer has the piece.</span></span><br><span class="line"><span class="string">        # The supernode may return the metadata of the next available piece.</span></span><br><span class="line"><span class="string">        response, err := p2p.pullPieceTask(&amp;curItem)</span></span><br><span class="line"><span class="string">        </span></span><br><span class="line"><span class="string">        if err != nil &#123;</span></span><br><span class="line"><span class="string">            error handler</span></span><br><span class="line"><span class="string">        &#125; else &#123;</span></span><br><span class="line"><span class="string">            # download the piece, and push the piece into the writer queue</span></span><br><span class="line"><span class="string">            p2p.processPiece(response, &amp;curItem)</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
 <p>And that’s all about the downloader. After the Dragonfly has successfully download the piece and push it to the writer queue, the <code>pieceWriter</code> will start to write the piece to the local disk and the target file. </p>
 <p>Note that the two files are different: the first one is to be sure located in the local file system, while for the later one, it may reside in the cluod disk, or another disk in local disk. Actually, there are two writers which corresponds to them: <code>client_writer</code> and <code>target_writer</code>. In this case, the writing process would be the network IO, and that will be the bottleneck of the whole system. </p>
+<h2 id="Proposal-of-ASoC-2020-Dragonfly"><a href="#Proposal-of-ASoC-2020-Dragonfly" class="headerlink" title="Proposal of ASoC 2020 Dragonfly"></a>Proposal of ASoC 2020 Dragonfly</h2><p><a href="https://github.com/dragonflyoss/Dragonfly/issues/1436" target="_blank" rel="noopener">Issue link</a></p>
+<h3 id="Backgrounds"><a href="#Backgrounds" class="headerlink" title="Backgrounds"></a>Backgrounds</h3><p>As mentioned in the #1164, the current download process would be a defect if the Dragonfly client is running on a cloud disk: the local file system is not the target place, and the downloader would have to write the file one more time to another file system. This is kind of like the <code>sendfile</code> function. </p>
+<h3 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h3><p>Remove the redundency of writing the file to the local file system. Directly upload the data to the target place by storing the data in memory as the sliding window in TCP protocol. Please look at #1164 to get more information about the great idea. </p>
+<h3 id="Implementation-Plan"><a href="#Implementation-Plan" class="headerlink" title="Implementation Plan"></a>Implementation Plan</h3><p><img src="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png" alt="image"></p>
+<h3 id="Design-of-Supernode-Scheduler"><a href="#Design-of-Supernode-Scheduler" class="headerlink" title="Design of Supernode Scheduler"></a>Design of Supernode Scheduler</h3><p>The key point is to maintain the sender window, and to verify the stream mode is on. </p>
+<ul>
+<li><p>Add <code>wnd</code> to <code>apis/types/task_create_request.go:18#TaskCreateRequest</code>: The task status would be initialized to progress manager during the task registry step. </p>
+<p>By default, the window size is set to -1, which means that the file is downloaded in regular mode.</p>
+</li>
+<li><p>Add new struct <code>SlidingWindow</code> to the progress manager struct, which has the fields <code>wnd</code>(window size) and <code>una</code>(oldest unacknowledged sequence number <a href="https://tools.ietf.org/html/rfc793#page-25" target="_blank" rel="noopener">RFC 793</a>). </p>
+</li>
+<li><p>Add <code>wnd</code> to <code>supernode/daemon/mgr/progress/progress_manager.go:52#manager</code> struct. During the registry process of task, the progress manager is initialized. Update the <code>SlidingWindow</code> field of progress manager. </p>
+<p>By default, the SlidingWindow is nil, which means that the file is downloaded in regular mode.  </p>
+</li>
+<li><p>Modify the behavior of <code>GetPieceProgressByCID</code> method of progress manager based on the <code>SlidingWindow</code> field: only return the piece info within the window range. </p>
+</li>
+<li><p>Update the <code>una</code> field of <code>SlidingWindow</code> in progress manager in the <code>updateTask</code> method of task manager. </p>
+</li>
+</ul>
+<h3 id="Design-of-Uploader"><a href="#Design-of-Uploader" class="headerlink" title="Design of Uploader"></a>Design of Uploader</h3><ul>
+<li><p>Since there could be multiple tasks running at the same time, which means that one peer server could have multiple client stream writers at the same time, it is necessary to add <code>csw []*ClientStreamWriter</code> field to the current <code>peerServer</code> struct in <code>dfget/core/uploader/peer_server.go</code> file. [It seems that this implementation would make the downloader and uploader tightly coupled. Optimization should be considered.]</p>
+</li>
+<li><p>Add Locker for the cache field in <code>ClientStreamWriter</code> struct in <code>dfget/core/downloader/p2p_downloader/client_stream_writer.go</code> file.</p>
+</li>
+<li><p>Extract <code>PeerServer</code> launch process from <code>registerToSuperNode()</code> method to the <code>Start()</code> method.</p>
+<p>And register the client stream writer to peer server after the download process is created in <code>Start()</code> method. </p>
+<p>The <code>Start()</code> method lies at the <code>dfget/core/core.go</code> file.</p>
+</li>
+<li><p>Separate the stream uploading branch and normal uploading branch apart in the <code>uploadHandler()</code> of <code>dfget/core/uploader/peer_server.go</code> file. Add new interface to handle the different behavior of <code>getTaskFile</code> and <code>uploadPiece</code> method. </p>
+</li>
+</ul>
+<p>Any recommendations and comments are welcome! Thank you.</p>
 <h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
-<h2 id="Supernode-Scheduler"><a href="#Supernode-Scheduler" class="headerlink" title="Supernode Scheduler"></a>Supernode Scheduler</h2><ul>
+<h2 id="Supernode-Scheduler"><a href="#Supernode-Scheduler" class="headerlink" title="Supernode Scheduler"></a>Supernode Scheduler</h2><p>First of all, we should understand the progress state regarding the download process. The supernode state maintains the piece bitSet of the given CID. If the bit is set, it means that the supernode has the location of the piece: the piece is available. And the client could download the piece if it is set in supernode state. During the downloading process, it would be put into the clientState running bitset. Once the downloading is finished, the piece would be removed from that bitset, and put to the piece bitset of the client state, with the mark of <code>success</code> [this is achieved by set specific bit of the piece status]. </p>
+<p>While the clientState not only maintains the piece status of CID, but also the runningPiece, which means the pieces that are currently downloaded from desCID to srcCID. </p>
+<h3 id="Implementation-Plan-1"><a href="#Implementation-Plan-1" class="headerlink" title="Implementation Plan"></a>Implementation Plan</h3><p>The key point is to maintain the sender window, and to verify the stream mode is on. </p>
+<ul>
+<li><p>Add <code>wnd</code> to <code>apis/types/task_create_request.go:18#TaskCreateRequest</code>: The task status would be initialized to progress manager during the task registry step. </p>
+<p>By default, the window size is set to -1, which means that the file is downloaded in regular mode.</p>
+</li>
+<li><p>Add new struct <code>SlidingWindow</code> to the progress manager struct, which has the fields <code>wnd</code>(window size) and <code>una</code>(oldest unacknowledged sequence number). </p>
+</li>
+<li><p>Add <code>wnd</code> to <code>supernode/daemon/mgr/progress/progress_manager.go:52#manager</code> struct. During the registry process of task, the progress manager is initialized. Update the <code>SlidingWindow</code> field of progress manager. </p>
+<p>By default, the SlidingWindow is nil, which means that the file is downloaded in regular mode.  </p>
+</li>
+<li><p>Modify the behavior of <code>GetPieceProgressByCID</code> method of progress manager based on the <code>SlidingWindow</code> field: only return the piece info within the window range. </p>
+</li>
+<li><p>Update the <code>una</code> field of <code>SlidingWindow</code> in progress manager in the <code>updateTask</code> method of task manager. </p>
+</li>
+</ul>
+<h3 id="Existing-Implementation-of-sliding-window"><a href="#Existing-Implementation-of-sliding-window" class="headerlink" title="Existing Implementation of sliding window"></a>Existing Implementation of sliding window</h3><p>Reference: <a href="https://github.com/tass-belgium/picotcp.git" target="_blank" rel="noopener">https://github.com/tass-belgium/picotcp.git</a></p>
+<h3 id="Questions-encountered-during-reading"><a href="#Questions-encountered-during-reading" class="headerlink" title="Questions encountered during reading"></a>Questions encountered during reading</h3><ul>
 <li><p>How does the current supernode schedule? </p>
 <p>The initial piece is a simple to heat the downloading process. It only has the following content:</p>
 <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> &amp;Piece&#123;</span><br><span class="line">	TaskID:    taskID,</span><br><span class="line">	SuperNode: node,</span><br><span class="line">	Status:    status,</span><br><span class="line">	Result:    constants.ResultInvalid,</span><br><span class="line">	Content:   &amp;bytes.Buffer&#123;&#125;,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -452,7 +504,7 @@
 <p>Inside the registry method, the peer instance in supernode is created, where the peerID is created for supernode to index peer server. What’s more, the task is added or updated after the creation of peer instance. </p>
 <p>PeerID is formed during the registry process of download process. It follows the format of <code>fmt.Sprintf(&quot;%s-%s-%d&quot;, peerInfo.HostName.String(), peerInfo.IP.String(), time.Now().UnixNano())</code>. </p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">// generatePeerID generates an ID with hostname and ip.</span><br><span class="line">// Use timestamp to ensure the uniqueness.</span><br></pre></td></tr></table></figure>
-<h3 id="Questions-encountered-during-reading"><a href="#Questions-encountered-during-reading" class="headerlink" title="Questions encountered during reading"></a>Questions encountered during reading</h3><ul>
+<h3 id="Questions-encountered-during-reading-1"><a href="#Questions-encountered-during-reading-1" class="headerlink" title="Questions encountered during reading"></a>Questions encountered during reading</h3><ul>
 <li><p>Why dose dfget defer deleting the dfget task in the <code>supernode/daemon/mgr/task/manager.go#Register</code> method?</p>
 <p>Answer: Note that the delete statement is in the if checking. And the deletion will only occur when the err != nil. </p>
 </li>
@@ -582,11 +634,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/P2P/" rel="tag"># P2P</a>
+          
             <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
           
             <a href="/tags/Dragonfly/" rel="tag"># Dragonfly</a>
-          
-            <a href="/tags/P2P/" rel="tag"># P2P</a>
           
             <a href="/tags/CNCF/" rel="tag"># CNCF</a>
           
@@ -804,7 +856,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.1.</span> <span class="nav-text">Supernode Scheduler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.2.</span> <span class="nav-text">Identifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.2.1.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.3.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.3.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.3.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.3.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.4.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.4.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.2.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.3.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">4.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">4.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proposal-of-ASoC-2020-Dragonfly"><span class="nav-number">1.2.</span> <span class="nav-text">Proposal of ASoC 2020 Dragonfly</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Backgrounds"><span class="nav-number">1.2.1.</span> <span class="nav-text">Backgrounds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Idea"><span class="nav-number">1.2.2.</span> <span class="nav-text">Idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan"><span class="nav-number">1.2.3.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Supernode-Scheduler"><span class="nav-number">1.2.4.</span> <span class="nav-text">Design of Supernode Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Uploader"><span class="nav-number">1.2.5.</span> <span class="nav-text">Design of Uploader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.1.</span> <span class="nav-text">Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan-1"><span class="nav-number">2.1.1.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Existing-Implementation-of-sliding-window"><span class="nav-number">2.1.2.</span> <span class="nav-text">Existing Implementation of sliding window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.1.3.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.2.</span> <span class="nav-text">Identifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading-1"><span class="nav-number">2.2.1.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.3.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.3.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.3.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.3.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.4.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.4.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Program-Design"><span class="nav-number">3.</span> <span class="nav-text">Program Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.2.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.3.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">4.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">4.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -838,7 +890,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">71.8k</span>
+    <span title="Site words total count">72.6k</span>
   
 </div>
 
