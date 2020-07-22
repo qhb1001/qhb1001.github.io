@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF,">
+  <meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF,">
 
 
 
@@ -133,19 +133,19 @@
 
 
 <meta name="description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
-<meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF">
+<meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dragonfly - Source Code Note">
 <meta property="og:url" content="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/index.html">
 <meta property="og:site_name" content="Beyond">
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png">
-<meta property="og:updated_time" content="2020-07-20T21:42:37.177Z">
+<meta property="og:image" content="https://user-images.githubusercontent.com/38253329/87991160-68c90400-ca9a-11ea-8f4e-8856f9a07c87.png">
+<meta property="og:updated_time" content="2020-07-21T05:56:13.322Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
-<meta name="twitter:image" content="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png">
+<meta name="twitter:image" content="https://user-images.githubusercontent.com/38253329/87991160-68c90400-ca9a-11ea-8f4e-8856f9a07c87.png">
 
 
 
@@ -357,7 +357,7 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-20T14:42:37-07:00">
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-20T22:56:13-07:00">
                 2020-07-20
               </time>
             
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  3.5k
+                  3.6k
                 </span>
               
 
@@ -424,7 +424,7 @@
 <h2 id="Proposal-of-ASoC-2020-Dragonfly"><a href="#Proposal-of-ASoC-2020-Dragonfly" class="headerlink" title="Proposal of ASoC 2020 Dragonfly"></a>Proposal of ASoC 2020 Dragonfly</h2><p><a href="https://github.com/dragonflyoss/Dragonfly/issues/1436" target="_blank" rel="noopener">Issue link</a></p>
 <h3 id="Backgrounds"><a href="#Backgrounds" class="headerlink" title="Backgrounds"></a>Backgrounds</h3><p>As mentioned in the #1164, the current download process would be a defect if the Dragonfly client is running on a cloud disk: the local file system is not the target place, and the downloader would have to write the file one more time to another file system. This is kind of like the <code>sendfile</code> function. </p>
 <h3 id="Idea"><a href="#Idea" class="headerlink" title="Idea"></a>Idea</h3><p>Remove the redundency of writing the file to the local file system. Directly upload the data to the target place by storing the data in memory as the sliding window in TCP protocol. Please look at #1164 to get more information about the great idea. </p>
-<h3 id="Implementation-Plan"><a href="#Implementation-Plan" class="headerlink" title="Implementation Plan"></a>Implementation Plan</h3><p><img src="https://user-images.githubusercontent.com/38253329/87888189-19be9880-c9e0-11ea-90d3-dd1b64a47cb7.png" alt="image"></p>
+<h3 id="Implementation-Plan"><a href="#Implementation-Plan" class="headerlink" title="Implementation Plan"></a>Implementation Plan</h3><p><img src="https://user-images.githubusercontent.com/38253329/87991160-68c90400-ca9a-11ea-8f4e-8856f9a07c87.png" alt="image"></p>
 <h3 id="Design-of-Supernode-Scheduler"><a href="#Design-of-Supernode-Scheduler" class="headerlink" title="Design of Supernode Scheduler"></a>Design of Supernode Scheduler</h3><p>The key point is to maintain the sender window, and to verify the stream mode is on. </p>
 <ul>
 <li><p>Add <code>wnd</code> to <code>apis/types/task_create_request.go:18#TaskCreateRequest</code>: The task status would be initialized to progress manager during the task registry step. </p>
@@ -485,16 +485,19 @@
 </li>
 <li><p><code>supernode/daemon/mgr/task/manage.go#Register</code> The PieceSize and PieceTotal are calculated inside the method. </p>
 <p>How to get the file length by HTTP request to origin http server?</p>
+<p>A: In the <code>supernode/daemon/mgr/task/manager_util.go:50#addOrUpdateTask</code> method, the supernode would call the rawURL stored in the task struct. Though I’m not quite understand what’s inside the url. But I’ll guess that it is sending the HTTP request to the source. </p>
 </li>
-<li><p>??? <code>supernode/daemon/mgr/task/manager.go:242</code> what’s the diff between dfgetTask and task?</p>
-<p>It seems that the dfget task is the downloading task in supernode side to download the images from cdn. While the task is the downloading task initialized by the client. </p>
+<li><p><code>supernode/daemon/mgr/task/manager.go:242</code> what’s the diff between dfgetTask and task?</p>
+<p>A: Actually the true usage of the dfgetTaskMgr is in the <code>supernode/server/server.go:47</code>. Here the supernode in the whole would maintain the dfgetTask info. And for every downloading task, it would maintain the task info in this struct. </p>
+<p>While for the dfgetTaskMgr in the taskMgr, it is only used to store the single task info that it is responsible for. </p>
 </li>
 <li><p>When is the progress updated? I didn’t notice the entry of the updation to client, supernode progress state. Understand the progess state. </p>
-<p>Once the piece in the dfget client is successfully downloaded, it will report to the supernode about the piece status. </p>
-<p>Client means the node that is downloading the pieces. </p>
+<p>A: Once the piece in the dfget client is successfully downloaded, it will report to the supernode about the piece status. </p>
+<p>Client notifies the node that is downloading the pieces. </p>
 </li>
 <li><p>Why is piece number calculated as <code>startIndex / (endIndex - startIndex + 1)</code>? </p>
-<p>I think the piece size is a fixed value?</p>
+<p>I think the piece size is a fixed value? </p>
+<p>A: Since the uploader would amend the range of piece by pad, to make sure that the piece is complete. </p>
 </li>
 </ul>
 <h2 id="Identifiers"><a href="#Identifiers" class="headerlink" title="Identifiers"></a>Identifiers</h2><p>Client ID is defined in the <code>apis/types/df_get_task.go#DfGetTask</code> struct. And it is generated during the <code>dfget/core/core.go#prepare</code> method with the structure <code>rv.LocalIP-cfg.Sign</code>. </p>
@@ -596,7 +599,8 @@
 <p>And those API structs have the HTTP request method to send datagram and get the response. </p>
 <h2 id="Reuse-the-code-for-different-branches"><a href="#Reuse-the-code-for-different-branches" class="headerlink" title="Reuse the code for different branches"></a>Reuse the code for different branches</h2><p>I was going to seperate the stream upadloing branch and regular uploading branch apart in the <code>uploadHandler()</code> of <code>df/get/core/uploader/peer_server.go</code> file. But my mentor hints me that, it would be better to add another interface to do the job. In this way, the current code would not be effected at all, while the actual action of the uploader would differ. </p>
 <p>That’s really a good lesson on resuing the current code. </p>
-<h2 id="Supernode-Framework"><a href="#Supernode-Framework" class="headerlink" title="Supernode Framework"></a>Supernode Framework</h2><h1 id="Lesson-on-Behavior"><a href="#Lesson-on-Behavior" class="headerlink" title="Lesson on Behavior"></a>Lesson on Behavior</h1><h2 id="Impossible-Feature-Issue-1403"><a href="#Impossible-Feature-Issue-1403" class="headerlink" title="Impossible Feature: Issue #1403"></a>Impossible Feature: Issue #1403</h2><p>I was assigned this issue as the first step for the ASoC to familiar myself with Dragonfly community. But it turns out that this feature is impossible to implement. Check my <a href="https://notes-hongbo.top/2020/07/14/Dragonfly-Feature-Request-supporting-sendfile-in-dfget-1403/">post</a> to get more information. </p>
+<h2 id="Supernode-Framework"><a href="#Supernode-Framework" class="headerlink" title="Supernode Framework"></a>Supernode Framework</h2><p>\todo</p>
+<h1 id="Lesson-on-Behavior"><a href="#Lesson-on-Behavior" class="headerlink" title="Lesson on Behavior"></a>Lesson on Behavior</h1><h2 id="Impossible-Feature-Issue-1403"><a href="#Impossible-Feature-Issue-1403" class="headerlink" title="Impossible Feature: Issue #1403"></a>Impossible Feature: Issue #1403</h2><p>I was assigned this issue as the first step for the ASoC to familiar myself with Dragonfly community. But it turns out that this feature is impossible to implement. Check my <a href="https://notes-hongbo.top/2020/07/14/Dragonfly-Feature-Request-supporting-sendfile-in-dfget-1403/">post</a> to get more information. </p>
 <p>So in this step, I know that it is impossible to implement the feature in two ways: one is to modify the type of limit reader, the other is to move the sendFile handler from system library to user space. </p>
 <p>But I was getting shy on talking about my results. For one thing, I didn’t directly comment my thoughts under the issue, rather I first went to the DingTalk to share it with mentor. This is not right. For another, I didn’t describe all my thoughts clear. Even if the other way is not impossible to implement, I should talk it aloud to prove that I worked on this. </p>
 
@@ -634,11 +638,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/P2P/" rel="tag"># P2P</a>
-          
             <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
           
             <a href="/tags/Dragonfly/" rel="tag"># Dragonfly</a>
+          
+            <a href="/tags/P2P/" rel="tag"># P2P</a>
           
             <a href="/tags/CNCF/" rel="tag"># CNCF</a>
           
@@ -653,8 +657,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2020/06/19/How-to-interview/" rel="next" title="How to interview">
-                <i class="fa fa-chevron-left"></i> How to interview
+              <a href="/2020/06/26/Research-for-Dragonfly-Bandwidth-Allocation-Strategy/" rel="next" title="Research for Dragonfly Bandwidth Allocation Strategy">
+                <i class="fa fa-chevron-left"></i> Research for Dragonfly Bandwidth Allocation Strategy
               </a>
             
           </div>
@@ -746,7 +750,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-count">43</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -890,7 +894,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">72.6k</span>
+    <span title="Site words total count">74.6k</span>
   
 </div>
 
