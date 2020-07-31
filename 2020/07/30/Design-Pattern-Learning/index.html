@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Algorithm,LeetCode,">
+  <meta name="keywords" content="Github,Design Pattern,">
 
 
 
@@ -132,18 +132,18 @@
 
 
 
-<meta name="description" content="Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for">
-<meta name="keywords" content="Algorithm,LeetCode">
+<meta name="description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
+<meta name="keywords" content="Github,Design Pattern">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Fully Understand Binary Search">
-<meta property="og:url" content="http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/index.html">
+<meta property="og:title" content="Design Pattern Learning">
+<meta property="og:url" content="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for">
+<meta property="og:description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-03-19T18:04:31.603Z">
+<meta property="og:updated_time" content="2020-07-30T17:49:16.739Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Fully Understand Binary Search">
-<meta name="twitter:description" content="Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for">
+<meta name="twitter:title" content="Design Pattern Learning">
+<meta name="twitter:description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
 
 
 
@@ -173,13 +173,13 @@
 
 
 
-  <link rel="canonical" href="http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/">
+  <link rel="canonical" href="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/">
 
 
 
 
 
-  <title>Fully Understand Binary Search | Beyond</title>
+  <title>Design Pattern Learning | Beyond</title>
   
 
 
@@ -310,7 +310,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="秦baibai">
@@ -327,7 +327,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Fully Understand Binary Search</h1>
+          <h1 class="post-title" itemprop="name headline">Design Pattern Learning</h1>
         
 
         <div class="post-meta">
@@ -339,8 +339,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-21T19:31:52-08:00">
-                2019-12-21
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-07-30T10:47:50-07:00">
+                2020-07-30
               </time>
             
 
@@ -355,8 +355,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-03-19T11:04:31-07:00">
-                2020-03-19
+              <time title="Post modified" itemprop="dateModified" datetime="2020-07-30T10:49:16-07:00">
+                2020-07-30
               </time>
             
           </span>
@@ -383,7 +383,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  427
+                  26
                 </span>
               
 
@@ -408,18 +408,8 @@
       
 
       
-        <p>Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for it. </p>
-<p>First let’s talk about the traditional implementation version of the binary search: </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">(<span class="keyword">int</span> x[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">0</span>, r = n<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= r) &#123;</span><br><span class="line">        <span class="keyword">int</span> m = (l+r)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (x[m] == k) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (x[m] &lt; k) l = m+<span class="number">1</span>; <span class="keyword">else</span> r = m<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Observation: </p>
-<ol>
-<li>The scope of the initial boundary is [0, n - 1], which is the entire available elements set. The reason why we choose this could be explained by the update strategy for the boundary variables <code>l</code> and <code>r</code>. Since they are updated as <code>mid - 1</code> or <code>mid + 1</code>, they could be set to any elements inside the entire scope. So we should not make the boundary exceed the valid index set. </li>
-<li>The update strategy for the <code>l</code> and <code>r</code> is reasonable when we think about a decision tree. Take left boundary <code>l</code> for example, if the current midpoint <code>mid</code> could not meet the predefined requirement, then  all the elements on the leftside of <code>mid</code>, while including the midpoint, should be excluded from the choice scope. And we can do this by assign <code>mid + 1</code> to <code>l</code>. </li>
-<li>According to the update strategy, it is possible that we will reach the situation when <code>l</code> equals to <code>r</code>. Thus, the while clause should be <code>l &lt;= r</code>, which includes the equality situation. </li>
-<li>It is always helpful to consider the situation when the binary search hit the end, so that we can easily find the correct boundary and update strategy. For example, in leetcode [35], consider what will happen in the final step where l == r - 1, and there’s no element equal to target. According to the previous updating strategy, <code>l</code> will be set to <code>mid + 1</code> and the binary search is finished. So the final output of the algorithm will be at the first value that is equal or bigger to the target. </li>
-<li>The template could easily support the operations like finding equality in list and find the first element that is not satisfied the mentioned property [in this case, element in <code>l</code> will be the first element that is not satisfied the property].</li>
-<li><a href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/er-fen-cha-zhao-suan-fa-xi-jie-xiang-jie-by-labula/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/er-fen-cha-zhao-suan-fa-xi-jie-xiang-jie-by-labula/</a></li>
-</ol>
+        <p>This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: <a href="https://github.com/tmrts/go-patterns" target="_blank" rel="noopener">https://github.com/tmrts/go-patterns</a></p>
+<a id="more"></a>
 
       
     </div>
@@ -440,7 +430,7 @@
   </li>
   <li class="post-copyright-link">
     <strong>Post link:</strong>
-    <a href="http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/" title="Fully Understand Binary Search">http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/</a>
+    <a href="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/" title="Design Pattern Learning">http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/</a>
   </li>
   <li class="post-copyright-license">
     <strong>Copyright Notice: </strong>
@@ -455,9 +445,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Algorithm/" rel="tag"># Algorithm</a>
+            <a href="/tags/Github/" rel="tag"># Github</a>
           
-            <a href="/tags/LeetCode/" rel="tag"># LeetCode</a>
+            <a href="/tags/Design-Pattern/" rel="tag"># Design Pattern</a>
           
         </div>
       
@@ -470,8 +460,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/07/15/Effective-Go/" rel="next" title="Effective Go">
-                <i class="fa fa-chevron-left"></i> Effective Go
+              <a href="/2020/07/21/Research-for-Dragonfly-Streaming-Scheduler/" rel="next" title="Research for Dragonfly Streaming Scheduler">
+                <i class="fa fa-chevron-left"></i> Research for Dragonfly Streaming Scheduler
               </a>
             
           </div>
@@ -479,10 +469,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/22/Computer-Networks-A-System-Approach/" rel="prev" title="Computer Networks: A System Approach">
-                Computer Networks: A System Approach <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>

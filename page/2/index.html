@@ -309,6 +309,180 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/05/19/Critique-of-MapReduce/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/05/19/Critique-of-MapReduce/" itemprop="url">Critique of MapReduce</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-05-19T21:00:02-07:00">
+                2020-05-19
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-05-20T16:16:20-07:00">
+                2020-05-20
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  529
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Map-and-Reduce"><a href="#Map-and-Reduce" class="headerlink" title="Map and Reduce"></a><a href="https://www.bogotobogo.com/python/python_fncs_map_filter_reduce.php" title="Map and Reduce" target="_blank" rel="noopener">Map and Reduce</a></h1><p>They are the core functions defined in the functional programming language. The <code>map</code> function takes two parameters, <code>func</code> and <code>para</code>, where the <code>para</code> will be passed to the given <code>func</code> and return the results. Here the <code>para</code> could be a list, in which case every item will be passed once to the given function, and form a list from the return value. While the reduce function is kind of like the filter function.</p>
+<p>But the actual action of the <code>map</code> and <code>reduce</code> in the paper is different. MapReduce applies <code>map</code> function to each logical record in input to compute a set of intermediate key/value pairs, and then applies <code>reduce</code> operation to all the values shared by the same key. From the perpective of user, the MapReduce interfaces decouple the operation of the data and the mechanism of distributed computing, and provide users a set of easy-coding interface to interact with data. </p>
+<h1 id="Implementation"><a href="#Implementation" class="headerlink" title="Implementation"></a>Implementation</h1><h2 id="MapReduce-Workflow"><a href="#MapReduce-Workflow" class="headerlink" title="MapReduce Workflow"></a>MapReduce Workflow</h2><ol>
+<li><p>MapReduce will first split the user input into several partitions, and pass them to different machines to execute <code>map</code> task. The number of partition (R) and the method of partitioning (hash function) could be specified by the user.</p>
+<p>And the <code>map</code> function code is copied to all machines. The partition is formed by the chunks. In general, the size of each chunk is 16MB or 64MB. Denote the number of the chunks as M.</p>
+</li>
+<li><p>One of the copies of the program is the master node, which will search the idle worker nodes and assign them tasks. There are M map tasks and R reduce tasks to assign. </p>
+</li>
+<li><p>For one map worker, it will first apply the map function to the given input, and buffer the result in memory. Periodically, the buffered pairs are written to local disks, partitioned into R regions by the partitioning function. The locations of these buffered pairs on the local disk are passed back to the master, who is responsible for forwarding these locations to the reduce workers.</p>
+</li>
+<li><p>When the reduce worker is notified by the master about the locations, it will fetch the buffered data sfrom the local disks of the map workers by remote procedure calls. When it has read all the intermediate data, it will sort it by the intermediate keys.</p>
+</li>
+<li><p>The reduce worker iterates over the sorted intermediate data and for each unique intermediate key encountered, it passes the key the the corresponding set of intermediate values to the reduce function. The output of the reduce function is appended to a final output file for this reduce function. </p>
+</li>
+<li><p>When all map tasks and reduce tasks have been completed, the master wakres up the user program. </p>
+</li>
+</ol>
+<p><img src="figure1.png" alt=""></p>
+<p><img src="/Users/qinhongbo/Desktop/Blog/source/_posts/Critique-of-MapReduce/figure1.png" alt="figure1"></p>
+<h1 id="Feedback"><a href="#Feedback" class="headerlink" title="Feedback"></a>Feedback</h1><p>Feedback on environment setup - 05/19</p>
+<p>I have created one basic ubuntu image in Docker and pulled the source code from the Github. But there’s no example to run to test the program. So it seems that I need to create a data set for testing. </p>
+<p>Today I finished reading the Paper <code>MapReduce</code>. And I have uploaded my critique.</p>
+<p>plan for 05/20: read the paper <code>MapReduce Program Synthesis</code> and try to create the data set</p>
+<p>The setup part is expected to be finished in 05/21.</p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/05/17/RemyCC-Algorithm/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1736,168 +1910,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/12/21/Fully-Understand-Binary-Search/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="秦baibai">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Beyond">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/12/21/Fully-Understand-Binary-Search/" itemprop="url">Fully Understand Binary Search</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-12-21T19:31:52-08:00">
-                2019-12-21
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2020-03-19T11:04:31-07:00">
-                2020-03-19
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  427
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <p>Here is a blog particularly for the Binary Search implementation. Though it is a very fundamental algorithm, it stll lays a foundation for a lot of other problems. And it is necessary to dive deep for it. </p>
-<p>First let’s talk about the traditional implementation version of the binary search: </p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">search</span><span class="params">(<span class="keyword">int</span> x[], <span class="keyword">int</span> n, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">int</span> l = <span class="number">0</span>, r = n<span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">while</span> (l &lt;= r) &#123;</span><br><span class="line">        <span class="keyword">int</span> m = (l+r)/<span class="number">2</span>;</span><br><span class="line">        <span class="keyword">if</span> (x[m] == k) <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (x[m] &lt; k) l = m+<span class="number">1</span>; <span class="keyword">else</span> r = m<span class="number">-1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>Observation: </p>
-<ol>
-<li>The scope of the initial boundary is [0, n - 1], which is the entire available elements set. The reason why we choose this could be explained by the update strategy for the boundary variables <code>l</code> and <code>r</code>. Since they are updated as <code>mid - 1</code> or <code>mid + 1</code>, they could be set to any elements inside the entire scope. So we should not make the boundary exceed the valid index set. </li>
-<li>The update strategy for the <code>l</code> and <code>r</code> is reasonable when we think about a decision tree. Take left boundary <code>l</code> for example, if the current midpoint <code>mid</code> could not meet the predefined requirement, then  all the elements on the leftside of <code>mid</code>, while including the midpoint, should be excluded from the choice scope. And we can do this by assign <code>mid + 1</code> to <code>l</code>. </li>
-<li>According to the update strategy, it is possible that we will reach the situation when <code>l</code> equals to <code>r</code>. Thus, the while clause should be <code>l &lt;= r</code>, which includes the equality situation. </li>
-<li>It is always helpful to consider the situation when the binary search hit the end, so that we can easily find the correct boundary and update strategy. For example, in leetcode [35], consider what will happen in the final step where l == r - 1, and there’s no element equal to target. According to the previous updating strategy, <code>l</code> will be set to <code>mid + 1</code> and the binary search is finished. So the final output of the algorithm will be at the first value that is equal or bigger to the target. </li>
-<li>The template could easily support the operations like finding equality in list and find the first element that is not satisfied the mentioned property [in this case, element in <code>l</code> will be the first element that is not satisfied the property].</li>
-<li><a href="https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/er-fen-cha-zhao-suan-fa-xi-jie-xiang-jie-by-labula/" target="_blank" rel="noopener">https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array/solution/er-fen-cha-zhao-suan-fa-xi-jie-xiang-jie-by-labula/</a></li>
-</ol>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1952,7 +1964,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">43</span>
+                  <span class="site-state-item-count">44</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1974,7 +1986,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">46</span>
+                  <span class="site-state-item-count">47</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -2080,7 +2092,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">74.6k</span>
+    <span title="Site words total count">75.1k</span>
   
 </div>
 
