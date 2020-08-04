@@ -132,18 +132,21 @@
 
 
 
-<meta name="description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
+<meta name="description" content="This post is going to record the note of design pattern of object-oriented programming. By reading the book, the following ability should be acquired:  Finding Appropriate Objects: The hard part about">
 <meta name="keywords" content="Github,Design Pattern">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Design Pattern Learning">
 <meta property="og:url" content="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/index.html">
 <meta property="og:site_name" content="Beyond">
-<meta property="og:description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
+<meta property="og:description" content="This post is going to record the note of design pattern of object-oriented programming. By reading the book, the following ability should be acquired:  Finding Appropriate Objects: The hard part about">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2020-07-30T17:49:16.739Z">
+<meta property="og:image" content="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/1.png">
+<meta property="og:image" content="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/2.png">
+<meta property="og:updated_time" content="2020-08-03T00:23:39.084Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Design Pattern Learning">
-<meta name="twitter:description" content="This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: https://github.com/tmrts/go-patterns">
+<meta name="twitter:description" content="This post is going to record the note of design pattern of object-oriented programming. By reading the book, the following ability should be acquired:  Finding Appropriate Objects: The hard part about">
+<meta name="twitter:image" content="http://notes-hongbo.top/2020/07/30/Design-Pattern-Learning/1.png">
 
 
 
@@ -355,8 +358,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-07-30T10:49:16-07:00">
-                2020-07-30
+              <time title="Post modified" itemprop="dateModified" datetime="2020-08-02T17:23:39-07:00">
+                2020-08-02
               </time>
             
           </span>
@@ -383,7 +386,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  26
+                  478
                 </span>
               
 
@@ -408,8 +411,53 @@
       
 
       
-        <p>This post is going to record the note of design pattern in Golang. The reference material is the Github Respository: <a href="https://github.com/tmrts/go-patterns" target="_blank" rel="noopener">https://github.com/tmrts/go-patterns</a></p>
+        <p>This post is going to record the note of design pattern of object-oriented programming. By reading the book, the following ability should be acquired:</p>
+<ul>
+<li>Finding Appropriate Objects: The hard part about OO design is de-composing a system into objects. Design patterns help you identify less-obvious abstractions and the objects that can capture them.</li>
+<li>Determining Object Granularity</li>
+<li>Specifying Object Interfaces:<br>The set of all signatures defined by an object’s operations is called the <code>interface</code> to the object.</li>
+<li>Specifying Object Implementations</li>
+</ul>
+<p>The reference material is listed below:</p>
+<ul>
+<li>the Github Respository: <a href="https://github.com/tmrts/go-patterns" target="_blank" rel="noopener">https://github.com/tmrts/go-patterns</a></li>
+<li>textbook: Design Patterns: Elements of Reuseable Object-Oriented Software</li>
+</ul>
+<blockquote>
+<p>  Christopher Alexander says, “Each pattern describes a problem which occurs over and over again in our environment, and then describes the core of the solution to that problem, in such a way that you can use this solution a million times over, without ever doing it the same way twice”</p>
+<p>  Gamma, Erich. Design Patterns (Addison-Wesley Professional Computing Series) (p. 24). Pearson Education. Kindle Edition. </p>
+</blockquote>
 <a id="more"></a>
+<p>The design patterns can be classified into two criteria: </p>
+<ul>
+<li>The first criterion, called purpose, reflects what a pattern does. <ul>
+<li>Creational: concerns the process of object creation.</li>
+<li>Structural: deals with the composition of classes or objects. </li>
+<li>Behaviroal: characterize the ways in which classes or objects interact and distribute responsibility.</li>
+</ul>
+</li>
+<li>The second criterion, called scope, specifies whether the pattern applies primarily to classes or to objects. <ul>
+<li>Class patterns deal with relationship between classes and their subclasses. These relationships are established through inheritance, so they are static – fixed at compile-time. </li>
+<li>Object patterns deal with object relationships, which can be changed at run-time and are more dynamic. </li>
+</ul>
+</li>
+</ul>
+<p>Creational class patterns defer some part of object creation to subclasses, while creational object patterns defer it to another object. </p>
+<p>The structural class patterns use inheritance to compose classes, while the structural object patterns describe ways to assemble objects [I think Golang could only implement object patterns.]. </p>
+<p>The behavioral class patterns use inheritance to describe algorithms and flow of control, whereas the behavioral object patterns describe how a group of objects cooperate to perform a task that no single object can carry out alone. </p>
+<p><img src="1.png" alt=""></p>
+<p>And here is the relationship between the design patterns, which illustrates the possible collaboration among them.</p>
+<p><img src="2.png" alt=""></p>
+<h1 id="Appendix"><a href="#Appendix" class="headerlink" title="Appendix"></a>Appendix</h1><h2 id="Principle-of-OOD"><a href="#Principle-of-OOD" class="headerlink" title="Principle of OOD"></a>Principle of OOD</h2><ul>
+<li><p>Programming to an Interface, not an Implementation</p>
+</li>
+<li><p>Favor object composition over class inheritance.</p>
+</li>
+</ul>
+<h2 id="Diff-between-class-amp-type"><a href="#Diff-between-class-amp-type" class="headerlink" title="Diff between class &amp; type"></a>Diff between class &amp; type</h2><p>The class specifies the concrete implementation of the object. While the type here means the interfaces that the object belongs to. </p>
+<blockquote>
+<p>  An object’s class defines how the object is implemented. The class defines the object’s internal state and the implementation of its operations. In contrast, an object’s type only refers to its interface—the set of requests to which it can respond. An object can have many types, and objects of different classes can have the same type.</p>
+</blockquote>
 
       
     </div>
@@ -522,8 +570,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -641,6 +698,22 @@
       </section>
 
       
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Appendix"><span class="nav-number">1.</span> <span class="nav-text">Appendix</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Principle-of-OOD"><span class="nav-number">1.1.</span> <span class="nav-text">Principle of OOD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Diff-between-class-amp-type"><span class="nav-number">1.2.</span> <span class="nav-text">Diff between class &amp; type</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
 
       
 
@@ -668,7 +741,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">75.1k</span>
+    <span title="Site words total count">75.9k</span>
   
 </div>
 
