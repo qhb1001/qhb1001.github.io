@@ -119,7 +119,7 @@
 
 
 
-  <meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF,">
+  <meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF,">
 
 
 
@@ -133,7 +133,7 @@
 
 
 <meta name="description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
-<meta name="keywords" content="Open Source,Dragonfly,P2P,CNCF">
+<meta name="keywords" content="P2P,Open Source,Dragonfly,CNCF">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Dragonfly - Source Code Note">
 <meta property="og:url" content="http://notes-hongbo.top/2020/07/08/Dragonfly-Source-Code-Note/index.html">
@@ -141,7 +141,7 @@
 <meta property="og:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://user-images.githubusercontent.com/38253329/87991160-68c90400-ca9a-11ea-8f4e-8856f9a07c87.png">
-<meta property="og:updated_time" content="2020-08-09T09:58:08.827Z">
+<meta property="og:updated_time" content="2020-08-24T06:11:24.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Dragonfly - Source Code Note">
 <meta name="twitter:description" content="This note is to reocrd the source code analysis of Dragonfly, which is the program that I participate during the 2020 summer as the remote internship. Thanks Alibaba for this great opportunity.  This">
@@ -357,8 +357,8 @@
               
                 <span class="post-meta-item-text">Post modified&#58;</span>
               
-              <time title="Post modified" itemprop="dateModified" datetime="2020-08-09T02:58:08-07:00">
-                2020-08-09
+              <time title="Post modified" itemprop="dateModified" datetime="2020-08-23T23:11:24-07:00">
+                2020-08-23
               </time>
             
           </span>
@@ -385,7 +385,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  5k
+                  5.4k
                 </span>
               
 
@@ -454,6 +454,24 @@
 </ul>
 <p>Any recommendations and comments are welcome! Thank you.</p>
 <h1 id="ASoC"><a href="#ASoC" class="headerlink" title="ASoC"></a>ASoC</h1><p>This section includes my understanding of the part associated with the ASoC program. There will be a lot of details compared to the Overrall section. </p>
+<h2 id="IPC-in-Golang"><a href="#IPC-in-Golang" class="headerlink" title="IPC in Golang"></a>IPC in Golang</h2><h3 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h3><ul>
+<li><a href="https://blog.csdn.net/Xiejingfa/article/details/50819660" target="_blank" rel="noopener">anonymous pipe</a></li>
+<li><a href="advanced programming in unix environment chapter 15">IPC among UNIX process</a></li>
+</ul>
+<h3 id="Summary"><a href="#Summary" class="headerlink" title="Summary"></a>Summary</h3><ul>
+<li>完善cache GC</li>
+<li><del>完善文件下载流程<br>通过类似pipe的进程间通信手段来实现流式传输</del></li>
+<li><del>完善 dfget &amp; supernode 之间关于流式传输的交互</del></li>
+<li>添加单元测试</li>
+<li><del>跑通联调测试</del></li>
+</ul>
+<p>本周我的主要工作是为流式传输添加了联调测试，并且成功得到了下载内容。通过该测试可以保证downloader方面的流式传输，以及其与supernode的交互没有问题。</p>
+<p>我另外的工作为修改了滑动窗口的piece status更新流程。目前的设计为，当piece下载完成之后，更新其状态为success</p>
+<h3 id="Question"><a href="#Question" class="headerlink" title="Question"></a>Question</h3><ul>
+<li>关于将stdout作为dfget的管道出口 -&gt; printer</li>
+<li>讨论关于piece status的状态流转</li>
+<li>关于联调测试中多个dfget协作的测试方法</li>
+</ul>
 <h2 id="Current-Uploader"><a href="#Current-Uploader" class="headerlink" title="Current Uploader"></a>Current Uploader</h2><h3 id="UploaderHandler"><a href="#UploaderHandler" class="headerlink" title="UploaderHandler"></a>UploaderHandler</h3><p>The whole file is stored in the file system. When the uploader is going to fetch the part of the piece, it will read the part of the file. In the URL given by the another peer which request the piece, it will give the following information:</p>
 <ul>
 <li>padSize: default size in the current architecture, which is 4 bytes in head, 1 byte in tail</li>
@@ -463,7 +481,6 @@
 <li>PieceNum</li>
 </ul>
 <p>By the above parameters, the starting piece could be located. It should also be noted that in CDN type, there is no pad, while for the p2p pattern, every piece includes the meta header and tail. What’s more, the meta header of the piece includes the size of the piece, along with the piece size. By using the meta data, we can locate the starting piece number. </p>
-<h2 id="Current-Client-Stream-Writer"><a href="#Current-Client-Stream-Writer" class="headerlink" title="Current Client Stream Writer"></a>Current Client Stream Writer</h2><p>The <code>dfget/core/downloader/p2p_downloader/client_stream_writer.go:153</code> ensures that the pieces in pipe are in order. So that we can no long worry about how to fetch the number of piece, and the size of piece: the pieces can be fetched in order!</p>
 <h2 id="Implementation-of-Cache"><a href="#Implementation-of-Cache" class="headerlink" title="Implementation of Cache"></a>Implementation of Cache</h2><p>关于P2P流式传输在客户端方面的实现：基于目前非常漂亮的系统设计，我考虑在客户端dfget/core新添加一个模块streamcache。该模块用于</p>
 <ul>
 <li>从downloader处接受下载完成的数据</li>
@@ -484,30 +501,48 @@
 </li>
 <li><p>Why the content of cache is not sync to the file system at last?</p>
 </li>
+<li><p>The refactor in downloader and doDownloadTimeoutTask.</p>
+</li>
 </ul>
-<h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><p>fill out the API frame work, create the interface</p>
+<h3 id="Summary-1"><a href="#Summary-1" class="headerlink" title="Summary"></a>Summary</h3><p>fill out the API frame work, create the interface</p>
 <ul>
-<li><del>regist: regist the information of cache to the uploader by dfget [*]</del><ul>
+<li><p><del>regist: regist the information of cache to the uploader by dfget [*]</del></p>
+<ul>
 <li><del>add API for dfget in <code>dfget/core/api/uploader_api.go:100</code></del></li>
 <li><del>add API for uploader to register the cache window <code>dfget/core/uploader/peer_server.go:286</code></del></li>
 </ul>
 </li>
-<li><p>pass pieces between downloader and uploader</p>
+<li><p><del>pass pieces between downloader and uploader [**]</del></p>
 <ul>
-<li>add receivePiece API for uploader [*]</li>
-<li><p>Add the for loop to read from the stream io.reader [**]</p>
+<li><p><del>Take the current implementation of the CDN stream downloader as the reference at <code>supernode/daemon/mgr/cdn/manager.go:121</code></del></p>
+</li>
+<li><p><del>add receivePiece API for uploader [*]</del></p>
+</li>
+</ul>
+</li>
+<li><p><del>Upload piece handler [*]</del></p>
+<p>The current URL is using the file name to locate the resource to share. And according to the annotation of <code>apis/types/df_get_task.go:47</code>, the URL is set during the task registration, and it is provided by peer which initializes the task. And what should we do about this?</p>
+</li>
+<li><p><del>LRU cache [***]</del></p>
 <ul>
-<li><p>find out the way to get the whole piece from reader </p>
-<p>Answer: not necessary. The data in cache can be transfered into uploader in large block. And the uploader can directly fetch the particular piece based on the request info. </p>
-</li>
+<li>API for update cache state between supernode and uploader cache manager</li>
+<li>GC</li>
 </ul>
 </li>
 </ul>
-</li>
-<li>LRU cache [***]</li>
-<li>Upload piece handler [*]</li>
+<h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<li>关于cache的GC应该如何嵌入目前的serverGC <code>dfget/core/uploader/uploader.go:171</code><br>目前下载的准备阶段会进行临时文件和目标文件的创建，这些将来会被用于碎片分享、serverGC，而且通过文件名以及主机地址作为P2P网络的URL资源。<br>-&gt; 流式传输在这个阶段创建空文件</li>
+<li>关于目前的流式传输，当文件下载完成之后的行为</li>
+<li>优化缓存的更新流程：首次成功的碎片直接进入缓存，而不再需要首先发送successful<br>之后当从缓存中删除的时候，再发送pieceUpdate信息</li>
 </ul>
-<h2 id="Implementation-of-Supernode-Scheduler"><a href="#Implementation-of-Supernode-Scheduler" class="headerlink" title="Implementation of Supernode Scheduler"></a>Implementation of Supernode Scheduler</h2><h3 id="Questions"><a href="#Questions" class="headerlink" title="Questions"></a>Questions</h3><ul>
+<h3 id="TODO"><a href="#TODO" class="headerlink" title="TODO"></a>TODO</h3><ul>
+<li>完善cache GC</li>
+<li><del>完善文件下载流程<br>通过类似pipe的进程间通信手段来实现流式传输</del></li>
+<li><del>完善 dfget &amp; supernode 之间关于流式传输的交互</del></li>
+<li>添加单元测试</li>
+<li><del>跑通联调测试</del></li>
+</ul>
+<h2 id="Implementation-of-Supernode-Scheduler"><a href="#Implementation-of-Supernode-Scheduler" class="headerlink" title="Implementation of Supernode Scheduler"></a>Implementation of Supernode Scheduler</h2><h3 id="Questions-1"><a href="#Questions-1" class="headerlink" title="Questions"></a>Questions</h3><ul>
 <li><p>inside <code>supernode/daemon/mgr/progress/progress_manager.go:103</code>, would supernode use the p2p streaming mode? </p>
 <p>Personally speaking, I think it won’t.</p>
 </li>
@@ -703,6 +738,12 @@
 <h1 id="Lesson-on-Behavior"><a href="#Lesson-on-Behavior" class="headerlink" title="Lesson on Behavior"></a>Lesson on Behavior</h1><h2 id="Impossible-Feature-Issue-1403"><a href="#Impossible-Feature-Issue-1403" class="headerlink" title="Impossible Feature: Issue #1403"></a>Impossible Feature: Issue #1403</h2><p>I was assigned this issue as the first step for the ASoC to familiar myself with Dragonfly community. But it turns out that this feature is impossible to implement. Check my <a href="https://notes-hongbo.top/2020/07/14/Dragonfly-Feature-Request-supporting-sendfile-in-dfget-1403/">post</a> to get more information. </p>
 <p>So in this step, I know that it is impossible to implement the feature in two ways: one is to modify the type of limit reader, the other is to move the sendFile handler from system library to user space. </p>
 <p>But I was getting shy on talking about my results. For one thing, I didn’t directly comment my thoughts under the issue, rather I first went to the DingTalk to share it with mentor. This is not right. For another, I didn’t describe all my thoughts clear. Even if the other way is not impossible to implement, I should talk it aloud to prove that I worked on this. </p>
+<h1 id="Framework-amp-Tools"><a href="#Framework-amp-Tools" class="headerlink" title="Framework &amp; Tools"></a>Framework &amp; Tools</h1><h2 id="GoMock"><a href="#GoMock" class="headerlink" title="GoMock"></a>GoMock</h2><ul>
+<li><p><a href="https://blog.codecentric.de/en/2017/08/gomock-tutorial/" target="_blank" rel="noopener">Testing with GoMock: A Tutorial</a></p>
+</li>
+<li><p>C语言的动态库是什么</p>
+</li>
+</ul>
 
       
     </div>
@@ -738,11 +779,11 @@
       
         <div class="post-tags">
           
+            <a href="/tags/P2P/" rel="tag"># P2P</a>
+          
             <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
           
             <a href="/tags/Dragonfly/" rel="tag"># Dragonfly</a>
-          
-            <a href="/tags/P2P/" rel="tag"># P2P</a>
           
             <a href="/tags/CNCF/" rel="tag"># CNCF</a>
           
@@ -850,7 +891,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -872,7 +913,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -960,7 +1001,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proposal-of-ASoC-2020-Dragonfly"><span class="nav-number">1.2.</span> <span class="nav-text">Proposal of ASoC 2020 Dragonfly</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Backgrounds"><span class="nav-number">1.2.1.</span> <span class="nav-text">Backgrounds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Idea"><span class="nav-number">1.2.2.</span> <span class="nav-text">Idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan"><span class="nav-number">1.2.3.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Supernode-Scheduler"><span class="nav-number">1.2.4.</span> <span class="nav-text">Design of Supernode Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Uploader"><span class="nav-number">1.2.5.</span> <span class="nav-text">Design of Uploader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-Uploader"><span class="nav-number">2.1.</span> <span class="nav-text">Current Uploader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UploaderHandler"><span class="nav-number">2.1.1.</span> <span class="nav-text">UploaderHandler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-Client-Stream-Writer"><span class="nav-number">2.2.</span> <span class="nav-text">Current Client Stream Writer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Cache"><span class="nav-number">2.3.</span> <span class="nav-text">Implementation of Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Challenge"><span class="nav-number">2.3.1.</span> <span class="nav-text">Challenge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consideration"><span class="nav-number">2.3.2.</span> <span class="nav-text">Consideration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO"><span class="nav-number">2.3.3.</span> <span class="nav-text">TODO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Supernode-Scheduler"><span class="nav-number">2.4.</span> <span class="nav-text">Implementation of Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions"><span class="nav-number">2.4.1.</span> <span class="nav-text">Questions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.5.</span> <span class="nav-text">Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PR"><span class="nav-number">2.5.1.</span> <span class="nav-text">PR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Discussion-with-Developer-from-Ant"><span class="nav-number">2.5.2.</span> <span class="nav-text">Discussion with Developer from Ant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan-1"><span class="nav-number">2.5.3.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Existing-Implementation-of-sliding-window"><span class="nav-number">2.5.4.</span> <span class="nav-text">Existing Implementation of sliding window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.5.5.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.6.</span> <span class="nav-text">Identifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.7.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.7.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.7.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.7.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.8.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.8.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Framework-Design"><span class="nav-number">3.</span> <span class="nav-text">Framework Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Encapsulation-in-Golang"><span class="nav-number">3.2.</span> <span class="nav-text">Encapsulation in Golang</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.3.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.4.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Design-Pattern"><span class="nav-number">4.</span> <span class="nav-text">Design Pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#supernode-scheduler"><span class="nav-number">4.1.</span> <span class="nav-text">supernode/scheduler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">5.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">5.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Overrall"><span class="nav-number">1.</span> <span class="nav-text">Overrall</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Dragonfly-P2P-Downloader"><span class="nav-number">1.1.</span> <span class="nav-text">Dragonfly P2P Downloader</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Proposal-of-ASoC-2020-Dragonfly"><span class="nav-number">1.2.</span> <span class="nav-text">Proposal of ASoC 2020 Dragonfly</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Backgrounds"><span class="nav-number">1.2.1.</span> <span class="nav-text">Backgrounds</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Idea"><span class="nav-number">1.2.2.</span> <span class="nav-text">Idea</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan"><span class="nav-number">1.2.3.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Supernode-Scheduler"><span class="nav-number">1.2.4.</span> <span class="nav-text">Design of Supernode Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Design-of-Uploader"><span class="nav-number">1.2.5.</span> <span class="nav-text">Design of Uploader</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ASoC"><span class="nav-number">2.</span> <span class="nav-text">ASoC</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#IPC-in-Golang"><span class="nav-number">2.1.</span> <span class="nav-text">IPC in Golang</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Reference"><span class="nav-number">2.1.1.</span> <span class="nav-text">Reference</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary"><span class="nav-number">2.1.2.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Question"><span class="nav-number">2.1.3.</span> <span class="nav-text">Question</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-Uploader"><span class="nav-number">2.2.</span> <span class="nav-text">Current Uploader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#UploaderHandler"><span class="nav-number">2.2.1.</span> <span class="nav-text">UploaderHandler</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Cache"><span class="nav-number">2.3.</span> <span class="nav-text">Implementation of Cache</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Challenge"><span class="nav-number">2.3.1.</span> <span class="nav-text">Challenge</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Consideration"><span class="nav-number">2.3.2.</span> <span class="nav-text">Consideration</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Summary-1"><span class="nav-number">2.3.3.</span> <span class="nav-text">Summary</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions"><span class="nav-number">2.3.4.</span> <span class="nav-text">Questions</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TODO"><span class="nav-number">2.3.5.</span> <span class="nav-text">TODO</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Implementation-of-Supernode-Scheduler"><span class="nav-number">2.4.</span> <span class="nav-text">Implementation of Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-1"><span class="nav-number">2.4.1.</span> <span class="nav-text">Questions</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Scheduler"><span class="nav-number">2.5.</span> <span class="nav-text">Supernode Scheduler</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#PR"><span class="nav-number">2.5.1.</span> <span class="nav-text">PR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Discussion-with-Developer-from-Ant"><span class="nav-number">2.5.2.</span> <span class="nav-text">Discussion with Developer from Ant</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Implementation-Plan-1"><span class="nav-number">2.5.3.</span> <span class="nav-text">Implementation Plan</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Existing-Implementation-of-sliding-window"><span class="nav-number">2.5.4.</span> <span class="nav-text">Existing Implementation of sliding window</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading"><span class="nav-number">2.5.5.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Identifiers"><span class="nav-number">2.6.</span> <span class="nav-text">Identifiers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-encountered-during-reading-1"><span class="nav-number">2.6.1.</span> <span class="nav-text">Questions encountered during reading</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Current-P2P-Downloader"><span class="nav-number">2.7.</span> <span class="nav-text">Current P2P Downloader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Questions-Encountered-During-Source-Code-Reading"><span class="nav-number">2.7.1.</span> <span class="nav-text">Questions Encountered During Source Code Reading</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-core-downloader"><span class="nav-number">2.7.2.</span> <span class="nav-text">dfget/core/downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#P2P-Streaming-Uploader-Design"><span class="nav-number">2.7.3.</span> <span class="nav-text">P2P Streaming Uploader Design</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Bandwidth-Optimization"><span class="nav-number">2.8.</span> <span class="nav-text">Bandwidth Optimization</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#dfget-locator"><span class="nav-number">2.8.1.</span> <span class="nav-text">dfget/locator</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Framework-Design"><span class="nav-number">3.</span> <span class="nav-text">Framework Design</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#API-variable"><span class="nav-number">3.1.</span> <span class="nav-text">API variable</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Encapsulation-in-Golang"><span class="nav-number">3.2.</span> <span class="nav-text">Encapsulation in Golang</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Reuse-the-code-for-different-branches"><span class="nav-number">3.3.</span> <span class="nav-text">Reuse the code for different branches</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Supernode-Framework"><span class="nav-number">3.4.</span> <span class="nav-text">Supernode Framework</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Design-Pattern"><span class="nav-number">4.</span> <span class="nav-text">Design Pattern</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#supernode-scheduler"><span class="nav-number">4.1.</span> <span class="nav-text">supernode/scheduler</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Lesson-on-Behavior"><span class="nav-number">5.</span> <span class="nav-text">Lesson on Behavior</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Impossible-Feature-Issue-1403"><span class="nav-number">5.1.</span> <span class="nav-text">Impossible Feature: Issue #1403</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Framework-amp-Tools"><span class="nav-number">6.</span> <span class="nav-text">Framework &amp; Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GoMock"><span class="nav-number">6.1.</span> <span class="nav-text">GoMock</span></a></li></ol></li></ol></div>
             
 
           </div>
@@ -980,7 +1021,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -994,7 +1035,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">76.5k</span>
+    <span title="Site words total count">79.8k</span>
   
 </div>
 

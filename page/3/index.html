@@ -309,6 +309,497 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/01/26/Chord-A-Peer-to-peer-Lookup-Protocol/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/26/Chord-A-Peer-to-peer-Lookup-Protocol/" itemprop="url">Chord: A Peer-to-peer Lookup Protocol</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-26T17:27:47-08:00">
+                2020-01-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-06-10T14:30:46-07:00">
+                2020-06-10
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  321
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Chord-A-Scalable-Peer-to-peer-Lookup-Protocol-for-Internet-Applications"><a href="#Chord-A-Scalable-Peer-to-peer-Lookup-Protocol-for-Internet-Applications" class="headerlink" title="Chord: A Scalable Peer-to-peer Lookup Protocol for Internet Applications"></a>Chord: A Scalable Peer-to-peer Lookup Protocol for Internet Applications</h1><h2 id="System-Model"><a href="#System-Model" class="headerlink" title="System Model"></a>System Model</h2><p>Support the following features:</p>
+<ul>
+<li>load balance: spreading keys evenly over the nodes</li>
+<li>decentralization: fully distributed; no node is more important than any other</li>
+<li>scalability: the cost of a Chord loopup grows as the log of the number of nodes</li>
+<li>availability: automatically adjusts its internal tables to reflect newly joined nodes as well as node failures</li>
+<li>flexible naming: Chord places no constraints on the structure of the keys it looks up</li>
+</ul>
+<h2 id="The-Chord-Protocol"><a href="#The-Chord-Protocol" class="headerlink" title="The Chord Protocol"></a>The Chord Protocol</h2><p>The consistent hash function assigns each node and key an <em>m</em>-bit identifier using SHA-1 as a base hash function. A node’s identifier is chosen by hashing the node’s IP address, while a key identifier is produced by hashing the key. The identifier length <em>m</em> must be large enough to make the probability of two nodes or keys hashing to the same identifier negligible. </p>
+<p>The range of the identifier circle is $2^m$. Key <em>k</em> is assigned to the first node whose identifier is equal to or follows <em>k</em> in the circle. </p>
+<p>The lookup algorithm makes use of binary search tech. Every node will store a table with <em>m</em> entries. The $i^{th}$ entry in the table at node <em>n</em> contains the identity of the <em>first</em> node <em>s</em> that succeeds <em>n</em> by at least $2^{i-1}$ on the circle. We denote the $i^{th}$ entry of node <em>n</em> by $n.finger[i]$. </p>
+<p><img src="finger.png" alt="finger"></p>
+<p>Since from any node, we can reach  half of the entire Chord circle, the lookup operation would take O($\log n$) cost. </p>
+<p>Impact of node joins on lookups: Sometimes the nodes in the affected region have incorrect successor pointers, or keys may not yet have migrated to newly joined nodes, and the lookup may fail. The higher-layer software using Chord has to notice that the desired data was not found, and has the option of retrying the lookup after a pause. </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/01/21/hashlib-md5-Understand-hexlify-and-unhexlify/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/21/hashlib-md5-Understand-hexlify-and-unhexlify/" itemprop="url">hashlib.md5 - Understand hexlify and unhexlify</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-21T08:16:41-08:00">
+                2020-01-21
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-01-21T20:05:49-08:00">
+                2020-01-21
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  421
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <p>When I was implementing the Linux MD5 crypt method for the user password, I encountered this problem. To solve a problem in this low level benefit me a lot. Here is the summary for what I learned from this. </p>
+<h1 id="ASCII-Encoding"><a href="#ASCII-Encoding" class="headerlink" title="ASCII Encoding"></a>ASCII Encoding</h1><p>Basically, string in python 3 are encoded in utf-8. This is a encoding method with a variable length for each character. If we are going to operate on the byte or bit level, it is not impossible to do that based on this encoding method. This we need to convert the string to another data structure - bytes. </p>
+<p>However, there exists many ways to interpret the original string to a bytes array. And the defualt translation method is <code>utf-8</code> for the <code>encode()</code> method of data structure <code>str</code>. No matter what encoding methods we are going to use, they are operating on the character level. That is to say, every character will be encoded in different ways based on the request encoding method. </p>
+<h1 id="digest-amp-hexdigest"><a href="#digest-amp-hexdigest" class="headerlink" title="digest  &amp; hexdigest"></a>digest  &amp; hexdigest</h1><p>These are the method included in the data structure <code>_Hash</code>, which is the return value of <code>hashlib.md5(bytes)</code>. We have two ways to get the printable result from it:</p>
+<ul>
+<li><p><code>digest()</code></p>
+<p>return the ascii encoding style result: every character in the output has the size of 8 bit, which means that there will be totally 16 characters (maybe includes invisible character). </p>
+<p>If we directly print the result to the console, we will get the format like <code>\x..\x..\x..</code>. That’s the low level storage method for ASCII encoding method. </p>
+</li>
+<li><p><code>hexdigest()</code></p>
+<p>For every ASCII character, extract the two hex character from the original representation. For example, <code>\x65\xa9</code> will be transformed to <code>65a9</code>. </p>
+</li>
+</ul>
+<h1 id="exlify-amp-unhexlify"><a href="#exlify-amp-unhexlify" class="headerlink" title="exlify &amp; unhexlify"></a>exlify &amp; unhexlify</h1><p>These are the method included in the package <code>binascii</code>, which is aimed to convert binary to ascii character, and vice versa. </p>
+<ul>
+<li>We can pass the result from <code>digest()</code> method to <code>hexlify</code>, and we will get the same result with <code>unhexlify</code>.</li>
+<li>We can pass the result from <code>hexdigest()</code> method to <code>unhexlify</code>, and we will get the same result with <code>hexlify</code>. </li>
+</ul>
+<h1 id="How-to-learn-Python"><a href="#How-to-learn-Python" class="headerlink" title="How to learn Python"></a>How to learn Python</h1><p>When coming into contact with a new package or function, it is necessary to find out what exactly it is designed to do. And the official document is a good resource to read about. </p>
+<p>For example, only after this experience, I got the idea of what the package <code>binascii</code> is doing. </p>
+<h1 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h1><ol>
+<li><a href="https://www.daniweb.com/programming/software-development/threads/494123/how-can-i-add-add-x" target="_blank" rel="noopener">https://www.daniweb.com/programming/software-development/threads/494123/how-can-i-add-add-x</a></li>
+<li><a href="http://www.asciitable.com/" target="_blank" rel="noopener">http://www.asciitable.com/</a></li>
+<li><a href="https://200ok.ch/posts/2018-12-09_unhexlify.html" target="_blank" rel="noopener">https://200ok.ch/posts/2018-12-09_unhexlify.html</a></li>
+</ol>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/01/07/Leetcode-14-Longest-Common-Prefix/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2020/01/07/Leetcode-14-Longest-Common-Prefix/" itemprop="url">Leetcode# [14] Longest Common Prefix</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-01-07T17:32:37-08:00">
+                2020-01-07
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-01-07T17:36:11-08:00">
+                2020-01-07
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  91
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="One-novel-solution-to-the-easy-problem"><a href="#One-novel-solution-to-the-easy-problem" class="headerlink" title="One novel solution to the easy problem"></a>One novel solution to the easy problem</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">longestCommonPrefix</span><span class="params">(self, strs)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type strs: List[str]</span></span><br><span class="line"><span class="string">        :rtype: str</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> strs: <span class="keyword">return</span> <span class="string">""</span></span><br><span class="line">        <span class="keyword">if</span> len(strs) == <span class="number">1</span>: <span class="keyword">return</span> strs[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        strs.sort()</span><br><span class="line">        p = <span class="string">""</span></span><br><span class="line">        <span class="keyword">for</span> x, y <span class="keyword">in</span> zip(strs[<span class="number">0</span>], strs[<span class="number">-1</span>]):</span><br><span class="line">            <span class="keyword">if</span> x == y: p+=x</span><br><span class="line">            <span class="keyword">else</span>: <span class="keyword">break</span></span><br><span class="line">        <span class="keyword">return</span> r</span><br></pre></td></tr></table></figure>
+<p>It works because the sort function will sort the strings by prefix. So if the last string has the same prefix with the first string, it means that all the string within the range would satisfy the property of common prefix. </p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/12/22/Computer-Networks-A-System-Approach/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
@@ -1402,471 +1893,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/05/06/基于ANTLR实现的简单绘图语言解释器/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="秦baibai">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Beyond">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/06/基于ANTLR实现的简单绘图语言解释器/" itemprop="url">基于ANTLR实现的简单绘图语言解释器</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-06T18:03:34-07:00">
-                2019-05-06
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-06T03:23:40-07:00">
-                2019-05-06
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  2.8k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>本文用于记录使用ANTLR实现一个简单绘图语言解释器的过程</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/06/基于ANTLR实现的简单绘图语言解释器/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/05/02/Django-Official-Torurial/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="秦baibai">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Beyond">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/05/02/Django-Official-Torurial/" itemprop="url">Django Official Torurial</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-05-02T20:52:30-07:00">
-                2019-05-02
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2019-05-16T20:32:50-07:00">
-                2019-05-16
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  2.6k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>学习Django的官方教程时记录的笔记</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/05/02/Django-Official-Torurial/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2019/03/26/CMU15213/">
-
-    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="秦baibai">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.JPG">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="Beyond">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/03/26/CMU15213/" itemprop="url">CMU15213</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Posted on</span>
-              
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2019-03-26T20:25:54-07:00">
-                2019-03-26
-              </time>
-            
-
-            
-              <span class="post-meta-divider">|</span>
-            
-
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-check-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">Post modified&#58;</span>
-              
-              <time title="Post modified" itemprop="dateModified" datetime="2019-04-01T06:07:38-07:00">
-                2019-04-01
-              </time>
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-            <div class="post-wordcount">
-              
-                
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-file-word-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">Words count in article&#58;</span>
-                
-                <span title="Words count in article">
-                  1.5k
-                </span>
-              
-
-              
-
-              
-            </div>
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          <p>该笔记用于记录学习CMU15213时遇到的知识点</p>
-          <!--noindex-->
-          <div class="post-button text-center">
-            <a class="btn" href="/2019/03/26/CMU15213/#more" rel="contents">
-              Read more &raquo;
-            </a>
-          </div>
-          <!--/noindex-->
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1921,7 +1947,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-count">48</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -1943,7 +1969,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-count">56</span>
                   <span class="site-state-item-name">tags</span>
                 </a>
               </div>
@@ -2035,7 +2061,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -2049,7 +2075,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">76.5k</span>
+    <span title="Site words total count">79.8k</span>
   
 </div>
 

@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+      
+    
+
+    
+  
+
+  
+    
+    
+    <link href="https://fonts.googleapis.com/css/css?family=Roboto Slab:300,300italic,400,400italic,700,700italic|Roboto Slab:300,300italic,400,400italic,700,700italic|Lobster Two:300,300italic,400,400italic,700,700italic|PT Mono:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.3" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.3">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.3">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.3" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Open Source,P2P System,Distributed System,">
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="Beyond" type="application/atom+xml">
+
+
+
+
+
+
+<meta name="description" content="Project Information1. Project NameDragonfly - an intelligent P2P based image and file distribution system. 2. Project Task DescriptionNow the client of Dragonfly will random read and write disk multip">
+<meta name="keywords" content="Open Source,P2P System,Distributed System">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Summary of ASoC 2020">
+<meta property="og:url" content="http://notes-hongbo.top/2020/08/26/Summary-of-ASoC-2020/index.html">
+<meta property="og:site_name" content="Beyond">
+<meta property="og:description" content="Project Information1. Project NameDragonfly - an intelligent P2P based image and file distribution system. 2. Project Task DescriptionNow the client of Dragonfly will random read and write disk multip">
+<meta property="og:locale" content="default">
+<meta property="og:image" content="http://notes-hongbo.top/Users/qinhongbo/Downloads/72036461-e505b200-32d5-11ea-929e-0955ce5be993%20(1">
+<meta property="og:updated_time" content="2020-08-27T07:39:03.685Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Summary of ASoC 2020">
+<meta name="twitter:description" content="Project Information1. Project NameDragonfly - an intelligent P2P based image and file distribution system. 2. Project Task DescriptionNow the client of Dragonfly will random read and write disk multip">
+<meta name="twitter:image" content="http://notes-hongbo.top/Users/qinhongbo/Downloads/72036461-e505b200-32d5-11ea-929e-0955ce5be993%20(1">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.3',
+    sidebar: {"position":"right","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: 'undefined',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://notes-hongbo.top/2020/08/26/Summary-of-ASoC-2020/">
+
+
+
+
+
+  <title>Summary of ASoC 2020 | Beyond</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-right page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/qhb1001" class="github-corner" aria-label="View source on GitHub"><svg width="80" height="80" viewbox="0 0 250 250" style="fill:#151513; color:#fff; position: absolute; top: 0; border: 0; right: 0;" aria-hidden="true"><path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"/><path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"/><path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor" class="octo-body"/></svg></a><style>.github-corner:hover .octo-arm{animation:octocat-wave 560ms ease-in-out}@keyframes octocat-wave{0%,100%{transform:rotate(0)}20%,60%{transform:rotate(-25deg)}40%,80%{transform:rotate(10deg)}}@media (max-width:500px){.github-corner:hover .octo-arm{animation:none}.github-corner .octo-arm{animation:octocat-wave 560ms ease-in-out}}</style>
+
+
+    
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Beyond</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            About
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://notes-hongbo.top/2020/08/26/Summary-of-ASoC-2020/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="秦baibai">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.JPG">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Beyond">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Summary of ASoC 2020</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-08-26T20:09:34-07:00">
+                2020-08-26
+              </time>
+            
+
+            
+              <span class="post-meta-divider">|</span>
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Post modified&#58;</span>
+              
+              <time title="Post modified" itemprop="dateModified" datetime="2020-08-27T00:39:03-07:00">
+                2020-08-27
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1.4k
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Project-Information"><a href="#Project-Information" class="headerlink" title="Project Information"></a>Project Information</h1><h2 id="1-Project-Name"><a href="#1-Project-Name" class="headerlink" title="1. Project Name"></a>1. Project Name</h2><p>Dragonfly - an intelligent P2P based image and file distribution system.</p>
+<h2 id="2-Project-Task-Description"><a href="#2-Project-Task-Description" class="headerlink" title="2. Project Task Description"></a>2. Project Task Description</h2><p>Now the client of Dragonfly will random read and write disk multiple times during the downloading process.<br>For directly using <code>dfget</code> to download a file:</p>
+<ul>
+<li><code>dfget</code> random writes a piece into disk after downloading it</li>
+<li><code>dfget server</code> random reads the piece from disk to share it</li>
+<li><code>dfget</code> sequential reads the file from disk after downloading to do checksum</li>
+</ul>
+<p>And for using <code>dfdaemon</code> to pull images, there’re extra disk IO by Dragonfly:</p>
+<ul>
+<li><code>dfdaemon</code> sequential reads the file from disk to send it to <code>dockerd</code></li>
+</ul>
+<p>It’s not a problem when the host has a local disk. But it will be a potential<br>bottleneck when the Dragonfly client runs on a virtual machine with a cloud disk, all the disk IO will become network IO which has a bad performance when read/write at the same time.</p>
+<p>So a solution is needed to reduce the IO times generated by Dragonfly.</p>
+<h2 id="3-Implementation-Plan"><a href="#3-Implementation-Plan" class="headerlink" title="3. Implementation Plan"></a>3. Implementation Plan</h2><p>As proposed in the <a href="https://github.com/dragonflyoss/Dragonfly/issues/1164" target="_blank" rel="noopener">Issue #1164</a>, the P2P streaming is come up for the problem discussed above. And my work in ASoC 2020 is to implement part of the streaming download method. The task can be summaried into four aspects, which are supernode scheduler, dfget downloader, dfget uploader, IPC between user and Dragonfly stream dfget. </p>
+<h3 id="3-1-Supernode-Scheduler"><a href="#3-1-Supernode-Scheduler" class="headerlink" title="3.1 Supernode Scheduler"></a>3.1 Supernode Scheduler</h3><p>The work in supernode can be categorized into two respectives:</p>
+<p><img src="/Users/qinhongbo/Downloads/72036461-e505b200-32d5-11ea-929e-0955ce5be993 (1" alt="72036461-e505b200-32d5-11ea-929e-0955ce5be993 (1)">.png)</p>
+<ul>
+<li><p>Maintain the sliding window in supernode.</p>
+<ul>
+<li>Initialize: The size of window will be registered in the dfget task registration phrase. And then, the window state is recorded in the ProgressManager as the SyncMap indexed by ClientID. The size of window is staic once it is recorded by supernode.</li>
+<li>Update: The dfget client will report to the supernode about the result of downloading for every piece. In the <code>report</code> API of supernode server, the window will be updated based on the received piece number and piece status. To be specific, the window keeps sliding until the unacknowledged piece. It should be noted that the supernode is using the sender window, which has the range of <code>[una, una + wnd)</code>.</li>
+<li>Finish: Update the <code>DeleteCID</code> method of ProgressManager to delete the sliding window state if it is in stream mode.</li>
+</ul>
+</li>
+<li><p>Schedule the pieces according to the window state</p>
+<p>The only modification that I made in this part lies at the <code>GetPieceProgressByCID</code> method of ProgressManager. The available pieces in regular mode means the success pieces which are not running; while for the stream mode, the available pieces means the cached pieces which are not running. After the modification, the ProgressManager would only return the available pieces inside the window when stream mode is on.</p>
+<p>A new kind of piece status is created: UNCACHED. When the piece is downloaded successfully, I assume that it will sotred into the cache immediately. Afterwards, the piece maybe popped out of the cache. And in this case, the handler of supernode server <code>deletePieceCache</code> at <code>supernode/server/router.go:101</code> would be called to change the state of the piece. </p>
+<p>It should be noted that, the scheduler in stream mode currently uses the same scheduler as the regular mode, which may demands future optimization.</p>
+</li>
+</ul>
+<h3 id="3-2-DFGET-Downloader"><a href="#3-2-DFGET-Downloader" class="headerlink" title="3.2 DFGET Downloader"></a>3.2 DFGET Downloader</h3><p>Since the client stream writer has been implemented under the <code>p2p_downloader</code> folder, which means that the pieces downloading process has been finished. My work here is to fullfill the task of handling the successfully downloaded pieces to uploader. Besides that, in the perparation phase at <code>dfget/core/core.go:171</code>, the registration of stream task is necessary for uploader. Here are all the modifications:</p>
+<ul>
+<li><p><code>dfget/core/core.go:210</code>: The  <code>doDownload</code> method is refactored. One new interface is defined as <code>DownloadTimeoutTask</code>. The interface has two implementations, which are regular downloader and the stream downloader. </p>
+</li>
+<li><p><code>dfget/core/downloader/downloader.go:79</code>: The <code>Start()</code> method of the <code>StreamDownloadTimeoutTask</code> struct will call the <code>RunStream</code> method of the downloader, and then pass the stream reader to the <code>startWriter</code> method. </p>
+</li>
+<li><p><code>dfget/core/downloader/downloader_util.go:55</code>: The <code>startWriter</code> method is used to fetch the pieces from the stream reader concurrently, and then upload the pieces to uploader in order. The logic of the <code>startWriter</code> is referenced from the stream downloading method in CDN manager at <code>supernode/daemon/mgr/cdn/super_writer.go:59</code>. </p>
+<p>The unit test has been added. </p>
+</li>
+</ul>
+<h3 id="3-3-DEGET-Uploader"><a href="#3-3-DEGET-Uploader" class="headerlink" title="3.3 DEGET Uploader"></a>3.3 DEGET Uploader</h3><p>The previous uploader is solely used for the regular downloading method. For the stream uploader, I have added new APIs for it. Apart from that, the cache manager is added to manage the cache pieces. </p>
+<ul>
+<li><p><code>dfget/core/api/supernode_api.go:359</code>: A new kind of updating piece status API has been implemented. It is used to change the peice status from SUCCESSFUL to UNCACHED. </p>
+</li>
+<li><p><code>dfget/core/api/uploader_api.go:108</code>: The uploader API <code>RegisterStreamTask</code> is added to register the stream task at cache manager. The initialization of the according entry at cache manager is finshed after the call. </p>
+</li>
+<li><p><code>dfget/core/api/uploader_api.go:127</code>: The uploader API <code>DeliverPieceToUploader</code> is used to handle the piece from downloader to uploader. </p>
+</li>
+<li><p><code>dfget/core/uploader/cache.go:60</code>: The FIFO cache manager is created to control the piece caches. It would store and pop the piece in the style of FIFO. It should be noted that the cache manager is using the receiver window, which has the range of <code>[start, una)</code>.</p>
+<p>The unit test has been added. </p>
+</li>
+<li><p>TODO: GC for cache manager</p>
+</li>
+</ul>
+<h3 id="3-4-IPC-Between-DFGET-and-User"><a href="#3-4-IPC-Between-DFGET-and-User" class="headerlink" title="3.4 IPC Between DFGET and User"></a>3.4 IPC Between DFGET and User</h3><p>This part demands further discussion. Currently, I propose that the DFGET can directly output the content of the pieces to stdout, and then the user who calls the DFGET command, can redirect the stdout of the DFGET command to the write side of the pipe by generally supported method <a href="https://pubs.opengroup.org/onlinepubs/009695399/functions/popen.html" target="_blank" rel="noopener">popen</a>.</p>
+<p>After that, the user can directly read from the pipe, and get the successfully downloaded content. Since the method uses the unnamed pipe, the whole process is not related with the file system.</p>
+<h2 id="4-Milestone-Review"><a href="#4-Milestone-Review" class="headerlink" title="4. Milestone Review"></a>4. Milestone Review</h2><table>
+<thead>
+<tr>
+<th>Date</th>
+<th>Milestone</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>07/07 - 07/14</td>
+<td>Community Bonding &amp; Source Code Reading<br> <a href="https://github.com/dragonflyoss/Dragonfly/issues/1403#issuecomment-658523918" target="_blank" rel="noopener">Issue 1403</a></td>
+</tr>
+<tr>
+<td>07/15 - 07/27</td>
+<td>Research on the Scheduler of Supernode for Stream Downloading<a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/commits/f9b7ef3921df515758e6a2d706cb5491789e2afd" target="_blank" rel="noopener"><br>Commit: Support Stream Mode in Supernode </a></td>
+</tr>
+<tr>
+<td>07/28 - 08/10</td>
+<td>Discuss the Stream Implementation with a Mentor from Ant.<br><a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/commits/ffa8db4a5514ffe37a94353367e29696c73e7ea3" target="_blank" rel="noopener">Commit: Implement Work Flow of Stream Mode in DFGET</a></td>
+</tr>
+<tr>
+<td>08/11 - 08/26</td>
+<td>Research on the IPC between the User and Stream DFGET.<br><a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/commits/8acfce95465b363846effcd429db6a03a40fe262" target="_blank" rel="noopener">commit: Add Unit Test and Fix Bugs for Integration Test</a></td>
+</tr>
+</tbody>
+</table>
+<p>Here is the changes of code lines after the commits: (+2033, -77).</p>
+<h1 id="Project-Summary"><a href="#Project-Summary" class="headerlink" title="Project Summary"></a>Project Summary</h1><h2 id="1-Project-Deliverables"><a href="#1-Project-Deliverables" class="headerlink" title="1. Project Deliverables"></a>1. Project Deliverables</h2><h3 id="1-1-Detailed-Design"><a href="#1-1-Detailed-Design" class="headerlink" title="1.1 Detailed Design"></a>1.1 Detailed Design</h3><p>The Overrall Proposal: <a href="https://github.com/dragonflyoss/Dragonfly/issues/1436#issue-659970568" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/issues/1436#issue-659970568</a></p>
+<p>Design of Supernode Scheduler: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447#issue-459701444" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447#issue-459701444</a></p>
+<p>Design of DFGET downloader, uploader and IPC between user and DFGET: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447#issuecomment-681619384" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447#issuecomment-681619384</a></p>
+<h3 id="1-2-Source-Code"><a href="#1-2-Source-Code" class="headerlink" title="1.2 Source Code"></a>1.2 Source Code</h3><p>Github Commits: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/commits" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447/commits</a></p>
+<h3 id="1-3-Test-Document"><a href="#1-3-Test-Document" class="headerlink" title="1.3 Test Document"></a>1.3 Test Document</h3><p>The tests have been implemented into the test files. And the annotation inside the source files would be necessary for the developer to test. </p>
+<p>cmd/dfget/app/root_test.go: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-14e54b172ea500c227d81045b4b132b4R139" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-14e54b172ea500c227d81045b4b132b4R139</a></p>
+<p>dfget/core/downloader/downloader_util_test.go: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-9b3047c6073bec2c5c3a02c87cfce3e2R1" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-9b3047c6073bec2c5c3a02c87cfce3e2R1</a></p>
+<p>dfget/core/uploader/cache_test.go: <a href="https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-61f496afc10516997e19f5ac636278f8R1" target="_blank" rel="noopener">https://github.com/dragonflyoss/Dragonfly/pull/1447/files#diff-61f496afc10516997e19f5ac636278f8R1</a></p>
+<h2 id="2-Project-Highlights"><a href="#2-Project-Highlights" class="headerlink" title="2. Project Highlights"></a>2. Project Highlights</h2><p>The highlights of my work is that I have implemented almost all of the downloading in sream mode. The sum of the modification code lines are (2033 + 77) = 2110. And I believe that the stream mode will definitely improve the efficiency of the Dragonfly downloading process in the case of the remote file system. </p>
+<p>What’s more, this will be one of the features that Dragonfly owns compared to the traditional P2P systems. </p>
+<h2 id="3-Experience"><a href="#3-Experience" class="headerlink" title="3. Experience"></a>3. Experience</h2><p>The whole ASoC experience benefits me a lot. First of all, I have done much research work during the application phase, which makes me familiar with the traditional distributed systems. And then, during the development phase, I learnt the system design, concurrent programming in golang, start-of-the-art architecture of Dragonfly and the group work experience with mentors in Alibaba. </p>
+<p>Mentors are really good at what they are working for: by the simple discussion, they can always quickly find the weakness of my design and point out the correct direction of the next move. </p>
+<p>In a word, it is so lucky for me to be chosen to be part of the 2020 ASoC program. </p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:</strong>
+    秦baibai
+  </li>
+  <li class="post-copyright-link">
+    <strong>Post link:</strong>
+    <a href="http://notes-hongbo.top/2020/08/26/Summary-of-ASoC-2020/" title="Summary of ASoC 2020">http://notes-hongbo.top/2020/08/26/Summary-of-ASoC-2020/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice: </strong>
+    All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/3.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0</a> unless stating additionally.
+  </li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Open-Source/" rel="tag"># Open Source</a>
+          
+            <a href="/tags/P2P-System/" rel="tag"># P2P System</a>
+          
+            <a href="/tags/Distributed-System/" rel="tag"># Distributed System</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/07/LRU-Implementation-in-Linux/" rel="next" title="LRU Implementation in Linux">
+                <i class="fa fa-chevron-left"></i> LRU Implementation in Linux
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/11/13/Refacotring-Improving-the-Design-of-Existing-Code/" rel="prev" title="Refacotring: Improving the Design of Existing Code">
+                Refacotring: Improving the Design of Existing Code <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="/images/avatar.JPG" alt="秦baibai">
+            
+              <p class="site-author-name" itemprop="name">秦baibai</p>
+              <p class="site-description motion-element" itemprop="description">So we beat on, boats against the current, borne back ceaselessly into the past.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">4</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">56</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          <div class="links-of-author motion-element">
+            
+              
+                <span class="links-of-author-item">
+                  <a href="https://github.com/qhb1001" target="_blank" title="GitHub">
+                    
+                      <i class="fa fa-fw fa-github"></i>GitHub</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="mailto:hongbo.qin.1001@gmail.com" target="_blank" title="E-Mail">
+                    
+                      <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                </span>
+              
+                <span class="links-of-author-item">
+                  <a href="https://www.instagram.com/qhb_1001/" target="_blank" title="Instagram">
+                    
+                      <i class="fa fa-fw fa-instagram"></i>Instagram</a>
+                </span>
+              
+            
+          </div>
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                友情链接
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://mrsempress.top" title="Little Sun" target="_blank">Little Sun</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://tobiaslee.top/" title="TobiasLee" target="_blank">TobiasLee</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://aidenfan.github.io/" title="UdefinedF" target="_blank">UdefinedF</a>
+                  </li>
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="http://blog.three7.cc/" title="37as" target="_blank">37as</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Project-Information"><span class="nav-number">1.</span> <span class="nav-text">Project Information</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Project-Name"><span class="nav-number">1.1.</span> <span class="nav-text">1. Project Name</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Project-Task-Description"><span class="nav-number">1.2.</span> <span class="nav-text">2. Project Task Description</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Implementation-Plan"><span class="nav-number">1.3.</span> <span class="nav-text">3. Implementation Plan</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Supernode-Scheduler"><span class="nav-number">1.3.1.</span> <span class="nav-text">3.1 Supernode Scheduler</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-DFGET-Downloader"><span class="nav-number">1.3.2.</span> <span class="nav-text">3.2 DFGET Downloader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-DEGET-Uploader"><span class="nav-number">1.3.3.</span> <span class="nav-text">3.3 DEGET Uploader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-4-IPC-Between-DFGET-and-User"><span class="nav-number">1.3.4.</span> <span class="nav-text">3.4 IPC Between DFGET and User</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-Milestone-Review"><span class="nav-number">1.4.</span> <span class="nav-text">4. Milestone Review</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Project-Summary"><span class="nav-number">2.</span> <span class="nav-text">Project Summary</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Project-Deliverables"><span class="nav-number">2.1.</span> <span class="nav-text">1. Project Deliverables</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-Detailed-Design"><span class="nav-number">2.1.1.</span> <span class="nav-text">1.1 Detailed Design</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-Source-Code"><span class="nav-number">2.1.2.</span> <span class="nav-text">1.2 Source Code</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-Test-Document"><span class="nav-number">2.1.3.</span> <span class="nav-text">1.3 Test Document</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Project-Highlights"><span class="nav-number">2.2.</span> <span class="nav-text">2. Project Highlights</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-Experience"><span class="nav-number">2.3.</span> <span class="nav-text">3. Experience</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">秦baibai</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">Site words total count&#58;</span>
+    
+    <span title="Site words total count">79.8k</span>
+  
+</div>
+
+
+
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a></div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.3"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.3"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.3"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.3"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.3"></script>
+
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+  
+  <script type="text/javascript" src="/js/src/js.cookie.js?v=5.1.3"></script>
+  <script type="text/javascript" src="/js/src/scroll-cookie.js?v=5.1.3"></script>
+
+
+  
+
+
+</body>
+</html>
